@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - loaders - OBJ loader</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+		<div id="info">
+		<a href="http://threejs.org" target="_blank">three.js</a> - OBJLoader test
+		</div>
+		<script>
+		var frameSpeed=40;
+		var accRaw=[];
+		var gyroRaw=[];
+		var accRendered=[];
+		var gyroRendered=[];
+		var positionRendered=[];
+		</script>
+		<script src="../build/three.min.js"></script>
+		<script src="js/loaders/OBJLoader.js"></script>
+		<script>
+
+		function populateGyroAndAcc(start,end){
+			
+			if (end<1 || end > accRaw[accRaw.length-1]){
+				end=accRaw.length;
+			}
+			else{
+				stop=false;
+				for (i=0;i<accRaw.length && !stop;i++){
+					if(start<=accRaw[i].time){
+						start=i-1;
+						stop=true;
+					}
+				}
+				stop=false;
+				for (i=0;i<accRaw.length && !stop;i++){
+					if(end<=accRaw[i].time){
+						end=i;
+						stop=true;
+					}
+				}
+				if (stop==false){
+					end=accRaw.length;
+				}
+			}
+			if (start<0){
+				start=0;
+			}
+			startTime=0;
+			accDeltaSeries=[];
+			for (i=start+1;i<end;i++){
+				while (accRaw[i].time>startTime){
+					accDelta=new Array();
+					timeDeltaSeries = accRaw[i].time - accRaw[i-1].time;
+					timeDelta = accRaw[i].time - startTime;
+					timeDelta = timeDelta / timeDeltaSeries;
+					for (j=0;j<3;j++){
+						accDeltaSeries[j] = accRaw[i].acc[j] - accRaw[i-1].acc[j];
+						accDelta[j] = accDeltaSeries[j] * timeDelta;
+						accDelta[j] += accRaw[i-1].acc[j];
+					}
+					
+					accRendered.push(accDelta);
+					startTime+=frameSpeed;
+				}
+			}
+			
+			
+			if (end<1 || end > gyroRaw[gyroRaw.length-1]){
+				end=gyroRaw.length;
+			}
+			else{
+				stop=false;
+				for (i=0;i<gyroRaw.length && !stop;i++){
+					if(start<=gyroRaw[i].time){
+						start=i-1;
+						stop=true;
+					}
+				}
+				stop=false;
+				for (i=0;i<gyroRaw.length && !stop;i++){
+					if(end<=gyroRaw[i].time){
+						end=i;
+						stop=true;
+					}
+				}
+				if (stop==false){
+					end=gyroRaw.length;
+				}
+			}
+			if (start<0){
+				start=0;
+			}
+			startTime=0;
+			gyroDeltaSeries=[];
+			
+			for (i=start+1;i<end;i++){
+				while (gyroRaw[i].time>startTime){
+					gyroDelta=new Array();
+					timeDeltaSeries = gyroRaw[i].time - gyroRaw[i-1].time;
+					timeDelta = gyroRaw[i].time - startTime;
+					timeDelta = timeDelta / timeDeltaSeries;
+					for (j=0;j<3;j++){
+						gyroDeltaSeries[j] = gyroRaw[i].gyro[j] - gyroRaw[i-1].gyro[j];
+						gyroDelta[j] = gyroDeltaSeries[j] * timeDelta;
+						gyroDelta[j] += gyroRaw[i-1].gyro[j];
+					}
+					gyroRendered.push(gyroDelta);
+					startTime+=frameSpeed;
+				}
+			}
+			while (gyroRendered.length<accRendered.length){
+				gyroRendered.push(gyroRendered[gyroRendered.length-1]);
+			}
+			
+
+		}
+	
+		</script>
+		<script src="getData.js"></script>
+		<script>
+
+			var container;
+
+			var camera, scene, renderer;
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			var phoneObj,screenObj;
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.z = 100;
+
+				// scene
+
+				scene = new THREE.Scene();
+
+				var ambient = new THREE.AmbientLight( 0x101030 );
+				scene.add( ambient );
+
+				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+				directionalLight.position.set( -50, -50, -50 );
+				scene.add( directionalLight );
+
+				// texture
+
+				var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+
+					console.log( item, loaded, total );
+
+				};
+
+				var texture = new THREE.Texture();
+				var texture2 = new THREE.Texture();
+
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					}
+				};
+
+				var onError = function ( xhr ) {
+				};
+
+
+				var loader = new THREE.ImageLoader( manager );
+				loader.load( 'obj/male02/galaxys3_white_diffuse.png', function ( image ) {
+
+					texture.image = image;
+					texture.needsUpdate = true;
+
+				} );
+				
+
+				
+
+				// model
+
+				var loader = new THREE.OBJLoader( manager );
+				
+				loader.load( 'obj/male02/phone.obj', function ( object ) {
+
+					object.traverse( function ( child ) {
+						
+						if ( child instanceof THREE.Mesh ) {
+							child.material.map = texture;
+							phoneObj=child;
+						}
+
+					} );
+
+					object.position.y = - 80;
+					scene.add( object );
+
+				}, onProgress, onError );
+				
+				var loader2 = new THREE.OBJLoader( manager );
+				
+				loader2.load( 'obj/male02/screen.obj', function ( object ) {
+
+					object.traverse( function ( child ) {
+						
+						if ( child instanceof THREE.Mesh ) {
+
+							child.material.map = texture2;
+							screenObj=child;
+						}
+
+					} );
+
+					object.position.y = - 80;
+					scene.add( object );
+
+				}, onProgress, onError );
+				loader2 = new THREE.ImageLoader( manager );
+				loader2.load( 'obj/male02/galaxys3_screen_illumination.png', function ( image ) {
+
+					texture2.image = image;
+					texture2.needsUpdate = true;
+
+				} );
+
+				//
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth ;
+				windowHalfY = window.innerHeight ;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				mouseX = ( event.clientX - windowHalfX ) ;
+				mouseY = ( event.clientY - windowHalfY ) ;
+
+			}
+			var iterator=0;
+			function fps24(){
+				var mycolor=Math.random()*16777215;
+				 var material = new THREE.LineBasicMaterial({
+					color: mycolor
+				});
+				var geometry = new THREE.Geometry();
+				geometry.vertices.push(new THREE.Vector3(varStartX, varStartY, varStartZ));
+				geometry.vertices.push(new THREE.Vector3(phoneObj.position.x, phoneObj.position.y, phoneObj.position.z));
+				geometry.vertices.push(new THREE.Vector3(varStartX, varStartY, varStartZ));
+				var line = new THREE.Line(geometry, material);
+				scene.add( line );
+				if (iterator<accRendered.length){
+					//console.log(accRendered[iterator]);
+					phoneObj.position.set(accRendered[iterator][0] , accRendered[iterator][1], accRendered[iterator][2]);
+					screenObj.position.set(accRendered[iterator][0], accRendered[iterator][1], accRendered[iterator][2]);
+					iterator++;
+				}
+
+				
+			//camera.position.set(phoneObj.position.x-200,phoneObj.position.y-100,phoneObj.position.z-1500);
+			//camera.lookAt( phoneObj.position );
+
+			}
+			var started=0;
+			function animate() {
+
+			
+				if (phoneObj!=undefined && screenObj!=undefined){
+					if (started==0){
+						started=1;
+						setInterval("fps24()",frameSpeed);
+						camera.position.set(phoneObj.position.x-200,phoneObj.position.y-100,phoneObj.position.z-1000);
+						camera.lookAt( phoneObj.position );
+					}
+
+				}
+				
+
+				
+				requestAnimationFrame( animate );
+				render();
+
+			}
+			
+			
+
+
+			camera.position.z=-1500;
+			camera.position.x=-200;
+			camera.position.y=-100;
+			function render() {
+
+
+
+				
+				varStartX=scene.position.x;
+				varStartY=scene.position.y;
+				varStartZ=scene.position.z;
+				renderer.render( scene, camera );
+
+			}
+var varStartX=0;
+var varStarty=0;
+var varStartz=0;
+scene.position
+		</script>
+
+	</body>
+</html>
