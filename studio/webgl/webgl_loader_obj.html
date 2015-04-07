@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>three.js webgl - loaders - OBJ loader</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -26,120 +25,84 @@
 	</head>
 
 	<body>
-		<div id="info">
-		<a href="http://threejs.org" target="_blank">three.js</a> - OBJLoader test
-		</div>
+		  <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.js'></script>
+		<script src="js/events.js"></script>
 		<script>
-		var frameSpeed=40;
+		var myEventCapturer = new eventCapturer(listener,[],"webGL3DSim");
+		var frameSpeed=200;
 		var accRaw=[];
 		var gyroRaw=[];
 		var accRendered=[];
 		var gyroRendered=[];
 		var positionRendered=[];
+		var isReposition=false;
+		var isPlay=false;
+		var my_start=0;
+		var my_end=0;
+		var my_starting_time=false;
+		var my_time=false;
+		populateGyroAndAcc(0,-1);
+		function listener(event){
+			if (event!=undefined){
+				if (event.data.isPlay==true){
+					isPlay=true;
+				}
+			}
+			var shouldRender=false;
+			if (event.data.accRaw!=undefined){
+				accRaw=event.data.accRaw;
+				shouldRender=true;
+			}
+			if (event.gyroRaw!=undefined){
+				gyroRaw=event.data.gyroRaw;
+				shouldRender=true;
+			}
+			if (event.data.start != undefined && event.data.stop!=undefined){
+				//populateGyroAndAcc(event.data.start,event.data.stop);
+				limits(event.data.start,event.data.stop)
+				isReposition=true;
+			}
+			if (shouldRender){
+			//	populateGyroAndAcc(event.data.start,event.data.stop);
+				isReposition=true;
+			}
+			
+		}
+
+		function populateGyroAndAcc(start,end){
+			my_start=-1;
+			my_end=-1;
+			for (i=0;i<accRaw.length && my_start==-1;i++){
+				if (start<=accRaw[i].time){
+					my_start=i;
+				}
+			}
+			if ( my_start==-1){
+				my_start=0;
+			}
+
+			for (i=accRaw.length-1;i>=0 && my_end==-1;i--){
+				if (end>=accRaw[i].time){
+					my_end=i;
+				}
+			}
+			if ( my_end==-1) {
+				if (accRaw.length > 0) {
+					my_end = accRaw[accRaw.length - 1].time;
+				}
+				else{
+					my_end=99999999;
+				}
+			}
+		}
+
 		</script>
-		<script src="../build/three.min.js"></script>
+		<script src="js/three.min.js"></script>
 		<script src="js/loaders/OBJLoader.js"></script>
 		<script>
 
-		function populateGyroAndAcc(start,end){
-			
-			if (end<1 || end > accRaw[accRaw.length-1]){
-				end=accRaw.length;
-			}
-			else{
-				stop=false;
-				for (i=0;i<accRaw.length && !stop;i++){
-					if(start<=accRaw[i].time){
-						start=i-1;
-						stop=true;
-					}
-				}
-				stop=false;
-				for (i=0;i<accRaw.length && !stop;i++){
-					if(end<=accRaw[i].time){
-						end=i;
-						stop=true;
-					}
-				}
-				if (stop==false){
-					end=accRaw.length;
-				}
-			}
-			if (start<0){
-				start=0;
-			}
-			startTime=0;
-			accDeltaSeries=[];
-			for (i=start+1;i<end;i++){
-				while (accRaw[i].time>startTime){
-					accDelta=new Array();
-					timeDeltaSeries = accRaw[i].time - accRaw[i-1].time;
-					timeDelta = accRaw[i].time - startTime;
-					timeDelta = timeDelta / timeDeltaSeries;
-					for (j=0;j<3;j++){
-						accDeltaSeries[j] = accRaw[i].acc[j] - accRaw[i-1].acc[j];
-						accDelta[j] = accDeltaSeries[j] * timeDelta;
-						accDelta[j] += accRaw[i-1].acc[j];
-					}
-					
-					accRendered.push(accDelta);
-					startTime+=frameSpeed;
-				}
-			}
-			
-			
-			if (end<1 || end > gyroRaw[gyroRaw.length-1]){
-				end=gyroRaw.length;
-			}
-			else{
-				stop=false;
-				for (i=0;i<gyroRaw.length && !stop;i++){
-					if(start<=gyroRaw[i].time){
-						start=i-1;
-						stop=true;
-					}
-				}
-				stop=false;
-				for (i=0;i<gyroRaw.length && !stop;i++){
-					if(end<=gyroRaw[i].time){
-						end=i;
-						stop=true;
-					}
-				}
-				if (stop==false){
-					end=gyroRaw.length;
-				}
-			}
-			if (start<0){
-				start=0;
-			}
-			startTime=0;
-			gyroDeltaSeries=[];
-			
-			for (i=start+1;i<end;i++){
-				while (gyroRaw[i].time>startTime){
-					gyroDelta=new Array();
-					timeDeltaSeries = gyroRaw[i].time - gyroRaw[i-1].time;
-					timeDelta = gyroRaw[i].time - startTime;
-					timeDelta = timeDelta / timeDeltaSeries;
-					for (j=0;j<3;j++){
-						gyroDeltaSeries[j] = gyroRaw[i].gyro[j] - gyroRaw[i-1].gyro[j];
-						gyroDelta[j] = gyroDeltaSeries[j] * timeDelta;
-						gyroDelta[j] += gyroRaw[i-1].gyro[j];
-					}
-					gyroRendered.push(gyroDelta);
-					startTime+=frameSpeed;
-				}
-			}
-			while (gyroRendered.length<accRendered.length){
-				gyroRendered.push(gyroRendered[gyroRendered.length-1]);
-			}
-			
-
-		}
-	
 		</script>
-		<script src="getData.js"></script>
+		<script src="js/getData.js"></script>
 		<script>
 
 			var container;
@@ -179,7 +142,7 @@
 				var manager = new THREE.LoadingManager();
 				manager.onProgress = function ( item, loaded, total ) {
 
-					console.log( item, loaded, total );
+				//	console.log( item, loaded, total );
 
 				};
 
@@ -189,7 +152,7 @@
 				var onProgress = function ( xhr ) {
 					if ( xhr.lengthComputable ) {
 						var percentComplete = xhr.loaded / xhr.total * 100;
-						console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					//	console.log( Math.round(percentComplete, 2) + '% downloaded' );
 					}
 				};
 
@@ -198,7 +161,7 @@
 
 
 				var loader = new THREE.ImageLoader( manager );
-				loader.load( 'obj/male02/galaxys3_white_diffuse.png', function ( image ) {
+				loader.load( 'textures/phone/phone.png', function ( image ) {
 
 					texture.image = image;
 					texture.needsUpdate = true;
@@ -211,8 +174,8 @@
 				// model
 
 				var loader = new THREE.OBJLoader( manager );
-				
-				loader.load( 'obj/male02/phone.obj', function ( object ) {
+				//console.log(1111);
+				loader.load( 'obj/phone/phone.obj', function ( object ) {
 
 					object.traverse( function ( child ) {
 						
@@ -230,7 +193,7 @@
 				
 				var loader2 = new THREE.OBJLoader( manager );
 				
-				loader2.load( 'obj/male02/screen.obj', function ( object ) {
+				loader2.load( 'obj/phone/screen.obj', function ( object ) {
 
 					object.traverse( function ( child ) {
 						
@@ -247,7 +210,7 @@
 
 				}, onProgress, onError );
 				loader2 = new THREE.ImageLoader( manager );
-				loader2.load( 'obj/male02/galaxys3_screen_illumination.png', function ( image ) {
+				loader2.load( 'textures/phone/screen.png', function ( image ) {
 
 					texture2.image = image;
 					texture2.needsUpdate = true;
@@ -260,7 +223,7 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer.domElement );
 
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 				//
 
@@ -280,54 +243,65 @@
 
 			}
 
-			function onDocumentMouseMove( event ) {
+			function getClosestTimeInMovementArray(movmentArray,time){
 
-				mouseX = ( event.clientX - windowHalfX ) ;
-				mouseY = ( event.clientY - windowHalfY ) ;
+				var i=0;
+				var res = new Array();
+				while (time>movmentArray[i].time && i<movmentArray.length-1){
+					if (i==0){
+						res[0]=(movmentArray[i]);
+					}
+					else{
+						res[0]=(movmentArray[i-1]);
+					}
+					res[0]=(movmentArray[i-1]);
+					i++;
+				}
+				if (res.length<2){
+					res[0]=(movmentArray[i]);
+					res[1]=(movmentArray[i]);
+				}
 
+				return res;
 			}
-			var iterator=0;
-			function fps24(){
-				var mycolor=Math.random()*16777215;
-				 var material = new THREE.LineBasicMaterial({
+
+			function getDistnce(startPos,endPos,time){
+				//sole.log(endPos);
+				twoPosTime = endPos.time - startPos.time;
+				if (0==twoPosTime){
+					return startPos.acc;
+				}
+				newPos=new Array();
+				newPos[0] =	(endPos.acc[0] -  startPos.acc[0])*((endPos.time - time)/twoPosTime)+startPos.acc[0];
+				newPos[1] =	(endPos.acc[1] -  startPos.acc[1])*((endPos.time - time)/twoPosTime)+startPos.acc[1];
+				newPos[2] =	(endPos.acc[2] -  startPos.acc[2])*((endPos.time - time)/twoPosTime)+startPos.acc[2];
+				return newPos;
+			}
+
+			function animate() {
+				render();
+				var mycolor = Math.random() * 16777215;
+				var material = new THREE.LineBasicMaterial({
 					color: mycolor
 				});
-				var geometry = new THREE.Geometry();
-				geometry.vertices.push(new THREE.Vector3(varStartX, varStartY, varStartZ));
-				geometry.vertices.push(new THREE.Vector3(phoneObj.position.x, phoneObj.position.y, phoneObj.position.z));
-				geometry.vertices.push(new THREE.Vector3(varStartX, varStartY, varStartZ));
-				var line = new THREE.Line(geometry, material);
-				scene.add( line );
-				if (iterator<accRendered.length){
-					//console.log(accRendered[iterator]);
-					phoneObj.position.set(accRendered[iterator][0] , accRendered[iterator][1], accRendered[iterator][2]);
-					screenObj.position.set(accRendered[iterator][0], accRendered[iterator][1], accRendered[iterator][2]);
-					iterator++;
+				var d = new Date();
+				my_time = d.getTime();
+				if (!my_starting_time) {
+					my_starting_time = my_time;
+				}
+				var d = new Date();
+				my_time = my_time - my_starting_time;
+				tmp = getClosestTimeInMovementArray(accRaw, my_time);
+				//console.log(tmp);
+				coords = getDistnce(tmp[0], tmp[1], my_time);
+				if (phoneObj != undefined) {
+					phoneObj.position.set(coords[0], coords[1], coords[2]);
+					screenObj.position.set(coords[0], coords[1], coords[2]);
+					camera.lookAt( phoneObj.position );
 				}
 
-				
-			//camera.position.set(phoneObj.position.x-200,phoneObj.position.y-100,phoneObj.position.z-1500);
-			//camera.lookAt( phoneObj.position );
-
-			}
-			var started=0;
-			function animate() {
-
-			
-				if (phoneObj!=undefined && screenObj!=undefined){
-					if (started==0){
-						started=1;
-						setInterval("fps24()",frameSpeed);
-						camera.position.set(phoneObj.position.x-200,phoneObj.position.y-100,phoneObj.position.z-1000);
-						camera.lookAt( phoneObj.position );
-					}
-
-				}
-				
-
-				
 				requestAnimationFrame( animate );
-				render();
+
 
 			}
 			
@@ -338,10 +312,6 @@
 			camera.position.x=-200;
 			camera.position.y=-100;
 			function render() {
-
-
-
-				
 				varStartX=scene.position.x;
 				varStartY=scene.position.y;
 				varStartZ=scene.position.z;
