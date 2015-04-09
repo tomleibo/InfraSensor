@@ -1,0 +1,127 @@
+<script>
+var phone = function (movementArray,rotationArray,scene){
+	this.startTime = 0;
+	this.movementArray=movementArray;
+	this.rotationArray=rotationArray;
+	this.phoneObjLoader = new THREE.OBJLoader( manager );
+	this.scene = scene;
+	this.endTime=movementArray[movementArray.length-1].time;
+	this.phoneObj=undefined;
+	this.screenObj=undefined;
+
+	this.phoneObjLoader.load( 'obj/phone/phone.obj', function ( object ) {
+	object.traverse( function ( child ) {					
+		if ( child instanceof THREE.Mesh ) {
+			child.material.map = texture;
+			this.phoneObj=child;
+			}
+		});
+	object.position.y = - 80;
+	this.phoneObj = object;
+	this.scene.add( this.phoneObj );
+
+	}, onProgress, onError );
+	this.screenObjLoader = new THREE.OBJLoader( manager );		
+	this.screenObjLoader.load( 'obj/phone/screen.obj', function ( object ) {
+	object.traverse( function ( child ) {						
+		if ( child instanceof THREE.Mesh ) {
+			child.material.map = texture2;
+			this.screenObj=child;
+			}
+		} );
+	object.position.y = - 80;
+	this.screenObj = object;
+	this.scene.add( this.screenObj );
+
+	}, onProgress, onError );
+
+	this.phoneTexture = new THREE.Texture();
+	this.screenTexture = new THREE.Texture();
+
+	this.screenObjLoader_tex = new THREE.ImageLoader( manager );
+	this.screenObjLoader_tex.load( 'textures/phone/screen.png', function ( image ) {
+		this.screenTexture.image = image;
+		this.screenTexture.needsUpdate = true;
+	} );
+
+	this.phoneObjLoader_tex = new THREE.ImageLoader( manager );
+	this.phoneObjLoader_tex.load( 'textures/phone/phone.png', function ( image ) {
+		this.phoneTexture.image = image;
+		this.phoneTexture.needsUpdate = true;
+	} );
+	this.setPosition = function (x,y,z){
+		this.phoneObj.position.x=x;
+		this.phoneObj.position.y=y;
+		this.phoneObj.position.z=z;
+
+		this.screenObj.position.x=x;
+		this.screenObj.position.y=y;
+		this.screenObj.position.z=z;
+	}
+
+	this.play= function(){
+		function getClosestTimeInMovementArray(movmentArray,time){
+
+			var i=0;
+			var res = new Array();
+			while (time>movmentArray[i].time && i<movmentArray.length-1){
+				if (i==0){
+					res[0]=(movmentArray[i]);
+				}
+				else{
+					res[0]=(movmentArray[i-1]);
+				}
+				res[0]=(movmentArray[i-1]);
+				i++;
+			}
+			if (res.length<2){
+				res[0]=(movmentArray[i]);
+				res[1]=(movmentArray[i]);
+			}
+
+			return res;
+		}
+
+		function getDistnce(startPos,endPos,time){
+			//sole.log(endPos);
+			twoPosTime = endPos.time - startPos.time;
+			if (0==twoPosTime){
+				return startPos.acc;
+			}
+			newPos=new Array();
+			newPos[0] =	(endPos.acc[0] -  startPos.acc[0])*((endPos.time - time)/twoPosTime)+startPos.acc[0];
+			newPos[1] =	(endPos.acc[1] -  startPos.acc[1])*((endPos.time - time)/twoPosTime)+startPos.acc[1];
+			newPos[2] =	(endPos.acc[2] -  startPos.acc[2])*((endPos.time - time)/twoPosTime)+startPos.acc[2];
+			return newPos;
+		}
+
+		
+		var d = new Date();
+		my_time = d.getTime();
+		if (!my_starting_time) {
+			my_starting_time = my_time;
+		}
+		var d = new Date();
+		my_time = my_time - my_starting_time;
+		tmp = getClosestTimeInMovementArray(accRaw, my_time);
+		//console.log(tmp);
+		coords = getDistnce(tmp[0], tmp[1], my_time);
+		if (this.phoneObj != undefined) {
+			this.setPosition(coords[0], coords[1], coords[2]);
+		}
+
+
+	}
+
+	this.updatefirstPosition=function(startTime){
+		shouldStop=false;
+		for (i=0;i<this.movementArray.length && !shouldStop ;i++){
+			if (this.movementArray[i].time>=this.startTime){
+				this.startTime=this.movementArray[i].time;
+				shouldStop=true;
+				this.setPosition(this.movementArray[i].acc[0],this.movementArray[i].acc[1],this.movementArray[i].acc[2]);
+			}
+		}
+	}
+}
+</script>

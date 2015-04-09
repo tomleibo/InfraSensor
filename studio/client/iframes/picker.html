@@ -1,0 +1,37 @@
+
+<script src="jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="image-picker.js"></script>
+<link rel="stylesheet" type="text/css" href="image-picker.css">
+<script>
+
+
+ $(function(){
+	$("select").imagepicker({
+		show_label  : true,
+	});
+	$(".iframeOverlay").css("width",$(".iframeOverlay").parent().css("width"));
+	$(".iframeOverlay").css("height",$(".iframeOverlay").parent().css("height"));
+});
+
+var isCntrl = false;
+$(document).bind('keydown', 'ctrl', fnd);
+$(document).bind('keyup', 'ctrl', fnu);
+function fnd(e){
+	if (e.data=="ctrl"){
+		isCntrl=true;
+	}
+}
+function fnu(e){
+	if (e.data=="ctrl"){
+		isCntrl=false;
+	}
+}
+</script>
+ <div class="picker">
+<select multiple="multiple" class="image-picker show-labels show-html">
+  <option data-img-label='Awww' data-img-src="http://placekitten.com/" value="1">Cute Kitten 1</option>
+  <option data-img-label='Awww' data-img-src="http://placekitten.com/180/200" value="2">Cute Kitten 2</option>
+  <option data-img-label='Awww' data-img-src="http://placekitten.com/130/200" value="3">Cute Kitten 3</option>
+  <option data-img-label='Awww' data-img-src="http://placekitten.com/270/200" value="4">Cute Kitten 4</option>
+</select>
+</div>
