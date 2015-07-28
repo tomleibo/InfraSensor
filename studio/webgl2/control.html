@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.js'></script>
+  <script type='text/javascript' src="http://www.google.com/jsapi?fake=.js"></script>
+  <style type='text/css'>  
+  body{ overflow: hidden;}
+  </style>
+  
+
+<script src="js/events.js"></script>
+<script type='text/javascript'>//<![CDATA[
+var mySize=100; 
+
+var myEventCapturer = new eventCapturer(function(event){},[],"webGL3DController");
+
+
+
+$( document ).ready(function(){
+mySize=$( document ).height();
+$( "#filter" ).css("height",$( window ).height()*0.9+"px");
+google.load('visualization', '1', {packages: ['corechart','controls'], callback: drawChart});
+
+});
+$( window ).resize(function() {
+
+  $( "#filter" ).css("height",$( window ).height()+"px");
+  mySize=$( document ).height()*0.8;
+  drawChart();
+});
+
+
+function drawChart() {console.log(mySize);
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'X');
+    data.addColumn('number', 'Y 1');
+    data.addColumn('number', 'Y 2');
+    data.addColumn('number', 'Y 3');
+	
+	var chart = new google.visualization.ChartWrapper({
+        chartType: 'LineChart',
+        dataTable: data,
+        options: {
+            width: 0,
+            height: 0
+		}
+    });
+	console.log(mySize+"hhh");
+    controlWrapper = new google.visualization.ControlWrapper({
+			controlType: 'ChartRangeFilter',
+			containerId: 'filter',
+			options: {
+				filterColumnIndex: 0,
+				height: 50,
+				colors: ['black', 'blue', 'red', 'green', 'yellow', 'gray'],
+				ui: {
+					chartType: 'LineChart',
+					chartOptions: {
+						chartArea: {
+							width: '95%',
+							height: mySize
+						},
+						hAxis: {
+							baselineColor: 'none'
+						},
+						colors: ['black', 'blue', 'red', 'green', 'yellow', 'gray']
+					},
+					// 1 day in milliseconds = 24 * 60 * 60 * 1000 = 86,400,000
+					minRangeSize: 86400000
+				}
+			}
+		});
+
+
+    // add random data
+    var y1 = 50, y2 = 50, y3 = 50;
+    for (var i = 0; i < 1830; i++) {
+        y1 += ~~(Math.random() * 5) * Math.pow(-1, ~~(Math.random() * 2));
+        y2 += ~~(Math.random() * 5) * Math.pow(-1, ~~(Math.random() * 2));
+        y3 += ~~(Math.random() * 5) * Math.pow(-1, ~~(Math.random() * 2));
+        data.addRow([i, y1, y2, y3]);
+    }
+    
+    // Instantiate and draw our chart, passing in some options.
+
+
+
+	var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard'));
+	dashboard.bind(controlWrapper, chart).draw(data);
+	google.visualization.events.removeAllListeners(chart);
+	google.visualization.events.addListener(controlWrapper, 'statechange', function () {
+	//console.log(controlWrapper.getState());
+	var myEventSender = new eventSender("webGL3DSim",[],{start:controlWrapper.getState().range.start,stop:controlWrapper.getState().range.end});
+	});
+
+	}
+	
+	function play(){
+			var myEventSender = new eventSender("webGL3DSim",[],{start:-1,stop:-1,isPlay:1});
+	}
+
+
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+  
+<div id="control_container"><div id="play_pause" style="float:left; width:10%;height:100%"><button onclick="play()" style="width:100%; height:100%">play</button></div><div id="filter" style="float:right; width:90%;"></div></div>
+
+  
+</body>
+
+
+</html>
+
