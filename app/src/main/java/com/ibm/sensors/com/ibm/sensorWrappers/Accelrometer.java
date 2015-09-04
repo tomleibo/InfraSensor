@@ -10,8 +10,7 @@ import com.ibm.sensors.com.ibm.sensors.interfaces.SensorWrapper;
 /**
  * Created by thinkPAD on 9/2/2015.
  */
-public class
-        Accelrometer implements SensorWrapper<SensorManager> {
+public class Accelrometer implements SensorWrapper<SensorManager> {
 
     private Sensor sensor;
     private EventHandler handler;

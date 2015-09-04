@@ -1,10 +1,12 @@
 package com.ibm.sensors.com.ibm.EventWrappers;
 
+import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 
 import com.google.gson.Gson;
 import com.ibm.sensors.com.ibm.sensors.interfaces.EventWrapper;
 import com.ibm.sensors.com.ibm.sensors.interfaces.Jsonable;
+import com.ibm.sensors.com.ibm.sensors.interfaces.SensorWrapper;
 
 /**
  * Created by thinkPAD on 8/18/2015.
@@ -14,12 +16,14 @@ public class MotionSensorEventWrapper implements EventWrapper {
     private float[] values;
     private long timestamp;
     private int accuracy;
+    private SensorWrapper sensor;
 
-    public MotionSensorEventWrapper(int type, float[] values, int timestamp, int accuracy) {
+    public MotionSensorEventWrapper(SensorWrapper sensor,int type, float[] values, int timestamp, int accuracy) {
         this.type = type;
         this.values = values;
         this.timestamp = timestamp;
         this.accuracy = accuracy;
+        this.sensor =sensor;
     }
 
     public MotionSensorEventWrapper(SensorEvent event) {
@@ -29,8 +33,13 @@ public class MotionSensorEventWrapper implements EventWrapper {
         this.accuracy = event.accuracy;
     }
 
-    public int getType() {
+    public int getEventType() {
         return type;
+    }
+
+    @Override
+    public SensorWrapper getSensor() {
+        return sensor;
     }
 
     public void setType(int type) {

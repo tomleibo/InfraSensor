@@ -16,11 +16,11 @@ import java.util.TreeMap;
 
 
 /**
- * EventHandler – A singleton which is the mediator between native events, events and rules.
+ * EventHandler: A singleton which is the mediator between native events, events and rules.
  This component will register on input source (including rules themselves), wrap these events in a uniform structure and send the wrapped event to any rule who is registered on it.
  In the same manner events can be unregistered.
  Rules can subscribe on events and unsubscribe.
- Implements Observer and Observalbe – It observes different types of events and send events to a subscribed rule.
+ Implements Observer and Observalbe: It observes different types of events and send events to a subscribed rule.
  Zero subscribers on an event type would imply unregistering on that event.
  Clarification: register means that the eventhandler is requesting to receive events. Subscribing means that a rule is requesting to receive events from the eventHandler.
 
@@ -77,7 +77,7 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> implement
             CommunicationHandler.getInstance().sendEvent(event);
         }
         else {
-            notifyObservers(event.getType(),event);
+            notifyObservers(event.getEventType(),event);
         }
     }
 

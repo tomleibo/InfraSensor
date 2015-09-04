@@ -2,6 +2,7 @@ package com.ibm.sensors.com.ibm.EventWrappers;
 
 import com.google.gson.Gson;
 import com.ibm.sensors.com.ibm.sensors.interfaces.EventWrapper;
+import com.ibm.sensors.com.ibm.sensors.interfaces.SensorWrapper;
 import com.ibm.sensors.com.ibm.utils.SensorTypes;
 
 import java.io.File;
@@ -12,15 +13,22 @@ import java.io.File;
 public class FileSizeChangedEvent implements EventWrapper {
     File file;
     long length;
+    SensorWrapper sensor;
 
-    public FileSizeChangedEvent(File file, long length) {
+    public FileSizeChangedEvent(SensorWrapper sensor,File file, long length) {
         this.file=file;
         this.length=length;
+        this.sensor = sensor;
     }
 
     @Override
-    public int getType() {
+    public int getEventType() {
         return SensorTypes.FILE_SIZE_CHECKER;
+    }
+
+    @Override
+    public SensorWrapper getSensor() {
+        return sensor;
     }
 
     @Override

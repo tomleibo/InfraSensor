@@ -56,7 +56,7 @@ public class FileSizeChecker implements SensorWrapper<File>,Runnable{
         while(!shouldStop) {
             try {
                 if (file.length() != prevSize) {
-                    handler.handleEvent(new FileSizeChangedEvent(file,file.length()));
+                    handler.handleEvent(new FileSizeChangedEvent(this,file,file.length()));
                 }
                 Thread.sleep(delay);
             }

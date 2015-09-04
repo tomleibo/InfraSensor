@@ -8,7 +8,7 @@ import com.ibm.sensors.com.ibm.EventWrappers.MotionSensorEventWrapper;
 import java.util.Set;
 
 /**
- * Rule – is a set of events that represents a new event or rule of action in the system.
+ * Rule: is a set of events that represents a new event or rule of action in the system.
  It can register or unregister receiving events through the eventHandler.
  For each event registered a specific modifier will process its data. Therefore, rule also contains a set of modifiers.
  To cover states an initial event will be created for each type of event needed by rule on registration for that event.
