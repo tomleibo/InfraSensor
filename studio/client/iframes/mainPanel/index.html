@@ -1,0 +1,39 @@
+<script type='text/javascript' src='js/jquery-1.11.0.js'></script>
+<script type='text/javascript' src='js/jquery-ui.min.js'></script>
+<script type='text/javascript' src='js/jquery.jspanel.js'></script>
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/jquery.jspanel.css">
+<script>
+
+	function loadPopup(title,html){
+		$.jsPanel({
+		selector: "#jspanel-func .panel-body",
+		title:    title,
+		position: "center",
+		theme:    "success",
+		size: {
+			width: 700,
+			height: 222
+		},
+		 content: html
+		});
+	};
+	
+window.onmessage = function(e){
+		var myregexp = /[^\/]+$/;
+		var match = myregexp.exec(e.data.msg);
+		result="";
+		if (match != null) {
+			result = match[0];
+			result= decodeURIComponent(result);
+		} else {
+			result = "";
+		}
+		loadPopup(result,e.data.msg);
+	}
+	
+
+	
+        
+</script>
+<div id="gg"></div>

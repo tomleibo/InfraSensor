@@ -1,0 +1,45 @@
+<script>
+var phone = function (position,rotation){
+    this.position=position;
+    this.rotation=rotation;
+    var manager = new THREE.LoadingManager();
+    var texture = new THREE.Texture();
+    this.Obj_phone_loader;
+    var tex_phone_loader = new THREE.ImageLoader( manager );
+
+    tex_phone_loader.load( 'textures/phone/phone.png', function ( image ) {
+
+        texture.image = image;
+        texture.needsUpdate = true;
+
+    } );
+    var Obj_phone_loader = new THREE.OBJLoader( manager );
+    Obj_phone_loader.load( 'obj/phone/phone.obj', function ( object ) {
+
+        object.traverse(function (child) {
+
+            if (child instanceof THREE.Mesh) {
+                child.material.map = texture;
+                Obj_phone_loader = child;
+            }
+        });
+    });
+
+    this.setRotation=function(rotationVector){
+        this.phoneObj.rotation(rotationVector.x,rotationVector.y,rotationVector.z);
+    }
+
+    this.setPosition=function(positionVector){
+        this.phoneObj.position(positionVector.x,positionVector.y,positionVector.z);
+    }
+
+    this.getObj=function(){
+        return this.Obj_phone_loader;
+    }
+
+    this.addToScene=function(scene){
+        scene.add( this.Obj_phone_loader );
+    }
+
+}
+</script>

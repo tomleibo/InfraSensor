@@ -1,0 +1,84 @@
+<script src="js/jquery-2.1.3.min.js" ></script>
+<script>
+var isFullScreen=false;
+window.onmessage = function(e){
+		
+		if (e.data.component == "flowChart" && e.data.type == "refreshStrted"){
+			//$("#chart").hide();
+			$("#loading").show();
+		}
+		if (e.data.component == "flowChart" && e.data.type == "refreshEnded"){
+			$("#chart").show();
+			$("#loading").hide();
+		}
+	}
+$(function(){
+	$( "body" ).mouseenter(function() {
+		$("#fullScreenContainer").show();
+	});
+		$( "body" ).mouseleave(function() {
+		$("#fullScreenContainer").hide();
+	});
+	
+});
+function fullScreenClickedGUI(){
+	if (isFullScreen){
+		$("#enterFullScreen").hide();
+		$("#exitFullScreen").show();
+		$("#editBlock").hide();
+	}
+	else{
+		$("#enterFullScreen").show();
+		$("#exitFullScreen").hide();
+		$("#editBlock").show();
+	}
+}
+
+function fullScreenClicked(){
+	fullScreenClickedGUI();
+	if (!isFullScreen){
+		isFullScreen=true;
+		full = {
+			component : "flowChart",
+			type: "fullScreenStartRequest"		
+		};
+		window.top.postMessage(full, '*');
+	}
+	else{
+		isFullScreen=false;
+		full = {
+			component : "flowChart",
+			type: "fullScreenEndRequest"		
+		};
+		window.top.postMessage(full, '*');
+	}
+}
+$(function(){
+	if (window.location.hash.toString().indexOf("true")>-1){
+		isFullScreen=true;
+		fullScreenClickedGUI();
+	}
+});
+</script>
+<style>
+#editBlock {
+            background-color: Transparent;
+            background-repeat:no-repeat;
+            border: none;
+            cursor:default;
+            overflow: hidden;
+        }
+.fullScreen{
+	z-index:40;
+	position:absolute;
+	top:0px;
+	right:0px;
+}
+</style>
+<div id="fullScreenContainer" style="display:none;">
+	<a class="fullScreen"  id="enterFullScreen"  href="#" onclick="fullScreenClicked();" ><img class="fullScreen" src="img/fullscreen_alt-32.png" /></a>
+	<a class="fullScreen"  id="exitFullScreen"  href="#" onclick="fullScreenClicked();" style="display:none;"><img class="fullScreen"  src="img/fullscreen_exit_alt-32.png" /></a>
+</div>
+<button id="editBlock" style="width:100%; height:100%; z-index:30; position:absolute; top:0px; left:0px;"></button>
+<iframe id="chart" src="chart.html" frameborder="0" style="position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:10; overflow-y: hidden;" scrolling="no" seamless="seamless"></iframe>
+<iframe id="loading" src="loading.html" frameborder="0" style="position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:15; display:none; overflow-y: hidden;" scrolling="no"  seamless="seamless"></iframe>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			font-family: Monospace;
+			background-color: #f0f0f0;
+			margin: 0px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+<script type='text/javascript' src='/jquery-1.8.3.js'></script>
+<script src="js/events.js"></script>
+<script src="js/three.min.js"></script>
+<script src="js/loaders/OBJLoader.js"></script>
+
+<script id="vertex_shader" type="x-shader/x-vertex">
+
+varying vec2 vUv;
+varying vec3 vNormal;
+varying vec3 vViewPosition;
+
+void main() {
+
+	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+	vUv = uv;
+	vNormal = normalize( normalMatrix * normal );
+	vViewPosition = -mvPosition.xyz;
+
+	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+}
+
+</script>
+<script src="PhisObj.js"></script>
+<script src="/loadJson.php"></script>
+<script src="EventMannager.js" ></script>
+<script src="PhonesTrailControler.js"></script>
+<script src="PhoneTrail.js"></script>
+<script src="Phone.js"></script>
+<script src="Clock.js"></script>
+<script>
+
+	var _clock = new clock(series[series.length-1].time,function(){});
+	var eventMannager = new EventManagerClass();
+	eventMannager.registerEvent(function(){_clock.update()});
+	scene = new THREE.Scene();
+
+	a = new PhoneTrailControler(series,'obj/phone/phone.obj','textures/phone/phone.png',scene,	function (){
+
+	});
+	b=new Phone(series,scene,'obj/phone/phone.obj','textures/phone/phone.png',a,function(){
+		eventMannager.registerEvent(function(){return b.play()});
+	});
+	camera = new THREE.PerspectiveCamera( 150, window.innerWidth / window.innerHeight, 1, 2000 );
+
+
+	var ambient = new THREE.AmbientLight( 0x101030 );
+	scene.add( ambient );
+	var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+	directionalLight.position.set( 500, 500, 500 );
+
+	scene.add( directionalLight );
+
+
+	//scene.add( object );
+	renderer = new THREE.WebGLRenderer();
+	renderer.setClearColor( 0xf0f0f0 );
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	camera.position.x = -2000;
+
+	document.body.appendChild(renderer.domElement);
+
+	function render() {
+		if (b.object!=null) {
+			camera.position.x = b.object.position.x - 1000;
+			camera.position.y = b.object.position.y;
+			camera.position.z = b.object.position.z;
+			camera.lookAt(b.object.position);
+		}
+	//	camera.position.y=b.object.position.y-500;
+	//	camera.position.z=b.object.position.z-500;
+
+		renderer.render(scene, camera);
+		requestAnimationFrame(render);
+		eventMannager.runEvents();
+	}
+	render();
+	//rollOverMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.5, transparent: true } );
+
+	/*document.body.onkeydown = function(e){
+
+		if (e.keyCode==87){
+			camera.position.x -=20;
+
+		}
+		console.log(e.keyCode);
+		if (e.keyCode==83){
+			camera.position.x +=20;
+
+		}
+
+		if (e.keyCode==68){
+			camera.position.z +=20;
+
+		}
+		if (e.keyCode==65){
+			camera.position.z -=20;
+
+		}
+	console.log()
+		if (e.keyCode==68){
+			camera.position.z +=20;
+
+		}
+		if (e.keyCode==65){
+			camera.position.z -=20;
+
+		}
+
+
+	};*/
+</script>
+
+</body>
+</html>

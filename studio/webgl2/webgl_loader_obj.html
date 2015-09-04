@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #000;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				color: #fff;
+				position: absolute;
+				top: 10px;
+				width: 100%;
+				text-align: center;
+				z-index: 100;
+				display:block;
+			}
+			#info a, .button { color: #f00; font-weight: bold; text-decoration: underline; cursor: pointer }
+		</style>
+	</head>
+
+	<body>
+		  <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.js'></script>
+		<script src="js/events.js"></script>
+
+		<script>
+		var myEventCapturer = new eventCapturer(listener,[],"webGL3DSim");
+		var frameSpeed=200;
+		var accRaw=[];
+		var gyroRaw=[];
+		var accRendered=[];
+		var gyroRendered=[];
+		var positionRendered=[];
+		var isReposition=false;
+		var isPlay=false;
+		var my_start=0;
+		var my_end=0;
+		var my_starting_time=false;
+		var my_time=false;
+
+		var phoneObj;
+		populateGyroAndAcc(0,-1);
+		function listener(event){
+			if (event!=undefined){
+				if (event.data.isPlay==true){
+					isPlay=true;
+				}
+			}
+			var shouldRender=false;
+			if (event.data.accRaw!=undefined){
+				accRaw=event.data.accRaw;
+				shouldRender=true;
+			}
+			if (event.gyroRaw!=undefined){
+				gyroRaw=event.data.gyroRaw;
+				shouldRender=true;
+			}
+			if (event.data.start != undefined && event.data.stop!=undefined){
+				//populateGyroAndAcc(event.data.start,event.data.stop);
+				limits(event.data.start,event.data.stop)
+				isReposition=true;
+			}
+			if (shouldRender){
+			//	populateGyroAndAcc(event.data.start,event.data.stop);
+				isReposition=true;
+			}
+			
+		}
+
+		function populateGyroAndAcc(start,end){
+			my_start=-1;
+			my_end=-1;
+			for (i=0;i<accRaw.length && my_start==-1;i++){
+				if (start<=accRaw[i].time){
+					my_start=i;
+				}
+			}
+			if ( my_start==-1){
+				my_start=0;
+			}
+
+			for (i=accRaw.length-1;i>=0 && my_end==-1;i--){
+				if (end>=accRaw[i].time){
+					my_end=i;
+				}
+			}
+			if ( my_end==-1) {
+				if (accRaw.length > 0) {
+					my_end = accRaw[accRaw.length - 1].time;
+				}
+				else{
+					my_end=99999999;
+				}
+			}
+		}
+
+		</script>
+		<script src="js/three.min.js"></script>
+		<script src="js/loaders/OBJLoader.js"></script>
+		<script>
+
+		</script>
+		<script src="js/getData.js"></script>
+		  <script src="phone.js"></script>
+		<script>
+
+			var container;
+
+			var camera, scene, renderer;
+
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			var phoneObj,screenObj;
+
+			init();
+			animate();
+
+			function init() {
+				phoneObj = new phone([0,0,0],[0,0,0]);
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.z = 100;
+
+				// scene
+
+				scene = new THREE.Scene();
+
+				var ambient = new THREE.AmbientLight( 0x101030 );
+				scene.add( ambient );
+
+				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+				directionalLight.position.set( -50, -50, -50 );
+				scene.add( directionalLight );
+
+				// texture
+
+				var manager = new THREE.LoadingManager();
+				manager.onProgress = function ( item, loaded, total ) {
+
+				//	console.log( item, loaded, total );
+
+				};
+				phoneObj.addToScene(scene);
+		/*		var texture = new THREE.Texture();
+				var texture2 = new THREE.Texture();
+
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+					//	console.log( Math.round(percentComplete, 2) + '% downloaded' );
+					}
+				};
+
+				var onError = function ( xhr ) {
+				};
+
+
+				var loader = new THREE.ImageLoader( manager );
+				loader.load( 'textures/phone/phone.png', function ( image ) {
+
+					texture.image = image;
+					texture.needsUpdate = true;
+
+				} );
+
+
+
+
+				// model
+
+				var loader = new THREE.OBJLoader( manager );
+				loader.load( 'obj/phone/phone.obj', function ( object ) {
+
+					object.traverse( function ( child ) {
+						
+						if ( child instanceof THREE.Mesh ) {
+							child.material.map = texture;
+							phoneObj=child;
+						}
+
+					} );
+
+					object.position.y = - 80;
+					scene.add( object );
+
+				}, onProgress, onError );
+				
+				var loader2 = new THREE.OBJLoader( manager );
+				
+				loader2.load( 'obj/phone/screen.obj', function ( object ) {
+
+					object.traverse( function ( child ) {
+						
+						if ( child instanceof THREE.Mesh ) {
+
+							child.material.map = texture2;
+							screenObj=child;
+						}
+
+					} );
+
+					object.position.y = - 80;
+					scene.add( object );
+
+				}, onProgress, onError );
+				loader2 = new THREE.ImageLoader( manager );
+				loader2.load( 'textures/phone/screen.png', function ( image ) {
+
+					texture2.image = image;
+					texture2.needsUpdate = true;
+
+				} );
+*/
+				//
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth ;
+				windowHalfY = window.innerHeight ;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function getClosestTimeInMovementArray(movmentArray,time){
+
+				var i=0;
+				var res = new Array();
+				while (time>movmentArray[i].time && i<movmentArray.length-1){
+					if (i==0){
+						res[0]=(movmentArray[i]);
+					}
+					else{
+						res[0]=(movmentArray[i-1]);
+					}
+					res[0]=(movmentArray[i-1]);
+					i++;
+				}
+				if (res.length<2){
+					res[0]=(movmentArray[i]);
+					res[1]=(movmentArray[i]);
+				}
+
+				return res;
+			}
+
+			function getDistnce(startPos,endPos,time){
+				//sole.log(endPos);
+				twoPosTime = endPos.time - startPos.time;
+				if (0==twoPosTime){
+					return startPos.acc;
+				}
+				newPos=new Array();
+				newPos[0] =	(endPos.acc[0] -  startPos.acc[0])*((endPos.time - time)/twoPosTime)+startPos.acc[0];
+				newPos[1] =	(endPos.acc[1] -  startPos.acc[1])*((endPos.time - time)/twoPosTime)+startPos.acc[1];
+				newPos[2] =	(endPos.acc[2] -  startPos.acc[2])*((endPos.time - time)/twoPosTime)+startPos.acc[2];
+				return newPos;
+			}
+
+			function animate() {
+				render();
+
+				phoneObj.setPosition([0,0,0]);
+				camera.position.z = -1500;
+				camera.position.x = -200;
+				camera.position.y = -100;
+				camera.lookAt( [0,0,0] );
+				requestAnimationFrame(animate);
+
+
+
+
+			};
+			function render() {
+				varStartX=scene.position.x;
+				varStartY=scene.position.y;
+				varStartZ=scene.position.z;
+				renderer.render( scene, camera );
+
+			};
+
+		</script>
+
+	</body>
+</html>
