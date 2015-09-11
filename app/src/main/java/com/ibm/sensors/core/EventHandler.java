@@ -1,18 +1,12 @@
-package com.ibm.sensors.com.ibm.core;
+package com.ibm.sensors.core;
 
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import com.google.gson.Gson;
-import com.ibm.sensors.com.ibm.sensors.interfaces.EventWrapper;
-import com.ibm.sensors.com.ibm.sensors.interfaces.GenericObserver;
-import com.ibm.sensors.com.ibm.EventWrappers.MotionSensorEventWrapper;
-import com.ibm.sensors.com.ibm.utils.MultiGenericObservable;
-
-import java.util.Map;
-import java.util.TreeMap;
+import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.interfaces.GenericObserver;
+import com.ibm.sensors.utils.MultiGenericObservable;
 
 
 /**
@@ -26,7 +20,7 @@ import java.util.TreeMap;
 
 
  */
-public class EventHandler extends MultiGenericObservable<EventWrapper> implements SensorEventListener{
+public class EventHandler extends MultiGenericObservable<EventWrapper> {
     private static final boolean REMOTE_PROCESSING = false;
     private static final int SENSOR_DELAY = SensorManager.SENSOR_DELAY_NORMAL;
     private static final int MOTION_SENSORS_TYPES[] = {Sensor.TYPE_GRAVITY,Sensor.TYPE_GYROSCOPE,Sensor.TYPE_ROTATION_VECTOR,Sensor.TYPE_ACCELEROMETER,Sensor.TYPE_LINEAR_ACCELERATION};
@@ -35,20 +29,18 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> implement
 
     private Gson gson;
     private SensorManager sm;
-    private Map<Integer,Integer> subscribersCount;
 
     private EventHandler() {
-        subscribersCount = new TreeMap<>();
         gson = new Gson();
         // optional GsonBuilder.settingMethods()....create()
     }
 
-    public EventHandler(SensorManager sm) {
+    private EventHandler(SensorManager sm) {
         this();
         this.sm=sm;
     }
 
-    public static EventHandler build() throws InstantiationException {
+    public static EventHandler get() throws InstantiationException {
         if (instance==null) {
             throw new InstantiationException();
         }
@@ -72,26 +64,12 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> implement
     }
 
 
-    public void handleEvent(EventWrapper event) throws InterruptedException {
+    public void handleEvent(EventWrapper event) {
         if (REMOTE_PROCESSING) {
             CommunicationHandler.getInstance().sendEvent(event);
         }
         else {
             notifyObservers(event.getEventType(),event);
-        }
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        try {
-            if (isMotionEvent(event.sensor.getType())) {
-                MotionSensorEventWrapper wrap = new MotionSensorEventWrapper(event);
-                handleEvent(wrap);
-            }
-            //TODO: add more types.
-        }
-        catch (InterruptedException e) {
-            return;
         }
     }
 
@@ -104,23 +82,11 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> implement
         return false;
     }
 
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
     @Override
     public boolean subscribe(Integer eventType, GenericObserver obs) {
         boolean result = super.subscribe(eventType,obs);
         if (result) {
-            Integer count = subscribersCount.get(eventType);
-            if (count == null) {
-                subscribersCount.put(eventType,1);
-            }
-            else {
-                subscribersCount.put(eventType,new Integer(count+1));
-            }
+            SensorAndRuleFactory.subscribe(this,eventType,sm);
         }
         return result;
     }
@@ -129,9 +95,13 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> implement
     public boolean unsubscribe(Integer eventType, GenericObserver<EventWrapper> obs) {
         boolean result = super.unsubscribe(eventType, obs);
         if (result) {
-            subscribersCount.put(eventType,new Integer(subscribersCount.get(eventType)-1));
+            SensorAndRuleFactory.unsubscribe(this,eventType);
         }
         return result;
+    }
+
+    public SensorManager getSensorManager() {
+        return sm;
     }
 
     /*
@@ -163,7 +133,7 @@ Sandbox methods
     /**
      * @param register false for unregister
      */
-    public void registerMotionSensors(boolean register) {
+   /* public void registerMotionSensors(boolean register) {
         Sensor sensor;
         for (int type : MOTION_SENSORS_TYPES) {
             sensor = sm.getDefaultSensor(type);
@@ -176,5 +146,5 @@ Sandbox methods
                 }
             }
         }
-    }
+    }*/
 }

@@ -1,8 +1,8 @@
-package com.ibm.sensors.com.ibm.core;
+package com.ibm.sensors.core;
 
 import android.util.Log;
 
-import com.ibm.sensors.com.ibm.sensors.interfaces.EventWrapper;
+import com.ibm.sensors.EventWrappers.EventWrapper;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -51,8 +51,13 @@ public class CommunicationHandler implements Runnable{
         return instance;
     }
 
-    public void sendEvent(EventWrapper event) throws InterruptedException {
-        eventQueue.put(event);
+    public void sendEvent(EventWrapper event) {
+        try {
+            eventQueue.put(event);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {
@@ -60,7 +65,7 @@ public class CommunicationHandler implements Runnable{
             String json = null;
             try {
                 EventWrapper event = eventQueue.take();
-                json = EventHandler.build().translateEventToJson(event);
+                json = EventHandler.get().translateEventToJson(event);
             } catch (InterruptedException e) {
                 json="interrupted exception occured.";
                 e.printStackTrace();

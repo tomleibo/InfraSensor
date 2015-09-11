@@ -1,4 +1,4 @@
-package com.ibm.sensors.com.ibm.sensors.interfaces;
+package com.ibm.sensors.interfaces;
 
 import com.google.gson.Gson;
 

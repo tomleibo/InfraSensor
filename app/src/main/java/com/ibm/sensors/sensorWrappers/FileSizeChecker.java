@@ -1,9 +1,8 @@
-package com.ibm.sensors.com.ibm.sensorWrappers;
+package com.ibm.sensors.sensorWrappers;
 
-import com.ibm.sensors.com.ibm.EventWrappers.FileSizeChangedEvent;
-import com.ibm.sensors.com.ibm.core.EventHandler;
-import com.ibm.sensors.com.ibm.sensors.interfaces.SensorWrapper;
-import com.ibm.sensors.com.ibm.utils.SensorTypes;
+import com.ibm.sensors.EventWrappers.FileSizeChangedEvent;
+import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.core.SensorAndRuleFactory;
 
 import java.io.File;
 
@@ -18,6 +17,7 @@ public class FileSizeChecker implements SensorWrapper<File>,Runnable{
     private File file;
     private int delay;
     private int prevSize=-1;
+    boolean isRegistered=false;
 
     public FileSizeChecker(EventHandler handler) {
         this.handler = handler;
@@ -26,7 +26,7 @@ public class FileSizeChecker implements SensorWrapper<File>,Runnable{
 
     @Override
     public int getType() {
-        return SensorTypes.FILE_SIZE_CHECKER;
+        return SensorAndRuleFactory.FILE_SIZE_CHECKER;
     }
 
     @Override
@@ -37,6 +37,7 @@ public class FileSizeChecker implements SensorWrapper<File>,Runnable{
         this.delay=delay;
         this.file=f;
         thread.run();
+        isRegistered=true;
         return true;
     }
 
@@ -48,7 +49,13 @@ public class FileSizeChecker implements SensorWrapper<File>,Runnable{
             thread.interrupt();
             return true;
         }
+        isRegistered=false;
         return false;
+    }
+
+    @Override
+    public boolean isRegistered() {
+        return isRegistered;
     }
 
     @Override

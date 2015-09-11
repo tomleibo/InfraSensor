@@ -1,4 +1,4 @@
-package com.ibm.sensors.com.ibm.utils;
+package com.ibm.sensors.utils;
 
 /**
  * Created by thinkPAD on 8/29/2015.
