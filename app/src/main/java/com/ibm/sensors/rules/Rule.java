@@ -1,5 +1,7 @@
 package com.ibm.sensors.rules;
 
+import android.util.Log;
+
 import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.interfaces.GenericObserver;
@@ -45,7 +47,7 @@ public abstract class Rule extends MultiGenericObservable<EventWrapper> implemen
 
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
-        Integer type = eventCount.get(data.getSensor().getType());
+        Integer type = data.getEventType();
         Integer count= eventCount.get(type);
         synchronized (this) {
             if (count == null) {
@@ -55,7 +57,8 @@ public abstract class Rule extends MultiGenericObservable<EventWrapper> implemen
             else {
                 eventCount.put(type, ++count);
             }
-            if (count == eventCountToDispatch.get(type)) {
+            if (count.equals(eventCountToDispatch.get(type))) {
+                Log.wtf("AAAA Rule:61"," eventCount = 500");
                 if (isReady()) {
                     dispatch();
                 }

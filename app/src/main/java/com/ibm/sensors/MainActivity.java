@@ -73,6 +73,5 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         tv.setText("max speed:  "+data.getData().toString());
-
     }
 }

@@ -129,7 +129,7 @@ public class SensorAndRuleFactory {
 
     public static void subscribe(EventHandler handler,int eventType,SensorManager sm) {
         Integer count = handler.observersCount(eventType);
-        if (count == null || count == 0) {
+        if (count == 1) {
 
             if (eventType < LAST_CUSTOM_RULE) {
                 buildAndRegisterSensor(handler,eventType,sm);

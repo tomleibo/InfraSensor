@@ -1,5 +1,7 @@
 package com.ibm.sensors.rules;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.core.SensorAndRuleFactory;
@@ -17,14 +19,14 @@ import java.util.TreeMap;
 
 public class ExtreMove extends Rule {
 
-    private static final int EXTREME_SPEED = 50;
+    private static final int EXTREME_SPEED = 0;
 
     public ExtreMove(EventHandler handler) {
         super(handler);
         eventCountToDispatch = new TreeMap<>();
-        eventCountToDispatch.put(SensorAndRuleFactory.ACCELEROMETER, 500);
+        eventCountToDispatch.put(SensorAndRuleFactory.ACCELEROMETER, 30);
         modifiers = new ArrayList<>();
-        modifiers.add(new Pair<Integer, Modifier>(0,new MaxAccelerometerSpeed()));
+        modifiers.add(new Pair<Integer, Modifier>(SensorAndRuleFactory.ACCELEROMETER,new MaxAccelerometerSpeed()));
     }
 
     @Override
@@ -38,9 +40,13 @@ public class ExtreMove extends Rule {
     @Override
     protected void dispatch() {
         for (Pair<Integer,Modifier> p : modifiers) {
-            final int speed = (int) p.value.modify();
+            final float speed = (float) p.value.modify();
+            Log.wtf("AAAA ExtreMove:44","sending event to handler.");
+            for (Integer type : eventCount.keySet()) {
+                eventCount.put(type,0);
+            }
             if (speed > EXTREME_SPEED) {
-                handler.handleEvent(new EventWrapper<Integer>() {
+                handler.handleEvent(new EventWrapper<Float>() {
                     @Override
                     public int getEventType() {
                         return SensorAndRuleFactory.RULE_EXTREME_MOVE;
@@ -51,8 +57,8 @@ public class ExtreMove extends Rule {
                     }
 
                     @Override
-                    public Integer getData() {
-                        return speed;
+                    public Float getData() {
+                        return Float.valueOf(speed);
                     }
 
                     @Override

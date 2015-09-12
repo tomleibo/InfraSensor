@@ -35,6 +35,7 @@ public class MaxAccelerometerSpeed implements Modifier<EventWrapper<Float[]>,Flo
             float distance= currPosition[1] - prevPosition[1] +currPosition[1] - prevPosition[1] +currPosition[2] - prevPosition[2];
             speed = Math.max(speed, distance/timeDif);
         }
+        events.clear();
         return speed;
     }
 
