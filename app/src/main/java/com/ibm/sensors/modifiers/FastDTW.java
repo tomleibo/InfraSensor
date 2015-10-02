@@ -1,9 +1,9 @@
 package com.ibm.sensors.modifiers;
 
+
 import com.dtw.TimeWarpInfo;
 import com.timeseries.TimeSeries;
 import com.util.DistanceFunction;
-import com.util.DistanceFunctionFactory;
 
 /**
  * Created by nexus on 02/10/2015.
