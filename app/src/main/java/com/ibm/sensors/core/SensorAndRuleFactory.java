@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.rules.ExtreMove;
 import com.ibm.sensors.rules.Rule;
+import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.FileSizeChecker;
 import com.ibm.sensors.sensorWrappers.SensorWrapper;
@@ -36,8 +37,8 @@ public class SensorAndRuleFactory {
     public static final int ROTATION_VECTOR = 11;
     public static final int RELATIVE_HUMIDITY = 12;
     public static final int AMBIENT_TEMPATURE = 13;
-    public static final int GAME_ROTATION_VECTOR = 15;
     public static final int MAGNETIC_FIELD_UNCALIBRATED = 14;
+    public static final int GAME_ROTATION_VECTOR = 15;
     public static final int GYROSCOPE_UNCALIBRATED = 16;
     public static final int SIGNIFICANT_MOTION = 17;
     public static final int STEP_DETECTOR = 18;
@@ -45,11 +46,13 @@ public class SensorAndRuleFactory {
     public static final int GEOMAGNETIC_ROTATION_VECTOR = 20;
     public static final int HEART_RATE = 21;
     public static final int TYPE_USB_CONNECTION_TYPE = 22;
-    public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 24;
-    public static final Integer LAST_HARDWARE_ID = 21;
+
+    public static final Integer LAST_HARDWARE_ID = 22;
 
     // arbitrary. decided by me.
     public static final int FILE_SIZE_CHECKER = 23;
+
+    public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 24;
 
 
     private static final int DELAY = 3;
@@ -120,7 +123,7 @@ public class SensorAndRuleFactory {
         switch (eventType) {
             case RULE_EXTREME_MOVE:
             default:
-                Rule rule = new ExtreMove(handler);
+                Rule rule = new ExtreMove(handler,new EventCountStrategy(SensorAndRuleFactory.ACCELEROMETER,50));
                 for (Integer type: rule.getSensorTypes()) {
                     handler.subscribe(type,rule);
                 }

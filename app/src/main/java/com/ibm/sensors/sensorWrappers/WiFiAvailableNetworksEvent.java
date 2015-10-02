@@ -19,8 +19,6 @@ public class WiFiAvailableNetworksEvent implements EventWrapper {
         this.mResults = results;
     }
 
-
-
     @Override
     public String toJson(Gson gson) {
         return gson.toJson(this);
