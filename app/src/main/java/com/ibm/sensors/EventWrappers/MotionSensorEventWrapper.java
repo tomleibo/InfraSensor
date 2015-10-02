@@ -5,28 +5,42 @@ import android.hardware.SensorEvent;
 import com.google.gson.Gson;
 import com.ibm.sensors.sensorWrappers.SensorWrapper;
 
-/**
- * Created by thinkPAD on 8/18/2015.
- */
-public class MotionSensorEventWrapper implements EventWrapper<Float[]> {
+public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     private int type;
     private float[] values;
-    private long timestamp;
     private int accuracy;
-    private SensorWrapper sensor;
 
     public MotionSensorEventWrapper(SensorWrapper sensor,int type, float[] values, int timestamp, int accuracy) {
+        super(System.currentTimeMillis(),sensor);
         this.type = type;
         this.values = values;
-        this.timestamp = timestamp;
         this.accuracy = accuracy;
-        this.sensor =sensor;
     }
 
-    public MotionSensorEventWrapper(SensorEvent event) {
+    public MotionSensorEventWrapper(final SensorEvent event) {
+        super(System.currentTimeMillis(), new SensorWrapper() {
+            @Override
+            public int getType() {
+                return event.sensor.getType();
+            }
+
+            @Override
+            public boolean register(int delayMillis, Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean unregister(Object o) {
+                return false;
+            }
+
+            @Override
+            public boolean isRegistered() {
+                return false;
+            }
+        });
         this.type = event.sensor.getType();
         this.values = event.values;
-        this.timestamp = event.timestamp;
         this.accuracy = event.accuracy;
     }
 

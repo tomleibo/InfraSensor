@@ -1,28 +1,22 @@
 package com.ibm.sensors.EventWrappers;
 
 import android.net.wifi.ScanResult;
-import com.google.gson.Gson;
-import com.ibm.sensors.EventWrappers.EventWrapper;
+
 import com.ibm.sensors.core.SensorAndRuleFactory;
 import com.ibm.sensors.sensorWrappers.SensorWrapper;
-
 
 import java.util.List;
 
 /**
  * Created by nexus on 04/09/2015.
  */
-public class WiFiAvailableNetworksEvent implements EventWrapper {
+public class WiFiAvailableNetworksEvent extends AbstractEventWrapper<List<ScanResult>> {
 
     private List<ScanResult> mResults;
 
-    public WiFiAvailableNetworksEvent(List<ScanResult> results){
+    public WiFiAvailableNetworksEvent(List<ScanResult> results, SensorWrapper sw){
+        super(System.currentTimeMillis(),sw);
         this.mResults = results;
-    }
-
-    @Override
-    public String toJson(Gson gson) {
-        return gson.toJson(this);
     }
 
     @Override
@@ -31,17 +25,16 @@ public class WiFiAvailableNetworksEvent implements EventWrapper {
     }
 
     @Override
-    public SensorWrapper getSensor() {
-        return null;
+    public List<ScanResult> getData() {
+        return mResults;
     }
 
     @Override
-    public Object getData() {
-        return null;
-    }
-
-    @Override
-    public long getTime() {
-        return 0;
+    public String toString() {
+        StringBuilder sb =new StringBuilder();
+        for (ScanResult result : mResults) {
+            sb.append(result+"\n");
+        }
+        return sb.toString();
     }
 }

@@ -34,6 +34,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         this.mDelay = 0;
         this.mResults =null;
         this.mContext = context;
+        this.thread = new Thread(this);
     }
     public AvailableWiFINetworks(WifiManager wifiMan,EventHandler handler, Context context, int delay){
         this(wifiMan,handler,context);
@@ -50,6 +51,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         mWiFi.setWifiEnabled(true);
         this.shouldStop = false;
         this.mDelay = delayMillis;
+        this.thread.start();
         return true;
     }
 
@@ -72,14 +74,22 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
             try {
                 this.mContext.registerReceiver(new BroadcastReceiver()
                 {
+                    SensorWrapper sensor=null;
+
+                    public BroadcastReceiver init(SensorWrapper s) {
+                        this.sensor=s;
+                        return this;
+                    }
+
                     @Override
                     public void onReceive(Context c, Intent intent)
                     {
                         mResults = null;
                         mResults = mWiFi.getScanResults();
-                        mHandler.handleEvent(new WiFiAvailableNetworksEvent(mResults));
+                        mHandler.handleEvent(new WiFiAvailableNetworksEvent(mResults,sensor));
+                        mContext.unregisterReceiver(this);
                     }
-                }, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+                }.init(this), new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
                 Thread.sleep(mDelay);
             }
             catch (InterruptedException e) {
