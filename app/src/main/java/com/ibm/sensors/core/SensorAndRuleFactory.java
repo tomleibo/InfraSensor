@@ -44,6 +44,7 @@ public class SensorAndRuleFactory {
     public static final int STEP_COUNTER= 19;
     public static final int GEOMAGNETIC_ROTATION_VECTOR = 20;
     public static final int HEART_RATE = 21;
+    public static final int TYPE_USB_CONNECTION_TYPE = 22;
 
     public static final Integer LAST_HARDWARE_ID = 21;
 
