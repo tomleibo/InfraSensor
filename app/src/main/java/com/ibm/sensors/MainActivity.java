@@ -1,17 +1,17 @@
 package com.ibm.sensors;
 
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
 import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
+import com.ibm.sensors.utils.GeneralUtils;
 import com.ibm.sensors.utils.MultiGenericObservable;
 
 
@@ -28,23 +28,19 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             tv=(TextView)findViewById(R.id.textView);
-
-            mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            EventHandler handler = EventHandler.build(mSensorManager);
-            if (!handler.subscribe(SensorAndRuleFactory.RULE_EXTREME_MOVE,this)) {
+            Env env = new Env(this);
+            if (!env.getEventHandler().subscribe(SensorAndRuleFactory.TYPE_AVAILABLE_WIFI_NETWORKS, this)) {
                 tv.setText("subscription failed");
             }
         }
-        catch (Exception e) {
-
+        catch (Throwable e) {
+            GeneralUtils.logException(TAG, e);
         }
-
-
-
         //CommunicationHandler.build(SERVER_URL);
 
         //logActiveSensors();
     }
+
 
 
 
@@ -72,6 +68,6 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
 
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
-        tv.setText("max speed:  "+data.getData().toString());
+        tv.setText("networks:  "+data.toString());
     }
 }

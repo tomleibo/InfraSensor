@@ -5,6 +5,7 @@ import android.hardware.SensorManager;
 
 import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
 import com.ibm.sensors.utils.MultiGenericObservable;
 
@@ -26,6 +27,7 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     private static final int MOTION_SENSORS_TYPES[] = {Sensor.TYPE_GRAVITY,Sensor.TYPE_GYROSCOPE,Sensor.TYPE_ROTATION_VECTOR,Sensor.TYPE_ACCELEROMETER,Sensor.TYPE_LINEAR_ACCELERATION};
 
     private static EventHandler instance;
+    private Env env=null;
 
     private Gson gson;
     private SensorManager sm;
@@ -35,9 +37,10 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
         // optional GsonBuilder.settingMethods()....create()
     }
 
-    private EventHandler(SensorManager sm) {
+    private EventHandler(Env env) {
         this();
-        this.sm=sm;
+        this.sm=env.getSensorManager();
+        this.env = env;
     }
 
     public static EventHandler get() throws InstantiationException {
@@ -47,11 +50,11 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
         return instance;
     }
 
-    public static EventHandler build(SensorManager sm) {
+    public static EventHandler build(Env env) {
         if (instance==null) {
             synchronized (EventHandler.class) {
                 if (instance==null) {
-                    instance = new EventHandler(sm);
+                    instance = new EventHandler(env);
                 }
             }
         }
@@ -86,7 +89,7 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     public boolean subscribe(Integer eventType, GenericObserver obs) {
         boolean result = super.subscribe(eventType,obs);
         if (result) {
-            SensorAndRuleFactory.subscribe(this,eventType,sm);
+            env.getSensorFactory().subscribe(eventType);
         }
         return result;
     }
@@ -95,7 +98,7 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     public boolean unsubscribe(Integer eventType, GenericObserver<EventWrapper> obs) {
         boolean result = super.unsubscribe(eventType, obs);
         if (result) {
-            SensorAndRuleFactory.unsubscribe(this,eventType);
+            env.getSensorFactory().unsubscribe(this,eventType);
         }
         return result;
     }

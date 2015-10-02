@@ -39,8 +39,6 @@ public class BatteryPercent extends AbstractSensorWrapper<Integer> {
     public boolean register(int delayMillis, Integer integer) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         mContext.registerReceiver(mBatInfoReceiver , ifilter);
-
-
         return true;
     }
 
