@@ -1,9 +1,10 @@
-package com.ibm.sensors.sensorWrappers;
+package com.ibm.sensors.EventWrappers;
 
 import android.net.wifi.ScanResult;
 import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.sensorWrappers.SensorWrapper;
 
 
 import java.util.List;
