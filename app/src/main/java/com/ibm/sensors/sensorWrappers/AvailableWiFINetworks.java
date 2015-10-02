@@ -70,8 +70,8 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
 
     @Override
     public void run() {
-        while(!shouldStop) {
-            try {
+        if (!shouldStop) {
+
                 this.mContext.registerReceiver(new BroadcastReceiver()
                 {
                     SensorWrapper sensor=null;
@@ -87,14 +87,19 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
                         mResults = null;
                         mResults = mWiFi.getScanResults();
                         mHandler.handleEvent(new WiFiAvailableNetworksEvent(mResults,sensor));
-                        mContext.unregisterReceiver(this);
+                        if (mDelay>0) {
+                            mContext.unregisterReceiver(this);
+                            try {
+                                thread.sleep(mDelay);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        thread.run();
                     }
                 }.init(this), new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-                Thread.sleep(mDelay);
-            }
-            catch (InterruptedException e) {
-                //ignore. unless it is implictly stopped.
+
             }
         }
-    }
+
 }
