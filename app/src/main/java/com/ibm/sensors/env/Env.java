@@ -26,6 +26,8 @@ public class Env {
         this.sensorFactory = new SensorAndRuleFactory(this);
     }
 
+
+
     public EventHandler getEventHandler() {
         return eventHandler;
     }

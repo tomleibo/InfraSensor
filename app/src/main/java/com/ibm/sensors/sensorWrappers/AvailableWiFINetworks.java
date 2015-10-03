@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.util.Log;
 
 
 import com.ibm.sensors.EventWrappers.WiFiAvailableNetworksEvent;
@@ -25,7 +26,19 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
     private Thread thread;
     private int mDelay;
     private List<ScanResult> mResults;
+    private Boolean mIsBuisy;
+    private BroadcastReceiver mBroadcastReciver;
 
+    private Boolean getIsBusy(){
+        synchronized (mIsBuisy){
+            return mIsBuisy;
+        }
+    }
+    private void setIsBusy(Boolean isbusy){
+        synchronized (mIsBuisy){
+            mIsBuisy = new Boolean(isbusy);
+        }
+    }
 
     public AvailableWiFINetworks(WifiManager wifiMan,EventHandler handler, Context context){
         super(handler);
@@ -35,6 +48,34 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         this.mResults =null;
         this.mContext = context;
         this.thread = new Thread(this);
+        this.mIsBuisy= new Boolean(false);
+        this.mBroadcastReciver = new BroadcastReceiver()
+        {
+            SensorWrapper sensor=null;
+
+            public BroadcastReceiver init(SensorWrapper s) {
+                this.sensor=s;
+                return this;
+            }
+
+            @Override
+            public void onReceive(Context c, Intent intent)
+            {
+                mResults = null;
+                mResults = mWiFi.getScanResults();
+                mHandler.handleEvent(new WiFiAvailableNetworksEvent(mResults,sensor));
+                if (mDelay>0) {
+                    mContext.unregisterReceiver(this);
+                    try {
+                        thread.sleep(mDelay);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    setIsBusy(false);
+                }
+
+            }
+        }.init(this);
     }
     public AvailableWiFINetworks(WifiManager wifiMan,EventHandler handler, Context context, int delay){
         this(wifiMan,handler,context);
@@ -52,6 +93,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         this.shouldStop = false;
         this.mDelay = delayMillis;
         this.thread.start();
+        setIsBusy(false);
         return true;
     }
 
@@ -59,6 +101,10 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
     public boolean unregister(Object o) {
         mWiFi.setWifiEnabled(false);
         shouldStop = true;
+
+        try {
+            this.mContext.unregisterReceiver(this.mBroadcastReciver);
+        }catch (Exception e){}
         thread.interrupt();
         return true;
     }
@@ -70,36 +116,16 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
 
     @Override
     public void run() {
-        if (!shouldStop) {
 
-                this.mContext.registerReceiver(new BroadcastReceiver()
-                {
-                    SensorWrapper sensor=null;
-
-                    public BroadcastReceiver init(SensorWrapper s) {
-                        this.sensor=s;
-                        return this;
-                    }
-
-                    @Override
-                    public void onReceive(Context c, Intent intent)
-                    {
-                        mResults = null;
-                        mResults = mWiFi.getScanResults();
-                        mHandler.handleEvent(new WiFiAvailableNetworksEvent(mResults,sensor));
-                        if (mDelay>0) {
-                            mContext.unregisterReceiver(this);
-                            try {
-                                thread.sleep(mDelay);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        thread.run();
-                    }
-                }.init(this), new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-
+        while (!shouldStop)
+        if (!getIsBusy()) {
+            setIsBusy(true);
+            try {
+                this.mContext.unregisterReceiver(this.mBroadcastReciver);
+            }catch (Exception e){}
+            this.mContext.registerReceiver(this.mBroadcastReciver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             }
-        }
+
+    }
 
 }

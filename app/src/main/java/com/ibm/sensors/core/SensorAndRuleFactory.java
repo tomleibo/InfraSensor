@@ -52,6 +52,7 @@ public class SensorAndRuleFactory {
     public static final Integer LAST_HARDWARE_ID = 22;
 
     public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 23;
+    public static final int TYPE_GPS = 24;
     // arbitrary. decided by me.
     public static final int FILE_SIZE_CHECKER = 50;
 
@@ -156,7 +157,7 @@ public class SensorAndRuleFactory {
         if (eventType > LAST_HARDWARE_ID) {
             sensor = buildAndRegisterCustomSensor(eventType, null);
         }
-        else  {
+        else {
             sensor = buildAndRegisterHardwareSensor(eventType);
         }
         sensors.put(eventType, sensor);

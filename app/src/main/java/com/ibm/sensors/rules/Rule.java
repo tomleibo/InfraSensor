@@ -20,7 +20,7 @@ import java.util.List;
  To cover states an initial event will be created for each type of event needed by rule on registration for that event.
  (e.g.: is the phone connected to USB?)
  */
-public abstract class Rule extends MultiGenericObservable<EventWrapper> implements GenericObserver<EventWrapper>{
+public abstract class Rule implements GenericObserver<EventWrapper>{
     protected List<Pair<Integer,Modifier>> modifiers;
     protected EventHandler handler;
     protected RuleStrategy strategy;

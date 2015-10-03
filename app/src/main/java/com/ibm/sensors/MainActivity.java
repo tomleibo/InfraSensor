@@ -70,4 +70,9 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         tv.setText("networks:  "+data.toString());
     }
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+    }
 }
