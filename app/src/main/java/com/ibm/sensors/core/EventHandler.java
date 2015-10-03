@@ -150,4 +150,6 @@ Sandbox methods
             }
         }
     }*/
+
+//TODO: fix handler so that when application closes it will unregister all sensors that are still registered to prevent a leak.
 }

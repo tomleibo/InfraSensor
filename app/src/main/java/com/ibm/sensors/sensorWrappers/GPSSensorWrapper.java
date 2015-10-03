@@ -5,7 +5,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.ibm.sensors.EventWrappers.GPSEventWrapper;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSEventWrapper;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSLocationChangeEventWrapper;
 import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.core.EventCreatorFactory;
 
@@ -49,7 +50,7 @@ public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements 
 
 	@Override
 	public void onLocationChanged(Location location) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,location,null,null));
+		mHandler.handleEvent(new GPSLocationChangeEventWrapper(System.currentTimeMillis(),this,location));
 	}
 
 	@Override
