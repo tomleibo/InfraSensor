@@ -7,16 +7,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import com.ibm.sensors.EventWrappers.AbstractEventWrapper;
-import com.ibm.sensors.core.SensorAndRuleFactory;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 /**
  * Created by nexus on 02/10/2015.
  */
-public class GPSLocationChangeEventWrapper extends AbstractEventWrapper<Location> {
+public class GPSLocationChangedEventWrapper extends AbstractEventWrapper<Location> {
 	private Location mLoscation;
 	private String mLocationProvider;
-	public GPSLocationChangeEventWrapper(long timestamp, SensorWrapper sensor, Location location) {
+	public GPSLocationChangedEventWrapper(long timestamp, EventCreator sensor, Location location) {
 		super(timestamp, sensor);
 		this.mLoscation=location;
 	}
@@ -25,7 +25,7 @@ public class GPSLocationChangeEventWrapper extends AbstractEventWrapper<Location
 
 	@Override
 	public int getEventType() {
-		return SensorAndRuleFactory.TYPE_GPS_LOCATION;
+		return EventCreatorFactory.TYPE_GPS;
 	}
 
 	@Override
