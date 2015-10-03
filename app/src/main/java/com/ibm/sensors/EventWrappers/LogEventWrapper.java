@@ -1,15 +1,12 @@
 package com.ibm.sensors.EventWrappers;
 
-import com.ibm.sensors.sensorWrappers.AbstractSensorWrapper;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
-
-import java.util.TreeMap;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 /**
  * Created by nexus on 02/10/2015.
  */
 public class LogEventWrapper extends AbstractEventWrapper<String[]> {
-	public LogEventWrapper(long timestamp, SensorWrapper sensor) {
+	public LogEventWrapper(long timestamp, EventCreator sensor) {
 		super(timestamp, sensor);
 	}
 

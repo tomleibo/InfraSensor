@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
 import com.ibm.sensors.utils.GeneralUtils;
@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
             setContentView(R.layout.activity_main);
             tv=(TextView)findViewById(R.id.textView);
             Env env = new Env(this);
-            if (!env.getEventHandler().subscribe(SensorAndRuleFactory.TYPE_AVAILABLE_WIFI_NETWORKS, this)) {
+            if (!env.getEventHandler().subscribe(EventCreatorFactory.TYPE_AVAILABLE_WIFI_NETWORKS, this)) {
                 tv.setText("subscription failed");
             }
         }

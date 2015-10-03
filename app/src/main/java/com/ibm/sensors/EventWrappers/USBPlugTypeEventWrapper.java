@@ -1,7 +1,7 @@
 package com.ibm.sensors.EventWrappers;
 
-import com.ibm.sensors.core.SensorAndRuleFactory;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 
 /**
@@ -9,9 +9,9 @@ import com.ibm.sensors.sensorWrappers.SensorWrapper;
  */
 public class USBPlugTypeEventWrapper extends AbstractEventWrapper<Integer> {
     private int mPlugType;
-    private SensorWrapper mSensorWrapper;
+    private EventCreator mSensorWrapper;
     private Long mBuildTime;
-    public USBPlugTypeEventWrapper(int plugType, SensorWrapper sw){
+    public USBPlugTypeEventWrapper(int plugType, EventCreator sw){
         super(System.currentTimeMillis(),sw);
         this.mPlugType = plugType;
         this.mSensorWrapper=sw;
@@ -20,7 +20,7 @@ public class USBPlugTypeEventWrapper extends AbstractEventWrapper<Integer> {
 
     @Override
     public int getEventType() {
-        return SensorAndRuleFactory.TYPE_USB_CONNECTION_TYPE;
+        return EventCreatorFactory.TYPE_USB_CONNECTION_TYPE;
     }
 
     @Override

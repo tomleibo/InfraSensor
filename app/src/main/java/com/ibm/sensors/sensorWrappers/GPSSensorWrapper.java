@@ -7,7 +7,7 @@ import android.os.Bundle;
 
 import com.ibm.sensors.EventWrappers.GPSEventWrapper;
 import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 
 /**
  * Created by nexus on 02/10/2015.
@@ -24,7 +24,7 @@ public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements 
 
 	@Override
 	public int getType() {
-		return SensorAndRuleFactory.TYPE_GPS;
+		return EventCreatorFactory.TYPE_GPS;
 	}
 
 	@Override

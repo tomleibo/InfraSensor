@@ -13,7 +13,7 @@ import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.FileSizeChecker;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,7 +25,7 @@ import java.util.TreeMap;
  * This class is responsible of creation of sensors to rule types.
  * In addition it contains all Sensor type numbers and rule type numbers.
  */
-public class SensorAndRuleFactory {
+public class EventCreatorFactory {
     //correlated with android's Sensor.TYPE_* constants.
     public static final int ACCELEROMETER=1;
     public static final int MAGNETIC_FIELD = 2;
@@ -60,14 +60,14 @@ public class SensorAndRuleFactory {
     private static final int DELAY = 3;
 
     private static final int LAST_CUSTOM_RULE = 1000;
-    public static final int RULE_EXTREME_MOVE = 1001;
+    public static final int TYPE_EXTREME_MOVE = 1001;
     private final Env env;
 
 
     private Map<Integer,Integer> subscribersCount;
-    private Map<Integer,SensorWrapper> sensors;
+    private Map<Integer,EventCreator> sensors;
 
-    public SensorAndRuleFactory(Env env) {
+    public EventCreatorFactory(Env env) {
         this.env = env;
         subscribersCount = new TreeMap<>();
         sensors = new TreeMap<>();
@@ -76,8 +76,8 @@ public class SensorAndRuleFactory {
 
 
 
-    public SensorWrapper buildAndRegisterCustomSensor(int type, Object o) {
-        SensorWrapper sensor;
+    public EventCreator buildAndRegisterCustomSensor(int type, Object o) {
+        EventCreator sensor;
         switch(type) {
             case TYPE_AVAILABLE_WIFI_NETWORKS:
                 sensor= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
@@ -92,7 +92,7 @@ public class SensorAndRuleFactory {
         return sensor;
     }
 
-    public SensorWrapper buildAndRegisterHardwareSensor(int type) {
+    public EventCreator buildAndRegisterHardwareSensor(int type) {
         switch (type) {
             case FILE_SIZE_CHECKER:
                 return new FileSizeChecker(env.getEventHandler());
@@ -101,7 +101,7 @@ public class SensorAndRuleFactory {
             case LINEAR_ACCELERATION:
             case ROTATION_VECTOR:
             case GRAVITY:
-            case RULE_EXTREME_MOVE:
+            case TYPE_EXTREME_MOVE:
             default:
                 try {
                     AbstractHardwareSensor result =  new AbstractHardwareSensor(type,env.getSensorManager(),env.getEventHandler()) {
@@ -129,12 +129,10 @@ public class SensorAndRuleFactory {
 
     public Rule buildRule(int eventType) {
         switch (eventType) {
-            case RULE_EXTREME_MOVE:
+            case TYPE_EXTREME_MOVE:
             default:
-                Rule rule = new ExtreMove(env.getEventHandler(),new EventCountStrategy(SensorAndRuleFactory.ACCELEROMETER,50));
-                for (Integer type: rule.getSensorTypes()) {
-                    env.getEventHandler().subscribe(type,rule);
-                }
+                Rule rule = new ExtreMove(env,new EventCountStrategy(EventCreatorFactory.ACCELEROMETER,50));
+                rule.register(50,null);
                 return rule;
         }
     }
@@ -152,8 +150,8 @@ public class SensorAndRuleFactory {
         }
     }
 
-    private SensorWrapper buildAndRegisterSensor(int eventType, Object o) {
-        SensorWrapper sensor;
+    private EventCreator buildAndRegisterSensor(int eventType, Object o) {
+        EventCreator sensor;
         if (eventType > LAST_HARDWARE_ID) {
             sensor = buildAndRegisterCustomSensor(eventType, null);
         }

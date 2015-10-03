@@ -5,12 +5,12 @@ import android.hardware.SensorManager;
 
 import com.ibm.sensors.core.CommunicationHandler;
 import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.db.DbHandler;
 
 public class Env {
     private static final String URL = "";
-    private SensorAndRuleFactory sensorFactory;
+    private EventCreatorFactory sensorFactory;
     private EventHandler eventHandler;
     private CommunicationHandler communicationHandler;
     private DbHandler dbHandler;
@@ -23,7 +23,7 @@ public class Env {
         this.eventHandler = EventHandler.build(this);
         this.communicationHandler = CommunicationHandler.build(URL);
         this.dbHandler = new DbHandler(context);
-        this.sensorFactory = new SensorAndRuleFactory(this);
+        this.sensorFactory = new EventCreatorFactory(this);
     }
 
 
@@ -48,7 +48,7 @@ public class Env {
         return sensorManager;
     }
 
-    public SensorAndRuleFactory getSensorFactory() {
+    public EventCreatorFactory getSensorFactory() {
         return sensorFactory;
     }
 }

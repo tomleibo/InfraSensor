@@ -3,14 +3,14 @@ package com.ibm.sensors.EventWrappers;
 import android.hardware.SensorEvent;
 
 import com.google.gson.Gson;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     private int type;
     private float[] values;
     private int accuracy;
 
-    public MotionSensorEventWrapper(SensorWrapper sensor,int type, float[] values, int timestamp, int accuracy) {
+    public MotionSensorEventWrapper(EventCreator sensor,int type, float[] values, int timestamp, int accuracy) {
         super(System.currentTimeMillis(),sensor);
         this.type = type;
         this.values = values;
@@ -18,7 +18,7 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     }
 
     public MotionSensorEventWrapper(final SensorEvent event) {
-        super(System.currentTimeMillis(), new SensorWrapper() {
+        super(System.currentTimeMillis(), new EventCreator() {
             @Override
             public int getType() {
                 return event.sensor.getType();
@@ -49,7 +49,7 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     }
 
     @Override
-    public SensorWrapper getSensor() {
+    public EventCreator getSensor() {
         return sensor;
     }
 

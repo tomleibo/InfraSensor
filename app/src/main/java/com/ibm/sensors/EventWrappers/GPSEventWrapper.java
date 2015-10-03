@@ -6,8 +6,8 @@ import android.os.Bundle;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import com.ibm.sensors.core.SensorAndRuleFactory;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 /**
  * Created by nexus on 02/10/2015.
@@ -18,7 +18,7 @@ public class GPSEventWrapper extends AbstractEventWrapper<JsonElement> {
 	private String mLocationProvider;
 	private Boolean mOnRegister;
 	private Bundle mExtras;
-	public GPSEventWrapper(long timestamp, SensorWrapper sensor, Integer accuracy , Bundle extras , Location location , String inputProvider, Boolean onRegister) {
+	public GPSEventWrapper(long timestamp, EventCreator sensor, Integer accuracy , Bundle extras , Location location , String inputProvider, Boolean onRegister) {
 		super(timestamp, sensor);
 		this.mLastAccuracy=null;
 		this.mLastLoscation=null;
@@ -47,7 +47,7 @@ public class GPSEventWrapper extends AbstractEventWrapper<JsonElement> {
 
 	@Override
 	public int getEventType() {
-		return SensorAndRuleFactory.TYPE_GPS;
+		return EventCreatorFactory.TYPE_GPS;
 	}
 
 	@Override

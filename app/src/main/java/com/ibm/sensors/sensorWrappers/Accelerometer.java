@@ -6,7 +6,7 @@ import android.hardware.SensorManager;
 
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 
 
 /**
@@ -15,7 +15,7 @@ import com.ibm.sensors.core.SensorAndRuleFactory;
 public class Accelerometer extends AbstractHardwareSensor {
 
     public Accelerometer(SensorManager sm,  EventHandler handler) throws InstantiationException {
-        super(SensorAndRuleFactory.ACCELEROMETER,sm,handler);
+        super(EventCreatorFactory.ACCELEROMETER,sm,handler);
     }
 
 

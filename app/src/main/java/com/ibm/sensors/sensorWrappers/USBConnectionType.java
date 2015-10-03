@@ -7,14 +7,12 @@ import android.os.BatteryManager;
 
 import com.ibm.sensors.EventWrappers.USBPlugTypeEventWrapper;
 import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
-
-import java.io.File;
+import com.ibm.sensors.core.EventCreatorFactory;
 
 /**
  * Created by nexus on 03/09/2015.
  */
-public class USBConnectionType extends BroadcastReceiver implements SensorWrapper {
+public class USBConnectionType extends BroadcastReceiver implements EventCreator {
     private EventHandler mEvenetHandler;
     private BroadcastReceiver mReceiver;
     private boolean mRegistered;
@@ -27,7 +25,7 @@ public class USBConnectionType extends BroadcastReceiver implements SensorWrappe
 
     @Override
     public int getType() {
-        return SensorAndRuleFactory.TYPE_USB_CONNECTION_TYPE;
+        return EventCreatorFactory.TYPE_USB_CONNECTION_TYPE;
     }
 
     @Override

@@ -2,12 +2,12 @@ package com.ibm.sensors.rules;
 
 import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
-import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.env.Env;
 import com.ibm.sensors.modifiers.MaxAccelerometerSpeed;
 import com.ibm.sensors.modifiers.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.MultiGenericObservable;
 import com.ibm.sensors.utils.Pair;
 
@@ -19,18 +19,15 @@ public class ExtreMove extends Rule {
 
     private static final int EXTREME_SPEED = 0;
 
-    public ExtreMove(EventHandler handler,RuleStrategy strategy) {
-        super(handler,strategy);
+    public ExtreMove(Env env,RuleStrategy strategy) {
+        super(env,strategy);
         modifiers = new ArrayList<>();
-        modifiers.add(new Pair<Integer, Modifier>(SensorAndRuleFactory.ACCELEROMETER,new MaxAccelerometerSpeed()));
+        modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.ACCELEROMETER,new MaxAccelerometerSpeed()));
     }
 
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         super.update(object, data);
-        for (Pair<Integer,Modifier> m : modifiers) {
-            m.value.aggregate(data);
-        }
     }
 
     @Override
@@ -38,13 +35,14 @@ public class ExtreMove extends Rule {
         for (Pair<Integer,Modifier> p : modifiers) {
             final float speed = (float) p.value.modify();
             if (speed > EXTREME_SPEED) {
-                handler.handleEvent(new EventWrapper<Float>() {
+                env.getEventHandler().handleEvent(new EventWrapper<Float>() {
                     @Override
                     public int getEventType() {
-                        return SensorAndRuleFactory.RULE_EXTREME_MOVE;
+                        return EventCreatorFactory.TYPE_EXTREME_MOVE;
                     }
+
                     @Override
-                    public SensorWrapper getSensor() {
+                    public EventCreator getSensor() {
                         return null;
                     }
 
@@ -57,6 +55,7 @@ public class ExtreMove extends Rule {
                     public long getTime() {
                         return System.currentTimeMillis();
                     }
+
                     @Override
                     public String toJson(Gson gson) {
                         return "wooooooooow";
@@ -68,6 +67,12 @@ public class ExtreMove extends Rule {
 
     @Override
     public Collection<Integer> getSensorTypes() {
-        return Arrays.asList(new Integer[]{SensorAndRuleFactory.ACCELEROMETER});
+        return Arrays.asList(EventCreatorFactory.ACCELEROMETER);
     }
+
+    @Override
+    public int getType() {
+        return EventCreatorFactory.TYPE_EXTREME_MOVE;
+    }
+
 }

@@ -2,14 +2,14 @@ package com.ibm.sensors.sensorWrappers;
 
 import com.ibm.sensors.EventWrappers.FileSizeChangedEvent;
 import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 
 import java.io.File;
 
 /**
  * Created by thinkPAD on 9/2/2015.
  */
-public class FileSizeChecker implements SensorWrapper<File>,Runnable{
+public class FileSizeChecker implements EventCreator<File>,Runnable{
 
     private EventHandler handler;
     private Thread thread;
@@ -26,7 +26,7 @@ public class FileSizeChecker implements SensorWrapper<File>,Runnable{
 
     @Override
     public int getType() {
-        return SensorAndRuleFactory.FILE_SIZE_CHECKER;
+        return EventCreatorFactory.FILE_SIZE_CHECKER;
     }
 
     @Override

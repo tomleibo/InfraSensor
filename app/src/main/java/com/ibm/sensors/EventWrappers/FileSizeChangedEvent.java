@@ -1,7 +1,7 @@
 package com.ibm.sensors.EventWrappers;
 
-import com.ibm.sensors.core.SensorAndRuleFactory;
-import com.ibm.sensors.sensorWrappers.SensorWrapper;
+import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 
 import java.io.File;
 
@@ -11,9 +11,9 @@ import java.io.File;
 public class FileSizeChangedEvent extends AbstractEventWrapper<Long> {
     File file;
     long length;
-    SensorWrapper sensor;
+    EventCreator sensor;
 
-    public FileSizeChangedEvent(SensorWrapper sensor,File file, long length) {
+    public FileSizeChangedEvent(EventCreator sensor,File file, long length) {
         super(System.currentTimeMillis(),sensor);
         this.file=file;
         this.length=length;
@@ -21,7 +21,7 @@ public class FileSizeChangedEvent extends AbstractEventWrapper<Long> {
 
     @Override
     public int getEventType() {
-        return SensorAndRuleFactory.FILE_SIZE_CHECKER;
+        return EventCreatorFactory.FILE_SIZE_CHECKER;
     }
 
     @Override

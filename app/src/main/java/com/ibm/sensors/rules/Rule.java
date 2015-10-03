@@ -1,10 +1,11 @@
 package com.ibm.sensors.rules;
 
-import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
 import com.ibm.sensors.modifiers.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
+import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.MultiGenericObservable;
 import com.ibm.sensors.utils.Pair;
 
@@ -20,15 +21,15 @@ import java.util.List;
  To cover states an initial event will be created for each type of event needed by rule on registration for that event.
  (e.g.: is the phone connected to USB?)
  */
-public abstract class Rule implements GenericObserver<EventWrapper>{
+public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator{
     protected List<Pair<Integer,Modifier>> modifiers;
-    protected EventHandler handler;
+    protected Env env;
     protected RuleStrategy strategy;
+    protected boolean isRegistered=false;
 
-
-    public Rule(EventHandler handler,RuleStrategy strategy) {
+    public Rule(Env env,RuleStrategy strategy) {
         this.strategy=strategy;
-        this.handler = handler;
+        this.env = env;
     }
 
     /**
@@ -53,4 +54,35 @@ public abstract class Rule implements GenericObserver<EventWrapper>{
         }
     }
 
+    @Override
+    public boolean register(int delayMillis, Object o) {
+        boolean ans = true;
+        for (Integer type: getSensorTypes()) {
+            ans &= env.getEventHandler().subscribe(type, this);
+        }
+        if (ans) {
+            isRegistered=true;
+            return true;
+        }
+        for (Integer type: getSensorTypes()) {
+            env.getEventHandler().unsubscribe(type, this);
+        }
+        isRegistered=false;
+        return false;
+    }
+
+    @Override
+    public boolean unregister(Object o) {
+        boolean ans = true;
+        for (Integer type: getSensorTypes()) {
+            ans &= env.getEventHandler().unsubscribe(type, this);
+        }
+        isRegistered=false;
+        return ans;
+    }
+
+    @Override
+    public boolean isRegistered() {
+        return isRegistered;
+    }
 }

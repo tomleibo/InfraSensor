@@ -6,12 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
 
 import com.ibm.sensors.EventWrappers.WiFiAvailableNetworksEvent;
 import com.ibm.sensors.core.EventHandler;
-import com.ibm.sensors.core.SensorAndRuleFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 
 import java.util.List;
 
@@ -51,9 +50,9 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         this.mIsBuisy= new Boolean(false);
         this.mBroadcastReciver = new BroadcastReceiver()
         {
-            SensorWrapper sensor=null;
+            EventCreator sensor=null;
 
-            public BroadcastReceiver init(SensorWrapper s) {
+            public BroadcastReceiver init(EventCreator s) {
                 this.sensor=s;
                 return this;
             }
@@ -84,7 +83,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
     }
     @Override
     public int getType() {
-        return SensorAndRuleFactory.TYPE_AVAILABLE_WIFI_NETWORKS;
+        return EventCreatorFactory.TYPE_AVAILABLE_WIFI_NETWORKS;
     }
 
     @Override

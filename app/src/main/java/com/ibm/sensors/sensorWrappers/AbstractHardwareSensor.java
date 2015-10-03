@@ -9,7 +9,7 @@ import com.ibm.sensors.core.EventHandler;
 /**
  * Created by thinkPAD on 9/5/2015.
  */
-public abstract class AbstractHardwareSensor implements SensorWrapper,SensorEventListener {
+public abstract class AbstractHardwareSensor implements EventCreator,SensorEventListener {
     private boolean isRegistered;
     private Sensor sensor;
     private SensorManager sm;
