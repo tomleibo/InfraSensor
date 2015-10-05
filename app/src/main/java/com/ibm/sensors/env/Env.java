@@ -10,12 +10,12 @@ import com.ibm.sensors.db.DbHandler;
 
 public class Env {
     private static final String URL = "";
-    private EventCreatorFactory sensorFactory;
-    private EventHandler eventHandler;
-    private CommunicationHandler communicationHandler;
-    private DbHandler dbHandler;
-    private Context context;
-    private SensorManager sensorManager;
+    private final EventCreatorFactory sensorFactory;
+    private final EventHandler eventHandler;
+    private final CommunicationHandler communicationHandler;
+    private final DbHandler dbHandler;
+    private final Context context;
+    private final SensorManager sensorManager;
 
     public Env(Context context) {
         this.context = context;

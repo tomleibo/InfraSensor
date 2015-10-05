@@ -7,13 +7,11 @@ import android.net.wifi.WifiManager;
 
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.env.Env;
-import com.ibm.sensors.rules.ExtreMove;
-import com.ibm.sensors.rules.Rule;
-import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
-import com.ibm.sensors.sensorWrappers.FileSizeChecker;
 import com.ibm.sensors.sensorWrappers.EventCreator;
+import com.ibm.sensors.sensorWrappers.FileSizeChecker;
+import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -21,10 +19,6 @@ import java.util.TreeMap;
 
 /**TODO: add custom incremental event type id.*/
 
-/**
- * This class is responsible of creation of sensors to rule types.
- * In addition it contains all Sensor type numbers and rule type numbers.
- */
 public class EventCreatorFactory {
     //correlated with android's Sensor.TYPE_* constants.
     public static final int ACCELEROMETER=1;
@@ -49,51 +43,33 @@ public class EventCreatorFactory {
     public static final int GEOMAGNETIC_ROTATION_VECTOR = 20;
     public static final int HEART_RATE = 21;
     public static final int TYPE_USB_CONNECTION_TYPE = 22;
-    public static final Integer LAST_HARDWARE_ID = 22;
-
     public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 23;
     public static final int TYPE_GPS = 24;
-    // arbitrary. decided by me.
     public static final int FILE_SIZE_CHECKER = 50;
-
-
-    private static final int DELAY = 3;
-
-    private static final int LAST_CUSTOM_RULE = 1000;
     public static final int TYPE_EXTREME_MOVE = 1001;
+
+
+    public static final int FIRST_DYNAMIC_ID = 10000;
+    private static final int DELAY = 3;
     private final Env env;
 
 
-    private Map<Integer,Integer> subscribersCount;
-    private Map<Integer,EventCreator> sensors;
+    private final Map<Integer,EventCreator> eventCreatorMap;
+    private final DynamicEventCreatorIdMapping mapping;
+
 
     public EventCreatorFactory(Env env) {
         this.env = env;
-        subscribersCount = new TreeMap<>();
-        sensors = new TreeMap<>();
+        mapping = new DynamicEventCreatorIdMapping(FIRST_DYNAMIC_ID);
+        eventCreatorMap = new TreeMap<>();
     }
 
-
-
-
-    public EventCreator buildAndRegisterCustomSensor(int type, Object o) {
-        EventCreator sensor;
-        switch(type) {
-            case TYPE_AVAILABLE_WIFI_NETWORKS:
-                sensor= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
-                break;
-            case FILE_SIZE_CHECKER:
-                sensor = new FileSizeChecker(env.getEventHandler());
-                break;
-            default:
-                sensor = new FileSizeChecker(env.getEventHandler());
-        }
-        sensor.register(DELAY,o);
-        return sensor;
-    }
-
-    public EventCreator buildAndRegisterHardwareSensor(int type) {
+    private EventCreator buildAndRegisterEventCreator(int type, Object o) {
+        EventCreator result;
         switch (type) {
+            case TYPE_AVAILABLE_WIFI_NETWORKS:
+                result= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
+                break;
             case FILE_SIZE_CHECKER:
                 return new FileSizeChecker(env.getEventHandler());
             case ACCELEROMETER:
@@ -102,9 +78,8 @@ public class EventCreatorFactory {
             case ROTATION_VECTOR:
             case GRAVITY:
             case TYPE_EXTREME_MOVE:
-            default:
                 try {
-                    AbstractHardwareSensor result =  new AbstractHardwareSensor(type,env.getSensorManager(),env.getEventHandler()) {
+                        result =  new AbstractHardwareSensor(type,env.getSensorManager(),env.getEventHandler()) {
                         @Override
                         public void onSensorChanged(SensorEvent event) {
                             MotionSensorEventWrapper wrap = new MotionSensorEventWrapper(event);
@@ -116,56 +91,44 @@ public class EventCreatorFactory {
 
                         }
                     };
-                    result.register(DELAY,null);
-                    return result;
+                        result.register(DELAY,null);
+                        return result;
                 } catch (InstantiationException e) {
-                    e.printStackTrace();
-                    return null;
+                        e.printStackTrace();
+                        return null;
                 }
-
-
-        }
-    }
-
-    public Rule buildRule(int eventType) {
-        switch (eventType) {
-            case TYPE_EXTREME_MOVE:
             default:
-                Rule rule = new ExtreMove(env,new EventCountStrategy(EventCreatorFactory.ACCELEROMETER,50));
-                rule.register(50,null);
-                return rule;
+                int coreType = getCoreTypeFromDynamicType(type);
+                result = buildAndRegisterEventCreator(coreType,o);
         }
+        eventCreatorMap.put(type, result);
+        return result;
     }
 
     public void subscribe(int eventType) {
         Integer count = env.getEventHandler().observersCount(eventType);
         if (count == 1) {
-
-            if (eventType < LAST_CUSTOM_RULE) {
-                buildAndRegisterSensor(eventType,env.getSensorManager());
-            }
-            else {
-                buildRule(eventType);
-            }
+            buildAndRegisterEventCreator(eventType, env.getSensorManager());
         }
     }
 
-    private EventCreator buildAndRegisterSensor(int eventType, Object o) {
-        EventCreator sensor;
-        if (eventType > LAST_HARDWARE_ID) {
-            sensor = buildAndRegisterCustomSensor(eventType, null);
-        }
-        else {
-            sensor = buildAndRegisterHardwareSensor(eventType);
-        }
-        sensors.put(eventType, sensor);
-        return sensor;
-    }
 
     public void unsubscribe(EventHandler handler,Integer eventType) {
         if (handler.observersCount(eventType) == 0) {
-            sensors.get(eventType).unregister(null);
+            eventCreatorMap.get(eventType).unregister(null);
         }
+    }
+
+    public int createNewEventCreatorId(String name,int type) {
+        return mapping.addMapping(name,type);
+    }
+
+    public int getIdForName(String name) {
+        return mapping.getDynamicIpFromName(name);
+    }
+
+    public int getCoreTypeFromDynamicType(int type) {
+        return mapping.getCoreType(type);
     }
 
 }

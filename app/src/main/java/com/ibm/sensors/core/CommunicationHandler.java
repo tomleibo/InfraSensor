@@ -22,10 +22,10 @@ public class CommunicationHandler implements Runnable{
     private static final String TAG = "CommunicationHandler";
 
     private static CommunicationHandler instance=null;
-    private BlockingQueue<EventWrapper> eventQueue;
-    private Thread runningThread;
+    private final BlockingQueue<EventWrapper> eventQueue;
+    private final Thread runningThread;
     private boolean shouldStop = false;
-    private String url;
+    private final String url;
 
 
     private CommunicationHandler(String url) {

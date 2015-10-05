@@ -15,11 +15,11 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class DbHandler extends SQLiteOpenHelper implements Runnable {
     private static final String DATABASE_NAME = "capturedEvents";
     private static final int DATABASE_VERSION = 1;
-    private static Table[] tables = {new EventTable()};
-    private BlockingQueue<EventWrapper> eventQueue;
-    private Thread runningThread;
+    private static final Table[] tables = {new EventTable()};
+    private final BlockingQueue<EventWrapper> eventQueue;
+    private final Thread runningThread;
     private boolean shouldStop = false;
-    private Gson gson;
+    private final Gson gson;
 
     public DbHandler(Context context) {
         this(context, null, null, 0);

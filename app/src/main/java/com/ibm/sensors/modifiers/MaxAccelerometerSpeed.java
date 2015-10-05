@@ -12,7 +12,7 @@ import java.util.TreeMap;
  */
 public class MaxAccelerometerSpeed implements Modifier<EventWrapper<Float[]>,Float>{
 
-    private SortedMap<Long,Float[]> events;
+    private final SortedMap<Long,Float[]> events;
 
     public MaxAccelerometerSpeed() {
         this.events = new TreeMap<>();

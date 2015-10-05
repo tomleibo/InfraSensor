@@ -19,7 +19,7 @@ public class BatteryPercent extends AbstractSensorWrapper<Integer> {
 
     }
 
-    private BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
+    private final BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);

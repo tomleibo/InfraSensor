@@ -13,7 +13,7 @@ import com.ibm.sensors.core.EventCreatorFactory;
  * Created by nexus on 03/09/2015.
  */
 public class USBConnectionType extends BroadcastReceiver implements EventCreator {
-    private EventHandler mEvenetHandler;
+    private final EventHandler mEvenetHandler;
     private BroadcastReceiver mReceiver;
     private boolean mRegistered;
 

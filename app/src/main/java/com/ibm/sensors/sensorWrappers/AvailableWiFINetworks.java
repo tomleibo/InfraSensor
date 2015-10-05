@@ -18,15 +18,15 @@ import java.util.List;
  * Created by nexus on 04/09/2015.
  */
 public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runnable {
-    private WifiManager mWiFi;
-    private Context mContext;
+    private final WifiManager mWiFi;
+    private final Context mContext;
 
     private boolean shouldStop;
-    private Thread thread;
+    private final Thread thread;
     private int mDelay;
     private List<ScanResult> mResults;
     private Boolean mIsBuisy;
-    private BroadcastReceiver mBroadcastReciver;
+    private final BroadcastReceiver mBroadcastReciver;
 
     private Boolean getIsBusy(){
         synchronized (mIsBuisy){
@@ -35,7 +35,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
     }
     private void setIsBusy(Boolean isbusy){
         synchronized (mIsBuisy){
-            mIsBuisy = new Boolean(isbusy);
+            mIsBuisy = isbusy;
         }
     }
 
@@ -47,7 +47,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         this.mResults =null;
         this.mContext = context;
         this.thread = new Thread(this);
-        this.mIsBuisy= new Boolean(false);
+        this.mIsBuisy= Boolean.valueOf(false);
         this.mBroadcastReciver = new BroadcastReceiver()
         {
             EventCreator sensor=null;
@@ -66,7 +66,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
                 if (mDelay>0) {
                     mContext.unregisterReceiver(this);
                     try {
-                        thread.sleep(mDelay);
+                        Thread.sleep(mDelay);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

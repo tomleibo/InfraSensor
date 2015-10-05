@@ -11,12 +11,12 @@ import java.io.File;
  */
 public class FileSizeChecker implements EventCreator<File>,Runnable{
 
-    private EventHandler handler;
-    private Thread thread;
+    private final EventHandler handler;
+    private final Thread thread;
     private boolean shouldStop = false;
     private File file;
     private int delay;
-    private int prevSize=-1;
+    private final int prevSize=-1;
     boolean isRegistered=false;
 
     public FileSizeChecker(EventHandler handler) {

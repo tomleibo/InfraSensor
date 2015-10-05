@@ -8,7 +8,7 @@ import com.ibm.sensors.sensorWrappers.EventCreator;
  */
 public abstract class AbstractEventWrapper<T> implements EventWrapper{
     long timestamp;
-    EventCreator sensor;
+    final EventCreator sensor;
 
     public AbstractEventWrapper(long timestamp,EventCreator sensor) {
         this.timestamp=timestamp;

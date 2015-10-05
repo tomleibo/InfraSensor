@@ -9,8 +9,8 @@ import java.io.File;
  * Created by thinkPAD on 9/3/2015.
  */
 public class FileSizeChangedEvent extends AbstractEventWrapper<Long> {
-    File file;
-    long length;
+    final File file;
+    final long length;
     EventCreator sensor;
 
     public FileSizeChangedEvent(EventCreator sensor,File file, long length) {

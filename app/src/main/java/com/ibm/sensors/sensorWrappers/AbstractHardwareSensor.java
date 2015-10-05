@@ -11,9 +11,9 @@ import com.ibm.sensors.core.EventHandler;
  */
 public abstract class AbstractHardwareSensor implements EventCreator,SensorEventListener {
     private boolean isRegistered;
-    private Sensor sensor;
-    private SensorManager sm;
-    protected EventHandler handler;
+    private final Sensor sensor;
+    private final SensorManager sm;
+    protected final EventHandler handler;
 
     public AbstractHardwareSensor(int type,SensorManager sm, EventHandler handler) throws InstantiationException {
         this.isRegistered=false;

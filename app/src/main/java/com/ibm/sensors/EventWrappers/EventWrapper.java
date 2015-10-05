@@ -7,8 +7,8 @@ import com.ibm.sensors.sensorWrappers.EventCreator;
  * Created by thinkPAD on 9/2/2015.
  */
 public interface EventWrapper<T> extends Jsonable {
-    public int getEventType();
-    public EventCreator getSensor();
-    public T getData();
-    public long getTime();
+    int getEventType();
+    EventCreator getSensor();
+    T getData();
+    long getTime();
 }

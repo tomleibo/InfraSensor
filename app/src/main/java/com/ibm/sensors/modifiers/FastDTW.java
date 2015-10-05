@@ -9,12 +9,12 @@ import com.util.DistanceFunction;
  * Created by nexus on 02/10/2015.
  */
 public class FastDTW implements Modifier<String[],Double>{
-	private String mTemplateName;
-	private TimeSeries mTemplateSeries;
-	private int mRadius;
+	private final String mTemplateName;
+	private final TimeSeries mTemplateSeries;
+	private final int mRadius;
 	private Double mDistance;
-	private char mDelimiterSeries;
-	private boolean mIsLabeledSeries;
+	private final char mDelimiterSeries;
+	private final boolean mIsLabeledSeries;
 	public void setmDistFunc(DistanceFunction mDistFunc) {
 		this.mDistFunc = mDistFunc;
 	}

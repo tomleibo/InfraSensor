@@ -6,8 +6,8 @@ package com.ibm.sensors.modifiers;
  * @param <OUT> output type.
  */
 public interface Modifier <IN,OUT> {
-    public OUT modify ();
-    public void aggregate(IN input);
+    OUT modify ();
+    void aggregate(IN input);
 }
 
 

@@ -29,7 +29,7 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     private static EventHandler instance;
     private Env env=null;
 
-    private Gson gson;
+    private final Gson gson;
     private SensorManager sm;
 
     private EventHandler() {

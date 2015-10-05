@@ -9,11 +9,11 @@ import com.ibm.sensors.interfaces.GenericObserver;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiGenericObservable<T> {
 
-    private Map<Integer, LinkedList<GenericObserver<T>>> observers = new TreeMap<>();
+    private final Map<Integer, LinkedList<GenericObserver<T>>> observers = new ConcurrentHashMap<>();
 
     public boolean subscribe(Integer eventType, GenericObserver<T> obs) {
         if (obs == null) {

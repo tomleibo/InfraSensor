@@ -34,10 +34,10 @@ public class GPSEventWrapper extends AbstractEventWrapper<JsonElement> {
 		}
 		if (inputProvider!=null){
 			if (onRegister){
-				this.mOnRegister=new Boolean(true);
+				this.mOnRegister=Boolean.valueOf(true);
 			}
 			else{
-				this.mOnRegister=new Boolean(false);
+				this.mOnRegister=Boolean.valueOf(false);
 			}
 			this.mLocationProvider=inputProvider;
 		}

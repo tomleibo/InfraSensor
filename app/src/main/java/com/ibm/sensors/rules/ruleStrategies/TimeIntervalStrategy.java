@@ -5,7 +5,7 @@ package com.ibm.sensors.rules.ruleStrategies;
  */
 public class TimeIntervalStrategy implements RuleStrategy {
     long startTime;
-    long freq;
+    final long freq;
 
     public TimeIntervalStrategy(long frequencyInMilliSeconds) {
         reset();

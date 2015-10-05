@@ -1,9 +1,5 @@
 package com.ibm.sensors.rules.ruleStrategies;
 
-import com.ibm.sensors.rules.Rule;
-import com.ibm.sensors.utils.Pair;
-
-import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,8 +7,8 @@ import java.util.TreeMap;
  * Created by thinkPAD on 9/12/2015.
  */
 public class EventCountStrategy implements RuleStrategy {
-    protected Map<Integer,Integer> eventCountToDispatch;
-    protected Map<Integer,Integer> eventCount;
+    protected final Map<Integer,Integer> eventCountToDispatch;
+    protected final Map<Integer,Integer> eventCount;
 
     public EventCountStrategy(int... typesAndCounts) {
         this.eventCountToDispatch = new TreeMap<>();

@@ -16,7 +16,7 @@ import com.ibm.sensors.utils.MultiGenericObservable;
 
 
 public class MainActivity extends Activity implements GenericObserver<EventWrapper> {
-    private String TAG = "main activity";
+    private final String TAG = "main activity";
     private SensorManager mSensorManager;
     private static final String SERVER_URL = "http://10.0.0.4:8080/SensorDataServer/SensorListener";
 

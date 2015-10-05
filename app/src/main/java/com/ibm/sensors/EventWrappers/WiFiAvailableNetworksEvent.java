@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class WiFiAvailableNetworksEvent extends AbstractEventWrapper<List<ScanResult>> {
 
-    private List<ScanResult> mResults;
+    private final List<ScanResult> mResults;
 
     public WiFiAvailableNetworksEvent(List<ScanResult> results, EventCreator sw){
         super(System.currentTimeMillis(),sw);

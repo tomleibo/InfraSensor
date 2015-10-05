@@ -13,7 +13,7 @@ import com.ibm.sensors.core.EventCreatorFactory;
  * Created by nexus on 02/10/2015.
  */
 public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements LocationListener {
-	private LocationManager mLocationManager;
+	private final LocationManager mLocationManager;
 
 
 
@@ -54,16 +54,16 @@ public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements 
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,new Integer(status),extras,null,provider,null));
+		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,Integer.valueOf(status),extras,null,provider,null));
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,null,provider,new Boolean(true)));
+		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,null,provider,Boolean.valueOf(true)));
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,null,provider,new Boolean(false)));
+		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,null,provider,Boolean.valueOf(false)));
 	}
 }

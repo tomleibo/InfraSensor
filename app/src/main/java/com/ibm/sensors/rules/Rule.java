@@ -23,8 +23,8 @@ import java.util.List;
  */
 public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator{
     protected List<Pair<Integer,Modifier>> modifiers;
-    protected Env env;
-    protected RuleStrategy strategy;
+    protected final Env env;
+    protected final RuleStrategy strategy;
     protected boolean isRegistered=false;
 
     public Rule(Env env,RuleStrategy strategy) {
@@ -45,7 +45,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         Integer type = data.getEventType();
         for (Pair <Integer,Modifier> p : modifiers) {
-            if (p.key == type) {
+            if (p.key.equals(type)) {
                 p.value.aggregate(data);
             }
         }
