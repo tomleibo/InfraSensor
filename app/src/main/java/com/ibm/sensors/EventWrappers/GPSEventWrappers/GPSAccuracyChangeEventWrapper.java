@@ -1,6 +1,7 @@
 package com.ibm.sensors.EventWrappers.GPSEventWrappers;
 
 import android.location.Location;
+import android.os.Bundle;
 
 import com.ibm.sensors.EventWrappers.AbstractEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
@@ -9,12 +10,11 @@ import com.ibm.sensors.sensorWrappers.EventCreator;
 /**
  * Created by nexus on 03/10/2015.
  */
-public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<Location> {
-	private Location mLoscation;
-	private String mLocationProvider;
-	public GPSAccuracyChangeEventWrapper(long timestamp, EventCreator sensor, Location location) {
+public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<GPSAccuracyChangeWrapper> {
+	private GPSAccuracyChangeWrapper mData;
+	public GPSAccuracyChangeEventWrapper(long timestamp, EventCreator sensor, String provider, Integer status, Bundle extras) {
 		super(timestamp, sensor);
-		this.mLoscation=location;
+		this.mData= new GPSAccuracyChangeWrapper(provider,status,extras);
 	}
 
 
@@ -25,7 +25,7 @@ public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<Locatio
 	}
 
 	@Override
-	public Location getData() {
-		return this.mLoscation;
+	public GPSAccuracyChangeWrapper getData() {
+		return this.mData;
 	}
 }

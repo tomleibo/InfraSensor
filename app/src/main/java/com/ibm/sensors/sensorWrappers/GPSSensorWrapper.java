@@ -5,6 +5,10 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.ibm.sensors.EventWrappers.GPSEventWrapper;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventWrapper;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSInputProviderAdd;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSInputProviderRemove;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSLocationChangedEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.core.EventHandler;
@@ -54,16 +58,16 @@ public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements 
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,new Integer(status),extras,null,provider,null));
+		mHandler.handleEvent(new GPSAccuracyChangeEventWrapper(System.currentTimeMillis(),this,provider,new Integer(status),extras));
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,null,provider,new Boolean(true)));
+		mHandler.handleEvent(new GPSInputProviderAdd(System.currentTimeMillis(),this,provider));
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		mHandler.handleEvent(new GPSEventWrapper(System.currentTimeMillis(),this,null,null,null,provider,new Boolean(false)));
+		mHandler.handleEvent(new GPSInputProviderRemove(System.currentTimeMillis(),this,provider));
 	}
 }

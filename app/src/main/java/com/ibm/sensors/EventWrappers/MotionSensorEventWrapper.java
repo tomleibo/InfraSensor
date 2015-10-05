@@ -7,15 +7,29 @@ import com.ibm.sensors.sensorWrappers.EventCreator;
 
 public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     private int type;
-    private float[] values;
+    private Float[] values;
     private int accuracy;
+
+    public MotionSensorEventWrapper(EventCreator sensor,int type, Float[] values, int timestamp, int accuracy) {
+        super(System.currentTimeMillis(),sensor);
+        construct(type,accuracy);
+        this.values=values;
+    }
+
+    private void construct(int type,int accuracy){
+        this.type = type;
+        this.accuracy = accuracy;
+    }
 
     public MotionSensorEventWrapper(EventCreator sensor,int type, float[] values, int timestamp, int accuracy) {
         super(System.currentTimeMillis(),sensor);
-        this.type = type;
-        this.values = values;
-        this.accuracy = accuracy;
+        construct(type, accuracy);
+        this.values=new Float[values.length];
+        for (int i=0;i<values.length;i++){
+            this.values[i]=new Float(values[i]);
+        }
     }
+
 
     public MotionSensorEventWrapper(final SensorEvent event) {
         super(System.currentTimeMillis(), new EventCreator() {
@@ -40,7 +54,10 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
             }
         });
         this.type = event.sensor.getType();
-        this.values = event.values;
+        for (int i=0; i< Math.min(this.values.length,event.values.length);i++){
+            this.values[i] = event.values[i];
+        }
+
         this.accuracy = event.accuracy;
     }
 
@@ -67,11 +84,17 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
         this.type = type;
     }
 
-    public float[] getValues() {
+    public Float[] getValues() {
         return values;
     }
 
     public void setValues(float[] values) {
+        for (int i=0; i< Math.min(this.values.length,values.length);i++){
+            this.values[i] = values[i];
+        }
+    }
+
+    public void setValues(Float[] values) {
         this.values = values;
     }
 
