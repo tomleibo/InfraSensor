@@ -44,7 +44,14 @@ public class EventCreatorFactory {
     public static final int HEART_RATE = 21;
     public static final int TYPE_USB_CONNECTION_TYPE = 22;
     public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 23;
-    public static final int TYPE_GPS = 24;
+
+    // 30-39 GPS
+    public static final int TYPE_GPS = 30;
+    public static final int TYPE_EVENT_GPS_LOCATION = 31;
+    public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
+    public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE = 33;
+
+
     public static final int FILE_SIZE_CHECKER = 50;
     public static final int TYPE_EXTREME_MOVE = 1001;
 
@@ -99,7 +106,7 @@ public class EventCreatorFactory {
                 }
             default:
                 int coreType = getCoreTypeFromDynamicType(type);
-                result = buildAndRegisterEventCreator(coreType,o);
+                result = buildAndRegisterEventCreator(coreType, o);
         }
         eventCreatorMap.put(type, result);
         return result;

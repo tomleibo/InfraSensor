@@ -25,7 +25,7 @@ public class GPSLocationChangedEventWrapper extends AbstractEventWrapper<Locatio
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_GPS;
+		return EventCreatorFactory.TYPE_EVENT_GPS_LOCATION;
 	}
 
 	@Override
