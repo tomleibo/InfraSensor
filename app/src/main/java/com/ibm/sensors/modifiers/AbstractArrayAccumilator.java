@@ -3,7 +3,7 @@ package com.ibm.sensors.modifiers;
 /**
  * Created by nexus on 05/10/2015.
  */
-public abstract class ArrayAccumilator<T> implements Modifier<T[],T[]>{
+public abstract class AbstractArrayAccumilator<T> implements Modifier<T[],T[]>{
 	protected T[] mData;
 
 	@Override

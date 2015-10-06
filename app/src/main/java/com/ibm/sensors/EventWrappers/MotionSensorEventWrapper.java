@@ -9,21 +9,23 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     private int type;
     private Float[] values;
     private int accuracy;
+    private long timestamp;
 
-    public MotionSensorEventWrapper(EventCreator sensor,int type, Float[] values, int timestamp, int accuracy) {
+    public MotionSensorEventWrapper(EventCreator sensor,int type, Float[] values, long timestamp, int accuracy) {
         super(System.currentTimeMillis(),sensor);
-        construct(type,accuracy);
+        construct(type,accuracy,timestamp);
         this.values=values;
     }
 
-    private void construct(int type,int accuracy){
+    private void construct(int type,int accuracy,long timestamp){
         this.type = type;
         this.accuracy = accuracy;
+        this.timestamp=timestamp;
     }
 
-    public MotionSensorEventWrapper(EventCreator sensor,int type, float[] values, int timestamp, int accuracy) {
+    public MotionSensorEventWrapper(EventCreator sensor,int type, float[] values, long timestamp, int accuracy) {
         super(System.currentTimeMillis(),sensor);
-        construct(type, accuracy);
+        construct(type, accuracy,timestamp);
         this.values=new Float[values.length];
         for (int i=0;i<values.length;i++){
             this.values[i]=new Float(values[i]);
@@ -96,10 +98,6 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
 
     public void setValues(Float[] values) {
         this.values = values;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     public void setTimestamp(long timestamp) {

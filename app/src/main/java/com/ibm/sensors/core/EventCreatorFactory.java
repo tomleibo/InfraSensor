@@ -44,7 +44,7 @@ public class EventCreatorFactory {
     public static final int HEART_RATE = 21;
     public static final int TYPE_USB_CONNECTION_TYPE = 22;
     public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 23;
-
+    public static final int TYPE_LINEAR_VELOCITY_CHANGE_EVENT = 24;
     // 30-39 GPS
     public static final int TYPE_GPS = 30;
     public static final int TYPE_EVENT_GPS_LOCATION = 31;
@@ -58,6 +58,7 @@ public class EventCreatorFactory {
 
     public static final int FIRST_DYNAMIC_ID = 10000;
     private static final int DELAY = 3;
+
     private final Env env;
 
 
