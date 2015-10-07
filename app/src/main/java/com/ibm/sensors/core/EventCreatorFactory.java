@@ -7,6 +7,7 @@ import android.net.wifi.WifiManager;
 
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.LinearVelocityVirtualSensor;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
@@ -80,6 +81,10 @@ public class EventCreatorFactory {
                 break;
             case FILE_SIZE_CHECKER:
                 return new FileSizeChecker(env.getEventHandler());
+            case TYPE_LINEAR_VELOCITY_CHANGE_EVENT:
+                result=  new LinearVelocityVirtualSensor(env);
+                result.register(0,null);
+                break;
             case ACCELEROMETER:
             case GYROSCOPE:
             case LINEAR_ACCELERATION:

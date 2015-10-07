@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
             setContentView(R.layout.activity_main);
             tv=(TextView)findViewById(R.id.textView);
             Env env = new Env(this);
-            if (!env.getEventHandler().subscribe(EventCreatorFactory.TYPE_AVAILABLE_WIFI_NETWORKS, this)) {
+            if (!env.getEventHandler().subscribe(EventCreatorFactory.TYPE_LINEAR_VELOCITY_CHANGE_EVENT, this)) {
                 tv.setText("subscription failed");
             }
         }

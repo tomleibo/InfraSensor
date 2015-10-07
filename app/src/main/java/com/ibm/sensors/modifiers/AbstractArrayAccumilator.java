@@ -1,30 +1,26 @@
 package com.ibm.sensors.modifiers;
 
+import com.ibm.sensors.EventWrappers.EventWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by nexus on 05/10/2015.
  */
-public abstract class AbstractArrayAccumilator<T> implements Modifier<T[],T[]>{
-	protected T[] mData;
+public abstract class AbstractArrayAccumilator<T> implements Modifier<EventWrapper<T[]>,List<T>>{
+
+	protected List<T> mData=null;
 
 	@Override
-	public T[] modify() {
+	public List<T> modify() {
 		return mData;
 	}
 
 	protected abstract T method(T oldDataOrNULL, T newData);
 
-	@Override
-	public void aggregate(T[] input) {
-		if (input.length>mData.length){
-			Object[] tmp = new Object[input.length];
-			for (int i=0;i<input.length;i++){
-				if (i<mData.length){
-					mData[i] = method(this.mData[i],input[i]);
-				}
-				else{
-					mData[i] = method(null,input[i]);
-				}
-			}
-		}
-	}
+
+
+
+
 }

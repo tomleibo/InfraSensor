@@ -5,6 +5,8 @@ import android.hardware.SensorEvent;
 import com.google.gson.Gson;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 
+import java.util.Arrays;
+
 public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
     private int type;
     private Float[] values;
@@ -13,25 +15,11 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
 
     public MotionSensorEventWrapper(EventCreator sensor,int type, Float[] values, long timestamp, int accuracy) {
         super(System.currentTimeMillis(),sensor);
-        construct(type,accuracy,timestamp);
-        this.values=values;
-    }
-
-    private void construct(int type,int accuracy,long timestamp){
         this.type = type;
         this.accuracy = accuracy;
-        this.timestamp=timestamp;
+        this.timestamp= timestamp;
+        this.values=values;
     }
-
-    public MotionSensorEventWrapper(EventCreator sensor,int type, float[] values, long timestamp, int accuracy) {
-        super(System.currentTimeMillis(),sensor);
-        construct(type, accuracy,timestamp);
-        this.values=new Float[values.length];
-        for (int i=0;i<values.length;i++){
-            this.values[i]=new Float(values[i]);
-        }
-    }
-
 
     public MotionSensorEventWrapper(final SensorEvent event) {
         super(System.currentTimeMillis(), new EventCreator() {
@@ -56,7 +44,8 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
             }
         });
         this.type = event.sensor.getType();
-        for (int i=0; i< Math.min(this.values.length,event.values.length);i++){
+        values=new Float[3];
+        for (int i=0; i< event.values.length;i++){
             this.values[i] = event.values[i];
         }
 
@@ -114,5 +103,15 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
 
     public String toJson(Gson gson) {
         return gson.toJson(this);
+    }
+
+    @Override
+    public String toString() {
+        return "MotionSensorEventWrapper{" +
+                "type=" + type +
+                ", values=" + Arrays.toString(values) +
+                ", accuracy=" + accuracy +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

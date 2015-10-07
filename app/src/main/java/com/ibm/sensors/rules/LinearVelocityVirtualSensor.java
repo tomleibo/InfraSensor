@@ -41,11 +41,14 @@ public class LinearVelocityVirtualSensor extends Rule
 
 	@Override
 	public void dispatch() {
-		Float[] values=new Float[3];
+		ArrayList<Float> values=new ArrayList();
 		for (Pair<Integer, Modifier> p : modifiers) {
-			values=(Float[])p.value.modify();
+			values = (ArrayList) p.value.modify();
+
 		}
-		env.getEventHandler().handleEvent(new MotionSensorEventWrapper(this,EventCreatorFactory.TYPE_LINEAR_VELOCITY_CHANGE_EVENT,values,System.currentTimeMillis(),0));
+
+
+		env.getEventHandler().handleEvent(new MotionSensorEventWrapper(this, EventCreatorFactory.TYPE_LINEAR_VELOCITY_CHANGE_EVENT, new Float[]{values.get(0),values.get(1),values.get(2)}, System.currentTimeMillis(), 0));
 	}
 
 	@Override
