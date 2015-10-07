@@ -8,6 +8,7 @@ package com.ibm.sensors.modifiers;
 public interface Modifier <IN,OUT> {
     OUT modify ();
     void aggregate(IN input);
+    int clear();
 }
 
 

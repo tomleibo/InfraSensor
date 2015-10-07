@@ -44,5 +44,12 @@ public class MaxAccelerometerSpeed implements Modifier<EventWrapper<Float[]>,Flo
         events.put(input.getTime(),input.getData());
     }
 
+    @Override
+    public int clear() {
+        int s = events.size();
+        events.clear();
+        return s;
+    }
+
 
 }
