@@ -1,4 +1,4 @@
-package com.ibm.sensors.modifiers;
+package com.ibm.sensors.modifiers.abstracts;
 
 /**
  * Modifier: receives an event and modifies it. Its goal is to normalize data.

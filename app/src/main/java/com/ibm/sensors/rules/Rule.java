@@ -3,7 +3,7 @@ package com.ibm.sensors.rules;
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
-import com.ibm.sensors.modifiers.Modifier;
+import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.MultiGenericObservable;

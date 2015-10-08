@@ -1,4 +1,4 @@
-package com.ibm.sensors.modifiers;
+package com.ibm.sensors.modifiers.abstracts;
 
 /**
  Created By Tom.

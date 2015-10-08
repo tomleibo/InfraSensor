@@ -1,17 +1,12 @@
 package com.ibm.sensors.rules;
 
-import com.google.gson.Gson;
-import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
-import com.ibm.sensors.modifiers.FloatAccumilator;
-import com.ibm.sensors.modifiers.MaxAccelerometerSpeed;
-import com.ibm.sensors.modifiers.Modifier;
-import com.ibm.sensors.rules.Rule;
+import com.ibm.sensors.modifiers.AddFloatAccumulator;
+import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.ImmidiateStrategy;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
-import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.Pair;
 
 import java.util.ArrayList;
@@ -27,7 +22,7 @@ public class LinearVelocityVirtualSensor extends Rule
 	public LinearVelocityVirtualSensor(Env env, RuleStrategy strategy) {
 		super(env, strategy);
 		modifiers = new ArrayList<>();
-		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.LINEAR_ACCELERATION, new FloatAccumilator()));
+		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.LINEAR_ACCELERATION, new AddFloatAccumulator()));
 		mMotionSensorEventWrapper = null;
 	}
 
@@ -35,7 +30,7 @@ public class LinearVelocityVirtualSensor extends Rule
 	public LinearVelocityVirtualSensor(Env env) {
 		super(env, new ImmidiateStrategy());
 		modifiers = new ArrayList<>();
-		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.LINEAR_ACCELERATION, new FloatAccumilator()));
+		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.LINEAR_ACCELERATION, new AddFloatAccumulator()));
 		mMotionSensorEventWrapper = null;
 	}
 
@@ -46,8 +41,6 @@ public class LinearVelocityVirtualSensor extends Rule
 			values = (ArrayList) p.value.modify();
 
 		}
-
-
 		env.getEventHandler().handleEvent(new MotionSensorEventWrapper(this, EventCreatorFactory.TYPE_LINEAR_VELOCITY_CHANGE_EVENT, new Float[]{values.get(0),values.get(1),values.get(2)}, System.currentTimeMillis(), 0));
 	}
 

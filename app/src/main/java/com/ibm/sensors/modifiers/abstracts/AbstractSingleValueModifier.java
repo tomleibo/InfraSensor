@@ -1,4 +1,4 @@
-package com.ibm.sensors.modifiers;
+package com.ibm.sensors.modifiers.abstracts;
 
 /**
  * Created by thinkPAD on 10/7/2015.

@@ -1,4 +1,5 @@
-package com.ibm.sensors.modifiers;
+
+package com.ibm.sensors.modifiers.abstracts;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
@@ -14,35 +15,36 @@ import java.util.List;
  * Used to aggregate [size] parametres. Old values are overridden by new ones in a fifo way.
  * Use getValues to get the aggregated collection.
  */
-public abstract class AbstractCircularArrayModifier<IN,OUT> implements Modifier<IN,Collection<OUT>>{
-    Collection<IN> buffer;
-    abstract OUT modifySingleValue(IN in);
-    public AbstractCircularArrayModifier(int size) {
-        this.buffer = new CircularFifoBuffer(size);
+public abstract class AbstractCircularListModifier<IN,OUT> implements ListModifierInterface<IN,OUT> {
+    Collection<IN> collection;
+    public abstract OUT modifySingleValue(IN in);
+    public AbstractCircularListModifier(int size) {
+        this.collection = new CircularFifoBuffer(size);
     }
 
     public Collection<IN> getValues() {
-        return buffer;
+        return collection;
     }
 
     @Override
-    public Collection<OUT> modify() {
+    public List<OUT> modify() {
         List<OUT> result = new ArrayList<>();
-        for (IN in : buffer){
+        for (IN in : collection){
             result.add(modifySingleValue(in));
         }
         return result;
     }
 
-    @Override
-    public void aggregate(IN input) {
-        buffer.add(input);
+    public void aggregate(Collection<IN> input) {
+        collection.addAll(input);
     }
 
     @Override
     public int clear() {
-        int res = buffer.size();
-        buffer.clear();
+        int res = collection.size();
+        collection.clear();
         return res;
     }
 }
+
+

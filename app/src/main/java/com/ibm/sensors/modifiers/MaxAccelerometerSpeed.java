@@ -1,6 +1,7 @@
 package com.ibm.sensors.modifiers;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.modifiers.abstracts.Modifier;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.TreeMap;
 /**
  * Created by thinkPAD on 9/11/2015.
  */
-public class MaxAccelerometerSpeed implements Modifier<EventWrapper<Float[]>,Float>{
+public class MaxAccelerometerSpeed implements Modifier<EventWrapper<Float[]>,Float> {
 
     private final SortedMap<Long,Float[]> events;
 
