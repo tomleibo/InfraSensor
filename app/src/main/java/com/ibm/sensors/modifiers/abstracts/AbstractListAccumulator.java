@@ -8,7 +8,7 @@ import java.util.List;
  */
 public abstract class AbstractListAccumulator<T> implements ListModifierInterface<T,T> {
 
-	List<T> list;
+	protected List<T> list;
 
 	public AbstractListAccumulator() {
 		this.list = new ArrayList<>();
