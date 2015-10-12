@@ -3,6 +3,7 @@ package com.ibm.sensors;
 import android.app.Activity;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -29,8 +30,9 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
             setContentView(R.layout.activity_main);
             tv=(TextView)findViewById(R.id.textView);
             Env env = new Env(this);
-            if (!env.getEventHandler().subscribe(EventCreatorFactory.TYPE_LINEAR_VELOCITY_CHANGE_EVENT, this)) {
+            if (!env.getEventHandler().subscribe(EventCreatorFactory.TYPE_EVENT_SCREEN_ON_OFF, this)) {
                 tv.setText("subscription failed");
+
             }
         }
         catch (Throwable e) {
@@ -69,6 +71,7 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         tv.setText("networks:  "+data.toString());
+        Log.d("data:", data.toString());
     }
     @Override
     protected void onStop()

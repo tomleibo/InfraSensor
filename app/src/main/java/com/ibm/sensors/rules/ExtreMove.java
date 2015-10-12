@@ -5,7 +5,7 @@ import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.modifiers.MaxAccelerometerSpeed;
-import com.ibm.sensors.modifiers.Modifier;
+import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.MultiGenericObservable;

@@ -12,6 +12,8 @@ import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.FileSizeChecker;
+import com.ibm.sensors.sensorWrappers.LightSensor;
+import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
 import java.util.Map;
@@ -52,6 +54,11 @@ public class EventCreatorFactory {
     public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
     public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE = 33;
 
+    public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
+    public static final int TYPE_LIGHT_SENSOR = 41;
+
+    public static final int TYPE_SCREEN_ON_OFF_SENSOR = 42;
+    public static final int TYPE_EVENT_SCREEN_ON_OFF = 43;
 
     public static final int FILE_SIZE_CHECKER = 50;
     public static final int TYPE_EXTREME_MOVE = 1001;
@@ -85,6 +92,10 @@ public class EventCreatorFactory {
                 result=  new LinearVelocityVirtualSensor(env);
                 result.register(0,null);
                 break;
+            case TYPE_EVENT_LIGHT_AMOUNT:
+                result= new LightSensor(env.getEventHandler());
+                result.register(0,null);
+                break;
             case ACCELEROMETER:
             case GYROSCOPE:
             case LINEAR_ACCELERATION:
@@ -110,6 +121,13 @@ public class EventCreatorFactory {
                         e.printStackTrace();
                         return null;
                 }
+
+
+            case TYPE_EVENT_SCREEN_ON_OFF:
+                result = new ScreenOnOffSensor(env.getEventHandler());
+                result.register(0,null);
+                break;
+
             default:
                 int coreType = getCoreTypeFromDynamicType(type);
                 result = buildAndRegisterEventCreator(coreType, o);

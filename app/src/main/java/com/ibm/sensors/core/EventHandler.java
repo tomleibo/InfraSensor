@@ -2,6 +2,7 @@ package com.ibm.sensors.core;
 
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.PowerManager;
 
 import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
@@ -27,11 +28,16 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     private static final int MOTION_SENSORS_TYPES[] = {Sensor.TYPE_GRAVITY,Sensor.TYPE_GYROSCOPE,Sensor.TYPE_ROTATION_VECTOR,Sensor.TYPE_ACCELEROMETER,Sensor.TYPE_LINEAR_ACCELERATION};
 
     private static EventHandler instance;
+
+    public Env getEnv() {
+        return env;
+    }
+
     private Env env=null;
 
     private final Gson gson;
     private SensorManager sm;
-
+    private PowerManager pm;
     private EventHandler() {
         gson = new Gson();
         // optional GsonBuilder.settingMethods()....create()
@@ -40,6 +46,9 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     private EventHandler(Env env) {
         this();
         this.sm=env.getSensorManager();
+        this.pm=env.getPowerManager();
+
+
         this.env = env;
     }
 
@@ -98,13 +107,17 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
     public boolean unsubscribe(Integer eventType, GenericObserver<EventWrapper> obs) {
         boolean result = super.unsubscribe(eventType, obs);
         if (result) {
-            env.getSensorFactory().unsubscribe(this,eventType);
+            env.getSensorFactory().unsubscribe(this, eventType);
         }
         return result;
     }
 
     public SensorManager getSensorManager() {
         return sm;
+    }
+
+    public PowerManager getPowerManager() {
+        return this.pm;
     }
 
     /*

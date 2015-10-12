@@ -2,13 +2,14 @@ package com.ibm.sensors.modifiers;
 
 
 import com.dtw.TimeWarpInfo;
+import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.timeseries.TimeSeries;
 import com.util.DistanceFunction;
 
 /**
  * Created by nexus on 02/10/2015.
  */
-public class FastDTW implements Modifier<String[],Double>{
+public class FastDTW implements Modifier<String[],Double> {
 	private final String mTemplateName;
 	private final TimeSeries mTemplateSeries;
 	private final int mRadius;
@@ -44,6 +45,11 @@ public class FastDTW implements Modifier<String[],Double>{
 		TimeSeries ts = new TimeSeries(input,false,mIsLabeledSeries,mDelimiterSeries);
 		final TimeWarpInfo info = com.dtw.FastDTW.getWarpInfoBetween(this.mTemplateSeries, ts, new Integer(mRadius), mDistFunc);
 		mDistance = new Double(info.getDistance());
+	}
+
+	@Override
+	public int clear() {
+		return 0;
 	}
 
 }
