@@ -21,7 +21,7 @@ public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<GPSAccu
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_GPS;
+		return EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED;
 	}
 
 	@Override
