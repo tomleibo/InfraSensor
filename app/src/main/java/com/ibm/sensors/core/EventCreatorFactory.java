@@ -53,6 +53,7 @@ public class EventCreatorFactory {
     public static final int TYPE_EVENT_GPS_LOCATION = 31;
     public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
     public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE = 33;
+    public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED = 34;
 
     public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
     public static final int TYPE_LIGHT_SENSOR = 41;
@@ -62,6 +63,8 @@ public class EventCreatorFactory {
 
     public static final int FILE_SIZE_CHECKER = 50;
     public static final int TYPE_EXTREME_MOVE = 1001;
+    public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
+
 
 
     public static final int FIRST_DYNAMIC_ID = 10000;
