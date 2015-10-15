@@ -15,7 +15,7 @@ public class ScreenOnOffEvent extends AbstractEventWrapper<Boolean>{
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_SCREEN_ON_OFF;
+		return EventCreatorFactory.Events.TYPE_EVENT_SCREEN_ON_OFF;
 	}
 
 	@Override

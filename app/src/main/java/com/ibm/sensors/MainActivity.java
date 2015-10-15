@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
             setContentView(R.layout.activity_main);
             tv=(TextView)findViewById(R.id.textView);
             Env env = new Env(this);
-            if (!env.getEventHandler().subscribe(EventCreatorFactory.TYPE_EVENT_SCREEN_ON_OFF, this)) {
+            if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_SCREEN_ON_OFF, this)) {
                 tv.setText("subscription failed");
 
             }

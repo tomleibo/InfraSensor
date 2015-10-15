@@ -15,7 +15,7 @@ import com.ibm.sensors.core.EventCreatorFactory;
 public class Accelerometer extends AbstractHardwareSensor {
 
     public Accelerometer(SensorManager sm,  EventHandler handler) throws InstantiationException {
-        super(EventCreatorFactory.ACCELEROMETER,sm,handler);
+        super(EventCreatorFactory.Sensors.TYPE_SENSOR_ACCELEROMETER,sm,handler);
     }
 
 

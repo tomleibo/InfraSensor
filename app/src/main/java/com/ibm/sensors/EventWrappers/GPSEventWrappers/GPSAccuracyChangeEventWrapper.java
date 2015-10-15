@@ -1,8 +1,5 @@
 package com.ibm.sensors.EventWrappers.GPSEventWrappers;
 
-import android.location.Location;
-import android.os.Bundle;
-
 import com.ibm.sensors.EventWrappers.AbstractEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.sensorWrappers.EventCreator;
@@ -21,7 +18,7 @@ public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<Integer
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED;
+		return EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED;
 	}
 
 	@Override

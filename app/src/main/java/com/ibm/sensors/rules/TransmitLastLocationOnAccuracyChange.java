@@ -22,17 +22,17 @@ public class TransmitLastLocationOnAccuracyChange extends Rule {
 
     public TransmitLastLocationOnAccuracyChange(Env env) {
         super(env, new EventCountStrategy(
-                EventCreatorFactory.TYPE_EVENT_GPS_LOCATION,Integer.MAX_VALUE,
-                EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED,1));
+                EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION,Integer.MAX_VALUE,
+                EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED,1));
         modifiers=new ArrayList<>();
-        modifiers.add(new Pair<>(EventCreatorFactory.TYPE_EVENT_GPS_LOCATION,
+        modifiers.add(new Pair<>(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION,
                 new AbstractSingleChangingValueModifier() {
                     @Override
                     public Object modify() {
                         return getValue();
                     }
                 }));
-        modifiers.add(new Pair<>(EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED,
+        modifiers.add(new Pair<>(EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED,
                 new AbstractSingleChangingValueModifier() {
                     @Override
                     public Object modify() {
@@ -44,11 +44,11 @@ public class TransmitLastLocationOnAccuracyChange extends Rule {
     @Override
     public void dispatch() {
         for (Pair<Integer, Modifier> p:modifiers) {
-            if (p.key.equals(EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED)) {
+            if (p.key.equals(EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED)) {
                 int accuracyGrade = (Integer)p.value.modify();
                 if (accuracyGrade == LocationProvider.OUT_OF_SERVICE) {
                     for (Pair<Integer, Modifier> p2:modifiers) {
-                        if (p2.key.equals(EventCreatorFactory.TYPE_EVENT_GPS_LOCATION)) {
+                        if (p2.key.equals(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION)) {
                             env.getEventHandler().handleEvent((GPSLocationChangedEventWrapper)p2.value.modify());
                         }
                     }
@@ -60,12 +60,12 @@ public class TransmitLastLocationOnAccuracyChange extends Rule {
 
     @Override
     public Collection<Integer> getSensorTypes() {
-        return Arrays.asList(EventCreatorFactory.TYPE_EVENT_GPS_LOCATION,
-                EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED);
+        return Arrays.asList(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION,
+                EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED);
     }
 
     @Override
     public int getType() {
-        return EventCreatorFactory.TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE;
+        return EventCreatorFactory.Events.TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE;
     }
 }

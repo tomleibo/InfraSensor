@@ -13,6 +13,6 @@ public class GPSInputProviderRemove extends GPSInputProviderAdd{
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE;
+		return EventCreatorFactory.Events.TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE;
 	}
 }

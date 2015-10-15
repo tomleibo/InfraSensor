@@ -1,10 +1,6 @@
 package com.ibm.sensors.EventWrappers.GPSEventWrappers;
 
 import android.location.Location;
-import android.os.Bundle;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 import com.ibm.sensors.EventWrappers.AbstractEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
@@ -25,7 +21,7 @@ public class GPSLocationChangedEventWrapper extends AbstractEventWrapper<Locatio
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_GPS_LOCATION;
+		return EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION;
 	}
 
 	@Override

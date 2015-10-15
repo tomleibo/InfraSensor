@@ -26,7 +26,7 @@ public class FileSizeChecker implements EventCreator<File>,Runnable{
 
     @Override
     public int getType() {
-        return EventCreatorFactory.FILE_SIZE_CHECKER;
+        return EventCreatorFactory.Sensors.TYPE_SENSOR_FILE_SIZE_CHECKER;
     }
 
     @Override

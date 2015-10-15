@@ -21,7 +21,7 @@ public class FileSizeChangedEvent extends AbstractEventWrapper<Long> {
 
     @Override
     public int getEventType() {
-        return EventCreatorFactory.FILE_SIZE_CHECKER;
+        return EventCreatorFactory.Sensors.TYPE_SENSOR_FILE_SIZE_CHECKER;
     }
 
     @Override

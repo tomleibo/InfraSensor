@@ -5,7 +5,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import com.ibm.sensors.EventWrappers.GPSEventWrapper;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventExtrasWrapper;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventInputProvider;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventWrapper;
@@ -30,7 +29,7 @@ public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements 
 
 	@Override
 	public int getType() {
-		return EventCreatorFactory.TYPE_GPS;
+		return EventCreatorFactory.Sensors.TYPE_SENSOR_GPS;
 	}
 
 	@Override

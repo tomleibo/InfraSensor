@@ -20,7 +20,7 @@ public class USBPlugTypeEventWrapper extends AbstractEventWrapper<Integer> {
 
     @Override
     public int getEventType() {
-        return EventCreatorFactory.TYPE_USB_CONNECTION_TYPE;
+        return EventCreatorFactory.Sensors.TYPE_SENSOR_USB_CONNECTION_TYPE;
     }
 
     @Override

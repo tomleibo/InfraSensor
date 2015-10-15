@@ -3,7 +3,6 @@ package com.ibm.sensors.sensorWrappers;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 
 import com.ibm.sensors.EventWrappers.LightSensorEvent;
 import com.ibm.sensors.core.EventCreatorFactory;
@@ -22,7 +21,7 @@ public class LightSensor extends AbstractSensorWrapper<Float> implements SensorE
 
 	@Override
 	public int getType() {
-		return EventCreatorFactory.TYPE_LIGHT_SENSOR;
+		return EventCreatorFactory.Sensors.TYPE_SENSOR_LIGHT_SENSOR;
 	}
 
 	@Override

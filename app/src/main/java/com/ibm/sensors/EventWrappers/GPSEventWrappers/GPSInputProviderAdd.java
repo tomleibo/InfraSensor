@@ -16,7 +16,7 @@ public class GPSInputProviderAdd extends AbstractEventWrapper{
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_GPS_INPUT_PROVIDER_ADD;
+		return EventCreatorFactory.Events.TYPE_EVENT_GPS_INPUT_PROVIDER_ADD;
 	}
 
 	@Override
