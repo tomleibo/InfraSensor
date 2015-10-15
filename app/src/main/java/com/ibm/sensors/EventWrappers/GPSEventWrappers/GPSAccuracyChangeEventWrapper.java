@@ -10,11 +10,11 @@ import com.ibm.sensors.sensorWrappers.EventCreator;
 /**
  * Created by nexus on 03/10/2015.
  */
-public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<GPSAccuracyChangeWrapper> {
-	private GPSAccuracyChangeWrapper mData;
-	public GPSAccuracyChangeEventWrapper(long timestamp, EventCreator sensor, String provider, Integer status, Bundle extras) {
+public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<Integer> {
+	private Integer mStatus;
+	public GPSAccuracyChangeEventWrapper(long timestamp, EventCreator sensor, Integer status) {
 		super(timestamp, sensor);
-		this.mData= new GPSAccuracyChangeWrapper(provider,status,extras);
+		this.mStatus = new Integer(status);
 	}
 
 
@@ -25,7 +25,7 @@ public class GPSAccuracyChangeEventWrapper  extends AbstractEventWrapper<GPSAccu
 	}
 
 	@Override
-	public GPSAccuracyChangeWrapper getData() {
-		return this.mData;
+	public Integer getData() {
+		return this.mStatus;
 	}
 }

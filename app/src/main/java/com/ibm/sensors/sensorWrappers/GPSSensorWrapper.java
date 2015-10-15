@@ -6,6 +6,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.ibm.sensors.EventWrappers.GPSEventWrapper;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventExtrasWrapper;
+import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventInputProvider;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSAccuracyChangeEventWrapper;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSInputProviderAdd;
 import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSInputProviderRemove;
@@ -58,7 +60,9 @@ public class GPSSensorWrapper extends AbstractSensorWrapper<Integer> implements 
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
-		mHandler.handleEvent(new GPSAccuracyChangeEventWrapper(System.currentTimeMillis(),this,provider,new Integer(status),extras));
+		mHandler.handleEvent(new GPSAccuracyChangeEventWrapper(System.currentTimeMillis(),this,new Integer(status)));
+		mHandler.handleEvent(new GPSAccuracyChangeEventExtrasWrapper(System.currentTimeMillis(),this,extras));
+		mHandler.handleEvent(new GPSAccuracyChangeEventInputProvider(System.currentTimeMillis(),this,provider));
 	}
 
 	@Override

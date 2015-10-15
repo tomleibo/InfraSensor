@@ -54,6 +54,8 @@ public class EventCreatorFactory {
     public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
     public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE = 33;
     public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED = 34;
+    public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS = 35;
+    public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER = 36;
 
     public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
     public static final int TYPE_LIGHT_SENSOR = 41;
