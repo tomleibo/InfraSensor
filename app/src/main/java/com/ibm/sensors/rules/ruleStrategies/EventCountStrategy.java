@@ -31,8 +31,8 @@ public class EventCountStrategy implements RuleStrategy {
 
     @Override
     public boolean shouldDispatchOnEventArrival(int type) {
-        Integer count= eventCount.get(type);
         synchronized (this) {
+            Integer count= eventCount.get(type);
             if (count == null) {
                 eventCount.put(type, 1);
                 count=1;

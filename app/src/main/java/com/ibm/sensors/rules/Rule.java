@@ -44,6 +44,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         Integer type = data.getEventType();
+
         for (Pair <Integer,Modifier> p : modifiers) {
             if (p.key.equals(type)) {
                 p.value.aggregate(data);

@@ -8,6 +8,7 @@ import android.net.wifi.WifiManager;
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.rules.LinearVelocityVirtualSensor;
+import com.ibm.sensors.rules.TransmitLastLocationOnAccuracyChange;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
@@ -56,6 +57,7 @@ public class EventCreatorFactory {
     public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED = 34;
     public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS = 35;
     public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER = 36;
+    public static final int TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE = 37;
 
     public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
     public static final int TYPE_LIGHT_SENSOR = 41;
@@ -88,6 +90,10 @@ public class EventCreatorFactory {
     private EventCreator buildAndRegisterEventCreator(int type, Object o) {
         EventCreator result;
         switch (type) {
+            case TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE:
+                result=new TransmitLastLocationOnAccuracyChange(env);
+                result.register(0,null);
+                break;
             case TYPE_AVAILABLE_WIFI_NETWORKS:
                 result= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
                 break;
@@ -121,7 +127,7 @@ public class EventCreatorFactory {
                         }
                     };
                         result.register(DELAY,null);
-                        return result;
+                        break;
                 } catch (InstantiationException e) {
                         e.printStackTrace();
                         return null;
