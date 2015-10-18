@@ -22,7 +22,7 @@ public class ExtreMove extends Rule {
     public ExtreMove(Env env,RuleStrategy strategy) {
         super(env,strategy);
         modifiers = new ArrayList<>();
-        modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.ACCELEROMETER,new MaxAccelerometerSpeed()));
+        modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.Sensors.TYPE_SENSOR_ACCELEROMETER,new MaxAccelerometerSpeed()));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ExtreMove extends Rule {
                 env.getEventHandler().handleEvent(new EventWrapper<Float>() {
                     @Override
                     public int getEventType() {
-                        return EventCreatorFactory.TYPE_EXTREME_MOVE;
+                        return EventCreatorFactory.Rules.TYPE_RULE_EXTREME_MOVE;
                     }
 
                     @Override
@@ -67,12 +67,12 @@ public class ExtreMove extends Rule {
 
     @Override
     public Collection<Integer> getSensorTypes() {
-        return Arrays.asList(EventCreatorFactory.ACCELEROMETER);
+        return Arrays.asList(EventCreatorFactory.Sensors.TYPE_SENSOR_ACCELEROMETER);
     }
 
     @Override
     public int getType() {
-        return EventCreatorFactory.TYPE_EXTREME_MOVE;
+        return EventCreatorFactory.Rules.TYPE_RULE_EXTREME_MOVE;
     }
 
 }

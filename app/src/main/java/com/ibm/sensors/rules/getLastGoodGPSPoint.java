@@ -7,7 +7,6 @@ import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * Created by nexus on 13/10/2015.
@@ -28,11 +27,11 @@ public class getLastGoodGPSPoint extends Rule{
 
 	@Override
 	public Collection<Integer> getSensorTypes() {
-		return Arrays.asList(EventCreatorFactory.TYPE_EVENT_GPS_LOCATION,EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED);
+		return Arrays.asList(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION, EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED);
 	}
 
 	@Override
 	public int getType() {
-		return EventCreatorFactory.TYPE_RULE_LAST_GOOD_GPS_POINT;
+		return EventCreatorFactory.Rules.TYPE_RULE_LAST_GOOD_GPS_POINT;
 	}
 }
