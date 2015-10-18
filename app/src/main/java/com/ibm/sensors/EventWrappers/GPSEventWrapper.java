@@ -47,7 +47,7 @@ public class GPSEventWrapper extends AbstractEventWrapper<JsonElement> {
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_GPS;
+		return EventCreatorFactory.Sensors.TYPE_SENSOR_GPS;
 	}
 
 	@Override

@@ -49,7 +49,7 @@ public class ScreenOnOffSensor extends AbstractSensorWrapper<Boolean>{
 
 	@Override
 	public int getType() {
-		return EventCreatorFactory.TYPE_SCREEN_ON_OFF_SENSOR;
+		return EventCreatorFactory.Sensors.TYPE_SENSOR_SCREEN_ON_OFF;
 	}
 
 	@Override

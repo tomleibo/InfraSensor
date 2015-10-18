@@ -25,7 +25,7 @@ public class USBConnectionType extends BroadcastReceiver implements EventCreator
 
     @Override
     public int getType() {
-        return EventCreatorFactory.TYPE_USB_CONNECTION_TYPE;
+        return EventCreatorFactory.Sensors.TYPE_SENSOR_USB_CONNECTION_TYPE;
     }
 
     @Override

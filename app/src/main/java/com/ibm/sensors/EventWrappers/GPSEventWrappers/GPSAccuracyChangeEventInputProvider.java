@@ -1,7 +1,5 @@
 package com.ibm.sensors.EventWrappers.GPSEventWrappers;
 
-import com.ibm.sensors.EventWrappers.AbstractEventWrapper;
-import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 
@@ -16,6 +14,6 @@ public class GPSAccuracyChangeEventInputProvider extends GPSInputProviderAdd {
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER;
+		return EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER;
 	}
 }

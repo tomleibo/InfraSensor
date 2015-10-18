@@ -83,7 +83,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
     }
     @Override
     public int getType() {
-        return EventCreatorFactory.TYPE_AVAILABLE_WIFI_NETWORKS;
+        return EventCreatorFactory.Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS;
     }
 
     @Override

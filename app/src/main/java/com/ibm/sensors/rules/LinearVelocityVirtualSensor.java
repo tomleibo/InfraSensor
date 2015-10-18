@@ -22,7 +22,7 @@ public class LinearVelocityVirtualSensor extends Rule
 	public LinearVelocityVirtualSensor(Env env, RuleStrategy strategy) {
 		super(env, strategy);
 		modifiers = new ArrayList<>();
-		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.LINEAR_ACCELERATION, new AddFloatAccumulator()));
+		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, new AddFloatAccumulator()));
 		mMotionSensorEventWrapper = null;
 	}
 
@@ -30,7 +30,7 @@ public class LinearVelocityVirtualSensor extends Rule
 	public LinearVelocityVirtualSensor(Env env) {
 		super(env, new ImmidiateStrategy());
 		modifiers = new ArrayList<>();
-		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.LINEAR_ACCELERATION, new AddFloatAccumulator()));
+		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, new AddFloatAccumulator()));
 		mMotionSensorEventWrapper = null;
 	}
 
@@ -41,12 +41,12 @@ public class LinearVelocityVirtualSensor extends Rule
 			values = (ArrayList) p.value.modify();
 
 		}
-		env.getEventHandler().handleEvent(new MotionSensorEventWrapper(this, EventCreatorFactory.TYPE_LINEAR_VELOCITY_CHANGE_EVENT, new Float[]{values.get(0),values.get(1),values.get(2)}, System.currentTimeMillis(), 0));
+		env.getEventHandler().handleEvent(new MotionSensorEventWrapper(this, EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE, new Float[]{values.get(0),values.get(1),values.get(2)}, System.currentTimeMillis(), 0));
 	}
 
 	@Override
 	public Collection<Integer> getSensorTypes() {
-		return Arrays.asList(EventCreatorFactory.LINEAR_ACCELERATION);
+		return Arrays.asList(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION);
 	}
 
 	@Override

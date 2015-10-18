@@ -32,7 +32,7 @@ public class SomeRule extends Rule{
 
 	@Override
 	public Collection<Integer> getSensorTypes() {
-		return Arrays.asList(EventCreatorFactory.TYPE_EXTREME_MOVE);
+		return Arrays.asList(EventCreatorFactory.Rules.TYPE_RULE_EXTREME_MOVE);
 	}
 
 	@Override

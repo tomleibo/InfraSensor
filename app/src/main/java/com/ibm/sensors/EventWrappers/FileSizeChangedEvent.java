@@ -11,8 +11,7 @@ import java.io.File;
 public class FileSizeChangedEvent extends AbstractEventWrapper<Long> {
     final File file;
     final long length;
-    EventCreator sensor;
-
+    
     public FileSizeChangedEvent(EventCreator sensor,File file, long length) {
         super(System.currentTimeMillis(),sensor);
         this.file=file;
@@ -21,7 +20,7 @@ public class FileSizeChangedEvent extends AbstractEventWrapper<Long> {
 
     @Override
     public int getEventType() {
-        return EventCreatorFactory.FILE_SIZE_CHECKER;
+        return EventCreatorFactory.Sensors.TYPE_SENSOR_FILE_SIZE_CHECKER;
     }
 
     @Override

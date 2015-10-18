@@ -24,51 +24,55 @@ import java.util.TreeMap;
 /**TODO: add custom incremental event type id.*/
 
 public class EventCreatorFactory {
-    //correlated with android's Sensor.TYPE_* constants.
-    public static final int ACCELEROMETER=1;
-    public static final int MAGNETIC_FIELD = 2;
-    public static final int ORIENTATION = 3;
-    public static final int GYROSCOPE = 4;
-    public static final int LIGHT =5;
-    public static final int PRESSURE = 6;
-    public static final int TEMPRATURE = 7;
-    public static final int PROXIMITY = 8;
-    public static final int GRAVITY = 9;
-    public static final int LINEAR_ACCELERATION = 10;
-    public static final int ROTATION_VECTOR = 11;
-    public static final int RELATIVE_HUMIDITY = 12;
-    public static final int AMBIENT_TEMPATURE = 13;
-    public static final int MAGNETIC_FIELD_UNCALIBRATED = 14;
-    public static final int GAME_ROTATION_VECTOR = 15;
-    public static final int GYROSCOPE_UNCALIBRATED = 16;
-    public static final int SIGNIFICANT_MOTION = 17;
-    public static final int STEP_DETECTOR = 18;
-    public static final int STEP_COUNTER= 19;
-    public static final int GEOMAGNETIC_ROTATION_VECTOR = 20;
-    public static final int HEART_RATE = 21;
-    public static final int TYPE_USB_CONNECTION_TYPE = 22;
-    public static final int TYPE_AVAILABLE_WIFI_NETWORKS = 23;
-    public static final int TYPE_LINEAR_VELOCITY_CHANGE_EVENT = 24;
-    // 30-39 GPS
-    public static final int TYPE_GPS = 30;
-    public static final int TYPE_EVENT_GPS_LOCATION = 31;
-    public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
-    public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE = 33;
-    public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED = 34;
-    public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS = 35;
-    public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER = 36;
-    public static final int TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE = 37;
+    public class Sensors{
+        public static final int TYPE_SENSOR_USB_CONNECTION_TYPE = 22;
+        //correlated with android's Sensor.TYPE_* constants.
+        public static final int TYPE_SENSOR_ACCELEROMETER =1;
+        public static final int TYPE_SENSOR_MAGNETIC_FIELD = 2;
+        public static final int TYPE_SENSOR_ORIENTATION = 3;
+        public static final int TYPE_SENSOR_GYROSCOPE = 4;
+        public static final int TYPE_SENSOR_LIGHT =5;
+        public static final int TYPE_SENSOR_PRESSURE = 6;
+        public static final int TYPE_SENSOR_TEMPRATURE = 7;
+        public static final int TYPE_SENSOR_PROXIMITY = 8;
+        public static final int TYPE_SENSOR_GRAVITY = 9;
+        public static final int TYPE_SENSOR_LINEAR_ACCELERATION = 10;
+        public static final int TYPE_SENSOR_AMBIENT_TEMPATURE = 13;
+        public static final int TYPE_SENSOR_MAGNETIC_FIELD_UNCALIBRATED = 14;
+        public static final int TYPE_SENSOR_GAME_ROTATION_VECTOR = 15;
+        public static final int TYPE_SENSOR_GYROSCOPE_UNCALIBRATED = 16;
+        public static final int TYPE_SENSOR_SIGNIFICANT_MOTION = 17;
+        public static final int TYPE_SENSOR_STEP_DETECTOR = 18;
+        public static final int TYPE_SENSOR_STEP_COUNTER = 19;
+        public static final int TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR = 20;
+        public static final int TYPE_SENSOR_HEART_RATE = 21;
+        public static final int TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS = 23;
+        public static final int TYPE_SENSOR_ROTATION_VECTOR = 11;
+        public static final int TYPE_SENSOR_RELATIVE_HUMIDITY = 12;
+        // 30-39 GPS
+        public static final int TYPE_SENSOR_GPS = 30;
+        public static final int TYPE_SENSOR_SCREEN_ON_OFF = 42;
+        public static final int TYPE_SENSOR_FILE_SIZE_CHECKER = 50;
+        public static final int TYPE_SENSOR_LIGHT_SENSOR = 41;
+    }
 
-    public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
-    public static final int TYPE_LIGHT_SENSOR = 41;
+    public class Events{
+        public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE = 33;
+        public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED = 34;
+        public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS = 35;
+        public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER = 36;
+        public static final int TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE = 37;
+        public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
+        public static final int TYPE_EVENT_SCREEN_ON_OFF = 43;
+        public static final int TYPE_EVENT_LINEAR_VELOCITY_CHANGE = 24;
+        public static final int TYPE_EVENT_GPS_LOCATION = 31;
+        public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
+    }
 
-    public static final int TYPE_SCREEN_ON_OFF_SENSOR = 42;
-    public static final int TYPE_EVENT_SCREEN_ON_OFF = 43;
-
-    public static final int FILE_SIZE_CHECKER = 50;
-    public static final int TYPE_EXTREME_MOVE = 1001;
-    public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
-
+    public class Rules{
+        public static final int TYPE_RULE_EXTREME_MOVE = 1001;
+        public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
+    }
 
 
     public static final int FIRST_DYNAMIC_ID = 10000;
@@ -90,29 +94,29 @@ public class EventCreatorFactory {
     private EventCreator buildAndRegisterEventCreator(int type, Object o) {
         EventCreator result;
         switch (type) {
-            case TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE:
+            case Events.TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE:
                 result=new TransmitLastLocationOnAccuracyChange(env);
                 result.register(0,null);
                 break;
-            case TYPE_AVAILABLE_WIFI_NETWORKS:
+            case Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS:
                 result= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
                 break;
-            case FILE_SIZE_CHECKER:
+            case Sensors.TYPE_SENSOR_FILE_SIZE_CHECKER:
                 return new FileSizeChecker(env.getEventHandler());
-            case TYPE_LINEAR_VELOCITY_CHANGE_EVENT:
+            case Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE:
                 result=  new LinearVelocityVirtualSensor(env);
                 result.register(0,null);
                 break;
-            case TYPE_EVENT_LIGHT_AMOUNT:
+            case Events.TYPE_EVENT_LIGHT_AMOUNT:
                 result= new LightSensor(env.getEventHandler());
                 result.register(0,null);
                 break;
-            case ACCELEROMETER:
-            case GYROSCOPE:
-            case LINEAR_ACCELERATION:
-            case ROTATION_VECTOR:
-            case GRAVITY:
-            case TYPE_EXTREME_MOVE:
+            case Sensors.TYPE_SENSOR_ACCELEROMETER:
+            case Sensors.TYPE_SENSOR_GYROSCOPE:
+            case Sensors.TYPE_SENSOR_LINEAR_ACCELERATION:
+            case Sensors.TYPE_SENSOR_ROTATION_VECTOR:
+            case Sensors.TYPE_SENSOR_GRAVITY:
+            case Rules.TYPE_RULE_EXTREME_MOVE:
                 try {
                         result =  new AbstractHardwareSensor(type,env.getSensorManager(),env.getEventHandler()) {
                         @Override
@@ -134,7 +138,7 @@ public class EventCreatorFactory {
                 }
 
 
-            case TYPE_EVENT_SCREEN_ON_OFF:
+            case Events.TYPE_EVENT_SCREEN_ON_OFF:
                 result = new ScreenOnOffSensor(env.getEventHandler());
                 result.register(0,null);
                 break;

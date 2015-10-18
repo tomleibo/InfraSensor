@@ -10,7 +10,7 @@ import com.util.DistanceFunction;
  * Created by nexus on 02/10/2015.
  */
 public class FastDTW implements Modifier<String[],Double> {
-	private final String mTemplateName;
+	private String mTemplateName;
 	private final TimeSeries mTemplateSeries;
 	private final int mRadius;
 	private Double mDistance;
@@ -35,6 +35,19 @@ public class FastDTW implements Modifier<String[],Double> {
 		this.mIsLabeledSeries = isLabeledSeries;
 	}
 
+	public FastDTW(String[] ts , boolean isFirstColTime, boolean isLabeledTemplate , boolean isLabeledSeries , DistanceFunction distFunc ,char delimiterTemplate, char delimiterSeries, int radius){
+
+		this.mDistFunc=distFunc;
+
+		this.mTemplateSeries = new TimeSeries(ts,isFirstColTime,isLabeledTemplate,delimiterTemplate);
+		if (radius > mTemplateSeries.size()){
+			radius = mTemplateSeries.size()-1;
+		}
+		this.mRadius=radius;
+		this.mDistance=new Double(Double.MAX_VALUE);
+		this.mDelimiterSeries=delimiterSeries;
+		this.mIsLabeledSeries = isLabeledSeries;
+	}
 	@Override
 	public Double modify() {
 		return mDistance;

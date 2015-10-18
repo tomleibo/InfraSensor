@@ -1,9 +1,7 @@
 package com.ibm.sensors.EventWrappers;
 
-import com.google.gson.Gson;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.sensorWrappers.EventCreator;
-import com.ibm.sensors.sensorWrappers.LightSensor;
 
 /**
  * Created by nexus on 07/10/2015.
@@ -18,7 +16,7 @@ public class LightSensorEvent extends AbstractEventWrapper<Float>{
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.TYPE_EVENT_LIGHT_AMOUNT;
+		return EventCreatorFactory.Events.TYPE_EVENT_LIGHT_AMOUNT;
 	}
 
 	@Override
