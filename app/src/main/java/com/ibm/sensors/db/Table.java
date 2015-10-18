@@ -1,14 +1,15 @@
 package com.ibm.sensors.db;
 
 
-import java.util.List;
+import android.content.ContentValues;
 
 public interface Table {
-    String getName();
+    String getTableName();
     String[] getColumnNames();
     SqliteColumnTypes[] getColumnTypes();
     String[] getColumnModifiers();
     void onCreate();
     void onUpgrade();
     boolean dropOnCreate();
+    ContentValues getInsertValues();
 }

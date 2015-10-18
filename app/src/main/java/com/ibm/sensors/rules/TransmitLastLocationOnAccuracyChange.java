@@ -43,11 +43,11 @@ public class TransmitLastLocationOnAccuracyChange extends Rule {
 
     @Override
     public void dispatch() {
-        for (Pair<Integer, Modifier> p:modifiers) {
+        for (Pair<Integer, ? extends Modifier> p:modifiers) {
             if (p.key.equals(EventCreatorFactory.TYPE_EVENT_GPS_ACCURACY_CHANGED)) {
                 int accuracyGrade = (Integer)p.value.modify();
                 if (accuracyGrade == LocationProvider.OUT_OF_SERVICE) {
-                    for (Pair<Integer, Modifier> p2:modifiers) {
+                    for (Pair<Integer, ? extends Modifier> p2:modifiers) {
                         if (p2.key.equals(EventCreatorFactory.TYPE_EVENT_GPS_LOCATION)) {
                             env.getEventHandler().handleEvent((GPSLocationChangedEventWrapper)p2.value.modify());
                         }

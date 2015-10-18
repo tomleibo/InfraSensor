@@ -2,6 +2,7 @@ package com.ibm.sensors.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -46,7 +47,7 @@ public class DbHandler extends SQLiteOpenHelper implements Runnable {
     private static String getCreateTableQuery(Table t) {
         StringBuilder sb = new StringBuilder("CREATE TABLE ");
         //sb.append(DATABASE_NAME + ".");
-        sb.append(t.getName() + "(\n");
+        sb.append(t.getTableName() + "(\n");
         String[] columnNames = t.getColumnNames();
         SqliteColumnTypes[] columnTypes = t.getColumnTypes();
         String[] modifiers = t.getColumnModifiers();
@@ -66,7 +67,7 @@ public class DbHandler extends SQLiteOpenHelper implements Runnable {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         for (Table t :tables) {
             t.onUpgrade();
-            db.execSQL("DROP TABLE IF EXISTS "+ t.getName());
+            db.execSQL("DROP TABLE IF EXISTS "+ t.getTableName());
         }
         onCreate(db);
     }
@@ -81,6 +82,35 @@ public class DbHandler extends SQLiteOpenHelper implements Runnable {
         }
         // null is a nullable column. this is just in the case that the row is empty and no values inserted. in that case sqlite will fail. this shouldn't happen here.
         return db.insert(tableName, null, values);
+    }
+
+    public LocationTable getLocation(String where) {
+        SQLiteDatabase db = getReadableDatabase();
+        StringBuilder query = new StringBuilder("select * from ");
+        query.append(LocationTable.TABLE_NAME);
+        query.append(" t1 join ");
+        query.append(WifiTable.TABLE_NAME);
+        query.append(" t2 on t1.");
+        query.append(LocationTable.ID);
+        query.append("=t2.");
+        query.append(WifiTable.LOCATION_ID);
+        query.append(" ");
+        query.append(where);
+        /*query.append(" order by t1.");
+        query.append(LocationTable.ID);
+        query.append(",t2.");
+        query.append();
+        query.append(" limit ");
+        query.append(limit);
+        query.append(" offset ");
+        query.append(offset);*/
+        Cursor cursor = db.rawQuery(query.toString(), null);
+        LocationTable location = LocationTable.buildFromCursor(cursor,0);
+        while (!cursor.isAfterLast()) {
+            location.addWifi(new WifiTable(cursor,LocationTable.COLUMNS.length));
+            cursor.moveToNext();
+        }
+        return location;
     }
 
     /**

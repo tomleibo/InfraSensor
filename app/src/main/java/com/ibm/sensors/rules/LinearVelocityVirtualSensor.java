@@ -37,7 +37,7 @@ public class LinearVelocityVirtualSensor extends Rule
 	@Override
 	public void dispatch() {
 		ArrayList<Float> values=new ArrayList();
-		for (Pair<Integer, Modifier> p : modifiers) {
+		for (Pair<Integer, ? extends Modifier> p : modifiers) {
 			values = (ArrayList) p.value.modify();
 
 		}

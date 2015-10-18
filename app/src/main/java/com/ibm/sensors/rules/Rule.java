@@ -22,7 +22,7 @@ import java.util.List;
  (e.g.: is the phone connected to USB?)
  */
 public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator{
-    protected List<Pair<Integer,Modifier>> modifiers;
+    protected List<Pair<Integer,? extends Modifier>> modifiers;
     protected final Env env;
     protected final RuleStrategy strategy;
     protected boolean isRegistered=false;
@@ -45,7 +45,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         Integer type = data.getEventType();
 
-        for (Pair <Integer,Modifier> p : modifiers) {
+        for (Pair <Integer,? extends Modifier> p : modifiers) {
             if (p.key.equals(type)) {
                 p.value.aggregate(data);
             }

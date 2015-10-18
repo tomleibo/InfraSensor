@@ -32,7 +32,7 @@ public class ExtreMove extends Rule {
 
     @Override
     public void dispatch() {
-        for (Pair<Integer,Modifier> p : modifiers) {
+        for (Pair<Integer,? extends Modifier> p : modifiers) {
             final float speed = (float) p.value.modify();
             if (speed > EXTREME_SPEED) {
                 env.getEventHandler().handleEvent(new EventWrapper<Float>() {

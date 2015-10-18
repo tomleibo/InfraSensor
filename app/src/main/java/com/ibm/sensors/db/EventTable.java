@@ -1,5 +1,6 @@
 package com.ibm.sensors.db;
 
+import android.content.ContentValues;
 import android.provider.BaseColumns;
 
 import java.util.Arrays;
@@ -36,9 +37,10 @@ public class EventTable implements Table,BaseColumns {
     }
 
     @Override
-    public String getName() {
+    public String getTableName() {
         return TABLE_NAME;
     }
+
 
     @Override
     public String[] getColumnNames() {
@@ -68,5 +70,10 @@ public class EventTable implements Table,BaseColumns {
     @Override
     public boolean dropOnCreate() {
         return true;
+    }
+
+    @Override
+    public ContentValues getInsertValues() {
+        throw new NullPointerException("not implemented");
     }
 }
