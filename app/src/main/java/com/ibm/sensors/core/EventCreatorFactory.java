@@ -72,6 +72,7 @@ public class EventCreatorFactory {
     public class Rules{
         public static final int TYPE_RULE_EXTREME_MOVE = 1001;
         public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
+        public static final int TYPE_RULE_COMPARE_DTW_SERIES = 1003;
     }
 
 

@@ -1,17 +1,8 @@
 package com.ibm.sensors.rules;
 
-import android.location.LocationProvider;
-
-import com.ibm.sensors.EventWrappers.GPSEventWrappers.GPSLocationChangedEventWrapper;
-import com.ibm.sensors.EventWrappers.Simple.EventDouble;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
-import com.ibm.sensors.modifiers.FastDTW;
-import com.ibm.sensors.modifiers.abstracts.AbstractSingleChangingValueModifier;
-import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
-import com.ibm.sensors.utils.Pair;
-import com.util.DistanceFunctionFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
