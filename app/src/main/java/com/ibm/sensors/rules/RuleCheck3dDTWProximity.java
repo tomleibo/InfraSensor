@@ -45,6 +45,6 @@ public class RuleCheck3dDTWProximity extends Rule{
 
 	@Override
 	public int getType() {
-		return EventCreatorFactory.Rules.TYPE_RULE_COMPARE_DTW_SERIES;
+		return 0;
 	}
 }

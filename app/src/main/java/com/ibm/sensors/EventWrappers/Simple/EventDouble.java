@@ -16,7 +16,7 @@ public class EventDouble extends AbstractEventWrapper<Double> {
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.Events.TYPE_EVENT_DOUBLE;
+		return 0;
 	}
 
 	@Override
