@@ -15,8 +15,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class DbHandler extends SQLiteOpenHelper implements Runnable {
     private static final String DATABASE_NAME = "capturedEvents";
-    private static final int DATABASE_VERSION = 1;
-    private static final Table[] tables = {new EventTable()};
+    private static final int DATABASE_VERSION = 2;
+    private static final Table[] tables = {new LocationTable(),new WifiTable()};
     private final BlockingQueue<EventWrapper> eventQueue;
     private final Thread runningThread;
     private boolean shouldStop = false;
@@ -84,7 +84,7 @@ public class DbHandler extends SQLiteOpenHelper implements Runnable {
         return db.insert(tableName, null, values);
     }
 
-    public LocationTable getLocation(String where) {
+    public LocationTable getLocation(String where, int limit, int offset) {
         SQLiteDatabase db = getReadableDatabase();
         StringBuilder query = new StringBuilder("select * from ");
         query.append(LocationTable.TABLE_NAME);

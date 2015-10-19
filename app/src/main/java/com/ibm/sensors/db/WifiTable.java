@@ -74,6 +74,8 @@ public class WifiTable implements Table,BaseColumns{
     private int level;
     private long locationId=-1;
 
+    public WifiTable(){}
+
     public WifiTable(String ssid, String mac, int distance, int level, long locationId) {
         this.ssid = ssid;
         this.mac = mac;
@@ -84,9 +86,9 @@ public class WifiTable implements Table,BaseColumns{
 
     public WifiTable(Cursor c, int offset) {
         this.ssid = c.getString(COLUMNS_AS_LIST.indexOf(SSID)+offset);
-        this.mac = c.getString(COLUMNS_AS_LIST.indexOf(MAC)+offset);
-        this.distance = c.getInt(COLUMNS_AS_LIST.indexOf(DISTANCE)+offset);
-        this.level = c.getInt(COLUMNS_AS_LIST.indexOf(LEVEL)+offset);
+        this.mac = c.getString(COLUMNS_AS_LIST.indexOf(MAC) + offset);
+        this.distance = c.getInt(COLUMNS_AS_LIST.indexOf(DISTANCE) + offset);
+        this.level = c.getInt(COLUMNS_AS_LIST.indexOf(LEVEL) + offset);
     }
 
     @Override
