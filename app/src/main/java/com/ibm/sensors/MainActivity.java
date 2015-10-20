@@ -9,9 +9,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
-import com.ibm.sensors.db.DbHandler;
-import com.ibm.sensors.db.LocationTable;
-import com.ibm.sensors.db.WifiTable;
+import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
 import com.ibm.sensors.utils.GeneralUtils;
 import com.ibm.sensors.utils.MultiGenericObservable;
@@ -30,16 +29,25 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
             tv=(TextView)findViewById(R.id.textView);
-//            Env env = new Env(this);
-//            if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_SCREEN_ON_OFF, this)) {
-//                tv.setText("subscription failed");
-//
-//            }
+            Env env = new Env(this);
+            /*if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_SCREEN_ON_OFF, this)) {
+                tv.setText("subscription failed");
+            }
+            if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION, this)) {
+                tv.setText("subscription failed");
+            }*/
+            if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED, this)) {
+                tv.setText("subscription failed");
+            }
+/*
             DbHandler db = new DbHandler(this);
             LocationTable loc = new LocationTable("home","sweet home",1,1,1,1,1,1);
             WifiTable wifi  = new WifiTable("ssid1","macmac",123,1234,-1);
             loc.addWifi(wifi);
-            loc.insert(db.getWritableDatabase());
+            long l = loc.insert(db.getWritableDatabase());
+            LocationTable locationFromDb = db.getLocation(" where t1." + LocationTable.ID + "="+l, 0, 0);
+            tv.setText(locationFromDb.toString());
+*/
 
         }
         catch (Throwable e) {
@@ -77,8 +85,8 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
 
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
-        tv.setText("networks:  "+data.toString());
-        Log.d("data:", data.toString());
+        tv.append("\naccuracy: "+data.getData().toString());
+        Log.d("data:", data.getData().toString());
     }
     @Override
     protected void onStop()

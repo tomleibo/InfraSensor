@@ -7,10 +7,9 @@ import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.MultiGenericObservable;
-import com.ibm.sensors.utils.Pair;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 
 /**
  * IRRELEVANT COMMENT - NEED TO BE UPDATED.
@@ -22,7 +21,7 @@ import java.util.List;
  (e.g.: is the phone connected to USB?)
  */
 public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator{
-    protected List<Pair<Integer,? extends Modifier>> modifiers;
+    protected Map<Integer,Modifier> modifiers;
     protected final Env env;
     protected final RuleStrategy strategy;
     protected boolean isRegistered=false;
@@ -44,12 +43,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         Integer type = data.getEventType();
-
-        for (Pair <Integer,? extends Modifier> p : modifiers) {
-            if (p.key.equals(type)) {
-                p.value.aggregate(data);
-            }
-        }
+        modifiers.get(type).aggregate(data);
         if (strategy.shouldDispatchOnEventArrival(type)){
             dispatch();
         }
