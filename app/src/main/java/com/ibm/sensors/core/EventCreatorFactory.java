@@ -12,7 +12,7 @@ import com.ibm.sensors.rules.TransmitLastLocationOnAccuracyChange;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
-import com.ibm.sensors.sensorWrappers.FileSizeChecker;
+import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
 import com.ibm.sensors.sensorWrappers.LightSensor;
 import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
@@ -52,7 +52,6 @@ public class EventCreatorFactory {
         // 30-39 GPS
         public static final int TYPE_SENSOR_GPS = 30;
         public static final int TYPE_SENSOR_SCREEN_ON_OFF = 42;
-        public static final int TYPE_SENSOR_FILE_SIZE_CHECKER = 50;
         public static final int TYPE_SENSOR_LIGHT_SENSOR = 41;
     }
 
@@ -61,17 +60,19 @@ public class EventCreatorFactory {
         public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED = 34;
         public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS = 35;
         public static final int TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER = 36;
-        public static final int TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE = 37;
+        public static final int WIFI_LOCATION_ON_GPS_LOST = 37;
         public static final int TYPE_EVENT_LIGHT_AMOUNT = 40;
         public static final int TYPE_EVENT_SCREEN_ON_OFF = 43;
         public static final int TYPE_EVENT_LINEAR_VELOCITY_CHANGE = 24;
         public static final int TYPE_EVENT_GPS_LOCATION = 31;
         public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
+        public static final int AVAILABLE_WIFI_NETWORKS = 50;
     }
 
     public class Rules{
         public static final int TYPE_RULE_EXTREME_MOVE = 1001;
         public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
+        public static final int TYPE_RULE_COMPARE_DTW_SERIES = 1003;
     }
 
 
@@ -94,15 +95,18 @@ public class EventCreatorFactory {
     private EventCreator buildAndRegisterEventCreator(int type, Object o) {
         EventCreator result;
         switch (type) {
-            case Events.TYPE_EVENT_GPS_TRANSMIT_LAST_LOCATION_ON_ACCURACY_CHANGE:
+            case Events.TYPE_EVENT_GPS_ACCURACY_CHANGED:
+            case Events.TYPE_EVENT_GPS_LOCATION:
+                result = new GPSSensorWrapper(env.getEventHandler(),env.getLocationManager());
+                result.register(0,10);
+                break;
+            case Events.WIFI_LOCATION_ON_GPS_LOST:
                 result=new TransmitLastLocationOnAccuracyChange(env);
                 result.register(0,null);
                 break;
             case Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS:
                 result= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
                 break;
-            case Sensors.TYPE_SENSOR_FILE_SIZE_CHECKER:
-                return new FileSizeChecker(env.getEventHandler());
             case Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE:
                 result=  new LinearVelocityVirtualSensor(env);
                 result.register(0,null);

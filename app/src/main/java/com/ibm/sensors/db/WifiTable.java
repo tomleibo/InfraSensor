@@ -3,6 +3,7 @@ package com.ibm.sensors.db;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.wifi.ScanResult;
 import android.provider.BaseColumns;
 
 import java.util.Arrays;
@@ -32,6 +33,7 @@ public class WifiTable implements Table,BaseColumns{
             SqliteColumnTypes.INTEGER
     };
     private static final String[] COLUMN_MODIFIERS = {"PRIMARY KEY","","","","","","","","",""};
+
 
     @Override
     public String getTableName() {
@@ -75,6 +77,14 @@ public class WifiTable implements Table,BaseColumns{
     private long locationId=-1;
 
     public WifiTable(){}
+
+
+    public WifiTable(ScanResult scan) {
+        this.ssid = scan.SSID;
+        this.mac=scan.BSSID;
+        this.distance=0;
+        this.level=scan.level;
+    }
 
     public WifiTable(String ssid, String mac, int distance, int level, long locationId) {
         this.ssid = ssid;

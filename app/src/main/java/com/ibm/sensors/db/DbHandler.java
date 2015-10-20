@@ -15,7 +15,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 public class DbHandler extends SQLiteOpenHelper implements Runnable {
     private static final String DATABASE_NAME = "capturedEvents";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
     private static final Table[] tables = {new LocationTable(),new WifiTable()};
     private final BlockingQueue<EventWrapper> eventQueue;
     private final Thread runningThread;
@@ -28,10 +28,10 @@ public class DbHandler extends SQLiteOpenHelper implements Runnable {
 
     private DbHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.gson = new Gson();
+        eventQueue = new LinkedBlockingDeque<>();
         runningThread = new Thread(this);
         runningThread.start();
-        eventQueue = new LinkedBlockingDeque<>();
-        this.gson = new Gson();
     }
 
 
@@ -104,14 +104,18 @@ public class DbHandler extends SQLiteOpenHelper implements Runnable {
         query.append(limit);
         query.append(" offset ");
         query.append(offset);*/
-        Cursor cursor = db.rawQuery(query.toString(), null);
+        //Cursor cursor = db.rawQuery(query.toString(), null);
+        Cursor cursor = db.query(LocationTable.TABLE_NAME, null, null, null, null, null, null);
+        cursor.moveToFirst();
         LocationTable location = LocationTable.buildFromCursor(cursor,0);
         while (!cursor.isAfterLast()) {
-            location.addWifi(new WifiTable(cursor,LocationTable.COLUMNS.length));
+            //location.addWifi(new WifiTable(cursor,LocationTable.COLUMNS.length));
             cursor.moveToNext();
         }
         return location;
     }
+
+
 
     /**
      * blocking.

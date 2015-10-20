@@ -51,8 +51,10 @@ public class MultiGenericObservable<T> {
     }
 
     protected void notifyObservers(Integer eventType, T data) {
-        for (GenericObserver<T> obs : observers.get(eventType)) {
-            obs.update(this, data);
+        if (observers.get(eventType) != null) {
+            for (GenericObserver<T> obs : observers.get(eventType)) {
+                obs.update(this, data);
+            }
         }
     }
 

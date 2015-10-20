@@ -4,6 +4,12 @@ android {
     compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
+    compileOptions {
+
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     defaultConfig {
         applicationId "com.ibm.sensors"
         minSdkVersion 21
@@ -27,5 +33,4 @@ dependencies {
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/commons-collections-3.2.1.jar')
     compile files('libs/fastdtw-1.1.0.jar')
-    compile files('libs/_fastdtw-1.1.0.jar')
 }

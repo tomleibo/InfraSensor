@@ -2,6 +2,7 @@ package com.ibm.sensors.env;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.os.PowerManager;
 
 import com.ibm.sensors.core.CommunicationHandler;
@@ -10,13 +11,23 @@ import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.db.DbHandler;
 
 public class Env {
-    private static final String URL = "";
+    public static final String URL = "";
     private final EventCreatorFactory sensorFactory;
     private final EventHandler eventHandler;
     private final CommunicationHandler communicationHandler;
     private final DbHandler dbHandler;
     private final Context context;
     private final SensorManager sensorManager;
+
+    public void setPowerManager(PowerManager powerManager) {
+        this.powerManager = powerManager;
+    }
+
+    public LocationManager getLocationManager() {
+        return locationManager;
+    }
+
+    private final LocationManager locationManager;
     private PowerManager powerManager;
 
     public Env(Context context) {
@@ -27,6 +38,7 @@ public class Env {
         this.dbHandler = new DbHandler(context);
         this.sensorFactory = new EventCreatorFactory(this);
         this.powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        this.locationManager= (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
 

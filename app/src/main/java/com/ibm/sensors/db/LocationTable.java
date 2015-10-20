@@ -43,6 +43,17 @@ public class LocationTable implements Table,BaseColumns {
     };
     private static final String[] COLUMN_MODIFIERS = {"PRIMARY KEY","","","","","","","",""};
 
+    private static final int INDEX_OF_ID = COLUMNS_AS_LIST.indexOf(ID);
+    private static final int INDEX_OF_NAME = COLUMNS_AS_LIST.indexOf(NAME);
+    private static final int INDEX_OF_DESC = COLUMNS_AS_LIST.indexOf(DESCRIPTION);
+    private static final int INDEX_OF_X1 = COLUMNS_AS_LIST.indexOf(X1);
+    private static final int INDEX_OF_Y1 = COLUMNS_AS_LIST.indexOf(Y1);
+    private static final int INDEX_OF_Z1 = COLUMNS_AS_LIST.indexOf(Z1);
+    private static final int INDEX_OF_X2 = COLUMNS_AS_LIST.indexOf(X2);
+    private static final int INDEX_OF_Y2 = COLUMNS_AS_LIST.indexOf(Y2);
+    private static final int INDEX_OF_Z2 = COLUMNS_AS_LIST.indexOf(Z2);
+
+
     @Override
     public String getTableName() {
         return TABLE_NAME;
@@ -102,6 +113,10 @@ public class LocationTable implements Table,BaseColumns {
 
     public void addWifi(WifiTable wifi){
         wifis.add(wifi);
+    }
+
+    public void setWifis(List<WifiTable> wifis) {
+        this.wifis=wifis;
     }
 
     public List<WifiTable> getWifis() {
@@ -205,7 +220,7 @@ public class LocationTable implements Table,BaseColumns {
 
     @Override
     public String toString() {
-        return "LocationOrm{" +
+        StringBuilder sb = new StringBuilder("LocationOrm{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", x1=" + x1 +
@@ -214,7 +229,14 @@ public class LocationTable implements Table,BaseColumns {
                 ", y2=" + y2 +
                 ", z1=" + z1 +
                 ", z2=" + z2 +
-                '}';
+                "'}'");
+        if (wifis!=null) {
+            for (WifiTable wifi : wifis)  {
+                sb.append(wifi.toString());
+            }
+        }
+
+        return sb.toString();
     }
 
     @Override
@@ -232,7 +254,7 @@ public class LocationTable implements Table,BaseColumns {
     }
 
     public static LocationTable buildFromCursor(Cursor c,int offset) {
-        return new LocationTable(c.getString(COLUMNS_AS_LIST.indexOf(NAME)+offset),c.getString(COLUMNS_AS_LIST.indexOf(DESCRIPTION)+offset),
+        return new LocationTable(c.getString(INDEX_OF_NAME+offset),c.getString(COLUMNS_AS_LIST.indexOf(DESCRIPTION)+offset),
                 c.getInt(COLUMNS_AS_LIST.indexOf(X1)+offset),c.getInt(COLUMNS_AS_LIST.indexOf(X2)+offset),
                 c.getInt(COLUMNS_AS_LIST.indexOf(Y1)+offset),c.getInt(COLUMNS_AS_LIST.indexOf(Y2)+offset),
                 c.getInt(COLUMNS_AS_LIST.indexOf(Z1)+offset),c.getInt(COLUMNS_AS_LIST.indexOf(Z2)+offset));

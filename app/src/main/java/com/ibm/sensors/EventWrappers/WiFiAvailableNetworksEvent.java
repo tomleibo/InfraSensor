@@ -21,7 +21,7 @@ public class WiFiAvailableNetworksEvent extends AbstractEventWrapper<List<ScanRe
 
     @Override
     public int getEventType() {
-        return EventCreatorFactory.Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS;
+        return EventCreatorFactory.Events.AVAILABLE_WIFI_NETWORKS;
     }
 
     @Override

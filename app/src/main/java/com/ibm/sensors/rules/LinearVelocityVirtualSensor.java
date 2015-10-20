@@ -12,6 +12,9 @@ import com.ibm.sensors.utils.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by nexus on 05/10/2015.
@@ -21,25 +24,24 @@ public class LinearVelocityVirtualSensor extends Rule
 	private MotionSensorEventWrapper mMotionSensorEventWrapper;
 	public LinearVelocityVirtualSensor(Env env, RuleStrategy strategy) {
 		super(env, strategy);
-		modifiers = new ArrayList<>();
-		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, new AddFloatAccumulator()));
+		modifiers = new TreeMap<>();
+		modifiers.put(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, new AddFloatAccumulator());
 		mMotionSensorEventWrapper = null;
 	}
 
 
 	public LinearVelocityVirtualSensor(Env env) {
 		super(env, new ImmidiateStrategy());
-		modifiers = new ArrayList<>();
-		modifiers.add(new Pair<Integer, Modifier>(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, new AddFloatAccumulator()));
+		modifiers = new TreeMap<>();
+		modifiers.put(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, new AddFloatAccumulator());
 		mMotionSensorEventWrapper = null;
 	}
 
 	@Override
 	public void dispatch() {
 		ArrayList<Float> values=new ArrayList();
-		for (Pair<Integer, ? extends Modifier> p : modifiers) {
-			values = (ArrayList) p.value.modify();
-
+		for (Map.Entry<Integer, ? extends Modifier> p : modifiers.entrySet()) {
+			values = (ArrayList) p.getValue().modify();
 		}
 		env.getEventHandler().handleEvent(new MotionSensorEventWrapper(this, EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE, new Float[]{values.get(0),values.get(1),values.get(2)}, System.currentTimeMillis(), 0));
 	}
@@ -51,6 +53,6 @@ public class LinearVelocityVirtualSensor extends Rule
 
 	@Override
 	public int getType() {
-		return 0;
+		return EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE;
 	}
 }
