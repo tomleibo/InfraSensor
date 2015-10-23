@@ -1,32 +1,45 @@
 package com.ibm.sensors.rules;
 
+import android.util.Log;
+
+import com.ibm.sensors.EventWrappers.BlankEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
+import com.ibm.sensors.modifiers.Converters.DoubleToTimeSeries;
+import com.ibm.sensors.modifiers.Converters.MotionSensorEventWrapperToDoubleArray;
+import com.ibm.sensors.modifiers.abstracts.ModifierDecorator;
 import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
+import com.timeseries.TimeSeries;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Created by nexus on 18/10/2015.
  */
-public class RuleCheck3dDTWProximity extends Rule{
+public class RuleTimeSeriesCreator extends Rule{
 	private Integer mSensorID;
 
-	public RuleCheck3dDTWProximity(Env env, int sensorID,int eventID, String[] templateFileName,int[] r) {//TODO: change eventfactoryshit to subgroups and add isingroup
+	public class myDecorator extends ModifierDecorator{
+		public myDecorator(DoubleToTimeSeries dts){
+			super(new MotionSensorEventWrapperToDoubleArray(),dts);
+		}
+	}
+
+	public RuleTimeSeriesCreator(Env env, int sensorID, DoubleToTimeSeries converter) {//TODO: change eventfactoryshit to subgroups and add isingroup
 		super(env, new EventCountStrategy(
 				sensorID,1));
-		modifiers=new ArrayList<>();
+		this.modifiers = new HashMap<>();
 		this.mSensorID=new Integer(sensorID);
-		//for ()
-		//final boolean euclideanDistance = modifiers.add(new Pair<>(eventID,
-	//			new FastDTW(templateFileName,false,false,false,DistanceFunctionFactory.getDistFnByName("EuclideanDistance"),',','\n',r)));
+		this.modifiers.put(this.mSensorID,new myDecorator(converter));
 	}
 
 	@Override
 	public void dispatch() {
-	
-
+		env.getEventHandler().handleEvent(new BlankEventWrapper<TimeSeries>(System
+				.currentTimeMillis(), this, -1, (TimeSeries) this.modifiers.get(this.mSensorID).modify()));
 	}
 
 	@Override
@@ -36,6 +49,6 @@ public class RuleCheck3dDTWProximity extends Rule{
 
 	@Override
 	public int getType() {
-		return 0;
+		return EventCreatorFactory.Rules.RuleTimeSeriesCreator;
 	}
 }

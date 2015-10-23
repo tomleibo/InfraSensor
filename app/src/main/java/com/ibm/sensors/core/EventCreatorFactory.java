@@ -73,6 +73,8 @@ public class EventCreatorFactory {
         public static final int TYPE_RULE_EXTREME_MOVE = 1001;
         public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
         public static final int TYPE_RULE_COMPARE_DTW_SERIES = 1003;
+        public static final int RuleTimeSeriesCreator = 1004;
+        public static final int RuleFastDTW=1005;
     }
 
 
@@ -120,7 +122,9 @@ public class EventCreatorFactory {
             case Sensors.TYPE_SENSOR_LINEAR_ACCELERATION:
             case Sensors.TYPE_SENSOR_ROTATION_VECTOR:
             case Sensors.TYPE_SENSOR_GRAVITY:
+            case Rules.RuleTimeSeriesCreator:
             case Rules.TYPE_RULE_EXTREME_MOVE:
+            case -1:
                 try {
                         result =  new AbstractHardwareSensor(type,env.getSensorManager(),env.getEventHandler()) {
                         @Override
@@ -146,6 +150,7 @@ public class EventCreatorFactory {
                 result = new ScreenOnOffSensor(env.getEventHandler());
                 result.register(0,null);
                 break;
+
 
             default:
                 int coreType = getCoreTypeFromDynamicType(type);

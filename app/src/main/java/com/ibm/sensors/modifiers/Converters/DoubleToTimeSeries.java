@@ -1,25 +1,26 @@
 package com.ibm.sensors.modifiers.Converters;
 
 import com.ibm.sensors.modifiers.abstracts.AbstractSingleValueModifier;
+import com.ibm.sensors.utils.TimeSeriesWithJSON;
 import com.timeseries.TimeSeries;
 import com.timeseries.TimeSeriesPoint;
 
 /**
  * Created by nexus on 19/10/2015.
  */
-public class DoubleToTimeSeries extends AbstractSingleValueModifier<Double[],TimeSeries>{
+public class DoubleToTimeSeries extends AbstractSingleValueModifier<Double[],TimeSeriesWithJSON>{
 	private int mLimit;
 	private boolean mCircular;
-	private TimeSeries mTimeSeries;
+	private TimeSeriesWithJSON mTimeSeries;
 	private double time;
 	public DoubleToTimeSeries(int limit, boolean circular, int numOfDims){
 		this.mLimit=limit;
 		this.mCircular=circular;
-		this.mTimeSeries=new TimeSeries(numOfDims);
+		this.mTimeSeries=new TimeSeriesWithJSON(numOfDims);
 		this.time=0;
 	}
 	@Override
-	public TimeSeries modify() {
+	public TimeSeriesWithJSON modify() {
 		return this.mTimeSeries;
 	}
 
@@ -36,7 +37,7 @@ public class DoubleToTimeSeries extends AbstractSingleValueModifier<Double[],Tim
 			return;
 		}
 		if (this.mLimit>0){
-			if (this.mLimit < this.mTimeSeries.size()){
+			if (this.mLimit > this.mTimeSeries.size()){
 				this.mTimeSeries.addLast(time,a);
 				return;
 			}
