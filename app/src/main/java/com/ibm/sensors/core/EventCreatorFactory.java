@@ -3,6 +3,7 @@ package com.ibm.sensors.core;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.media.AudioFormat;
 import android.net.wifi.WifiManager;
 
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
@@ -121,10 +122,6 @@ public class EventCreatorFactory {
                 result.register(0,null);
                 break;
 
-          //  case Sensors.TYPE_SENSOR_MICROPHONE:
-              //  result = new Microphone(env.getEventHandler());
-               // result.register(0,null);
-           //     break;
             case Sensors.TYPE_SENSOR_ACCELEROMETER:
             case Sensors.TYPE_SENSOR_GYROSCOPE:
             case Sensors.TYPE_SENSOR_LINEAR_ACCELERATION:
