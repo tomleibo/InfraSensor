@@ -4,7 +4,6 @@ import android.location.Location;
 import android.location.LocationProvider;
 import android.net.wifi.ScanResult;
 
-import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.db.LocationTable;
@@ -12,7 +11,6 @@ import com.ibm.sensors.db.WifiTable;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.modifiers.abstracts.AbstractSingleChangingValueModifier;
 import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
-import com.ibm.sensors.sensorWrappers.EventCreator;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -74,7 +72,29 @@ public class TransmitLastLocationOnAccuracyChange extends Rule {
                     (int)Math.round(location.getLatitude()+acc),
                     (int)Math.round(location.getAltitude()-acc),
                     (int)Math.round(location.getAltitude()+acc));
-            env.getEventHandler().handleEvent(new EventWrapper() {
+            locationTable.setWifis(wifis);
+            locationTable.insert(env.getDbHandler().getWritableDatabase());
+        }
+        strategy.reset();
+
+
+    }
+
+    @Override
+    public Collection<Integer> getSensorTypes() {
+        return Arrays.asList(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION,
+                EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED,
+                EventCreatorFactory.Events.AVAILABLE_WIFI_NETWORKS);
+    }
+
+    @Override
+    public int getType() {
+        return EventCreatorFactory.Events.WIFI_LOCATION_ON_GPS_LOST;
+    }
+}
+
+/*
+env.getEventHandler().handleEvent(new EventWrapper() {
 
                 private long time;
                 TransmitLastLocationOnAccuracyChange instance;
@@ -113,20 +133,4 @@ public class TransmitLastLocationOnAccuracyChange extends Rule {
                     return this;
                 }
             }.init(this));
-        }
-
-
-    }
-
-    @Override
-    public Collection<Integer> getSensorTypes() {
-        return Arrays.asList(EventCreatorFactory.Events.TYPE_EVENT_GPS_LOCATION,
-                EventCreatorFactory.Events.TYPE_EVENT_GPS_ACCURACY_CHANGED,
-                EventCreatorFactory.Events.AVAILABLE_WIFI_NETWORKS);
-    }
-
-    @Override
-    public int getType() {
-        return EventCreatorFactory.Events.WIFI_LOCATION_ON_GPS_LOST;
-    }
-}
+ */

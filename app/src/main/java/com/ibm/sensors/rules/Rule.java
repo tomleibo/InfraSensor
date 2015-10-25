@@ -10,6 +10,7 @@ import com.ibm.sensors.utils.MultiGenericObservable;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * IRRELEVANT COMMENT - NEED TO BE UPDATED.
@@ -27,6 +28,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     protected boolean isRegistered=false;
 
     public Rule(Env env,RuleStrategy strategy) {
+        this.modifiers = new TreeMap<>();
         this.strategy=strategy;
         this.env = env;
     }

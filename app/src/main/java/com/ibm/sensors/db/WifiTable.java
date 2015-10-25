@@ -118,23 +118,13 @@ public class WifiTable implements Table,BaseColumns{
         if (o == null || getClass() != o.getClass()) return false;
 
         WifiTable wifiOrm = (WifiTable) o;
-
-        if (distance != wifiOrm.distance) return false;
-        if (level != wifiOrm.level) return false;
-        if (locationId != wifiOrm.locationId) return false;
-        if (ssid != null ? !ssid.equals(wifiOrm.ssid) : wifiOrm.ssid != null) return false;
         return !(mac != null ? !mac.equals(wifiOrm.mac) : wifiOrm.mac != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = ssid != null ? ssid.hashCode() : 0;
-        result = 31 * result + (mac != null ? mac.hashCode() : 0);
-        result = 31 * result + distance;
-        result = 31 * result + level;
-        result = 31 * result + (int) (locationId ^ (locationId >>> 32));
-        return result;
+        return mac.hashCode();
     }
 
     public String getSsid() {

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -261,6 +262,7 @@ public class LocationTable implements Table,BaseColumns {
     }
 
     public long insert(SQLiteDatabase writableDb) {
+        Log.d("LocationTable","inserting: "+toString());
         long id = writableDb.insert(getTableName(),null,getInsertValues());
         for (WifiTable wifi : wifis) {
             wifi.insert(writableDb,id);
