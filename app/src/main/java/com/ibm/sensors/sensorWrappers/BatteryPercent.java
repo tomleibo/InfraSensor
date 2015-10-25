@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 
-import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by nexus on 27/09/2015.
  */
-public class BatteryPercent extends AbstractSensorWrapper<Integer> {
+public class BatteryPercent extends AbstractSensorWrapper{
     private Context mContext;
     private int mLevel;
 
@@ -25,8 +26,8 @@ public class BatteryPercent extends AbstractSensorWrapper<Integer> {
             mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
         }
     };
-    public BatteryPercent(Context context,EventHandler eventHandler){
-        super(eventHandler);
+    public BatteryPercent(Env env){
+        super(env);
         this.mLevel=-1;
     }
 
@@ -36,14 +37,14 @@ public class BatteryPercent extends AbstractSensorWrapper<Integer> {
     }
 
     @Override
-    public boolean register(int delayMillis, Integer integer) {
+    public boolean register(SensorConfiguration conf) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         mContext.registerReceiver(mBatInfoReceiver , ifilter);
         return true;
     }
 
     @Override
-    public boolean unregister(Integer integer) {
+    public boolean unregister() {
         mContext.unregisterReceiver(mBatInfoReceiver);
         return false;
     }

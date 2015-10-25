@@ -197,4 +197,8 @@ public class EventCreatorFactory {
         return mapping.getCoreType(type);
     }
 
+    public class Params {
+        public static final String DELAY = "delay";
+        public static final String MIN_DISTANCE = "minDistance";
+    }
 }

@@ -1,11 +1,13 @@
 package com.ibm.sensors.sensorWrappers;
 
+import com.ibm.sensors.rules.SensorConfiguration;
+
 /**
  * Created by thinkPAD on 9/2/2015.
  */
-public interface EventCreator<REGISTERATION_PARAM>{
+public interface EventCreator{
     int getType();
-    boolean register (int delayMillis, REGISTERATION_PARAM param);
-    boolean unregister (REGISTERATION_PARAM param);
+    boolean register (SensorConfiguration configuration);
+    boolean unregister ();
     boolean isRegistered();
 }

@@ -4,12 +4,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by thinkPAD on 9/5/2015.
  */
 public abstract class AbstractHardwareSensor implements EventCreator,SensorEventListener {
+
     private boolean isRegistered;
     private final Sensor sensor;
     private final SensorManager sm;
@@ -30,30 +33,18 @@ public abstract class AbstractHardwareSensor implements EventCreator,SensorEvent
         return sensor.getType();
     }
 
-    private boolean registerOrUnregister(int delayMillis, boolean register) {
-        if (sensor!=null) {
-            if (register) {
-                sm.registerListener(this, sensor, delayMillis);
-            } else {
-                sm.unregisterListener(this, sensor);
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
     @Override
-    public synchronized boolean unregister(Object o) {
+    public synchronized boolean unregister() {
         isRegistered = false;
-        return registerOrUnregister(0,true);
+        sm.unregisterListener(this, sensor);
+        return true;
     }
 
     @Override
-    public synchronized boolean register(int delayMillis, Object o) {
+    public synchronized boolean register(SensorConfiguration conf) {
         isRegistered=true;
-        return registerOrUnregister(delayMillis, true);
+        int delayMillis = conf.getInt(EventCreatorFactory.Params.DELAY);
+        return sm.registerListener(this, sensor, delayMillis);
     }
 
     @Override

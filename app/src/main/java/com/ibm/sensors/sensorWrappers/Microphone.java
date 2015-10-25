@@ -7,15 +7,16 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by nexus on 22/10/2015.
  */
 public class Microphone extends AbstractSensorWrapper{
 
-	public Microphone(EventHandler handler) {
-		super(handler);
+	public Microphone(Env env) {
+		super(env);
 	}
 
 	@Override
@@ -24,12 +25,12 @@ public class Microphone extends AbstractSensorWrapper{
 	}
 
 	@Override
-	public boolean register(int delayMillis, Object o) {
+	public boolean register(SensorConfiguration s) {
 		return false;
 	}
 
 	@Override
-	public boolean unregister(Object o) {
+	public boolean unregister() {
 		return false;
 	}
 

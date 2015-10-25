@@ -6,17 +6,18 @@ import android.hardware.SensorEventListener;
 
 import com.ibm.sensors.EventWrappers.LightSensorEvent;
 import com.ibm.sensors.core.EventCreatorFactory;
-import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by nexus on 07/10/2015.
  */
-public class LightSensor extends AbstractSensorWrapper<Float> implements SensorEventListener {
+public class LightSensor extends AbstractSensorWrapper implements SensorEventListener {
 
 	private Sensor mLightSensor;
-	public LightSensor(EventHandler handler) {
-		super(handler);
-		mLightSensor = handler.getSensorManager().getDefaultSensor(Sensor.TYPE_LIGHT);
+	public LightSensor(Env env) {
+		super(env);
+		mLightSensor = env.getSensorManager().getDefaultSensor(Sensor.TYPE_LIGHT);
 	}
 
 	@Override
@@ -25,17 +26,17 @@ public class LightSensor extends AbstractSensorWrapper<Float> implements SensorE
 	}
 
 	@Override
-	public boolean register(int delayMillis, Float integer) {
-		mHandler.getSensorManager().registerListener(
+	public boolean register(SensorConfiguration conf) {
+		env.getSensorManager().registerListener(
 				this,
 				mLightSensor,
-				delayMillis);
+				conf.getInt(EventCreatorFactory.Params.DELAY));
 		return true;
 	}
 
 	@Override
-	public boolean unregister(Float integer) {
-		mHandler.getSensorManager().unregisterListener(this);
+	public boolean unregister() {
+		env.getSensorManager().unregisterListener(this);
 		return true;
 	}
 
@@ -46,7 +47,7 @@ public class LightSensor extends AbstractSensorWrapper<Float> implements SensorE
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		mHandler.handleEvent(new LightSensorEvent(System.currentTimeMillis(),this,new Float(event.values[0])));
+		env.getEventHandler().handleEvent(new LightSensorEvent(System.currentTimeMillis(),this,new Float(event.values[0])));
 	}
 
 	@Override

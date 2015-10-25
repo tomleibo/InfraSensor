@@ -8,6 +8,7 @@ import android.os.BatteryManager;
 import com.ibm.sensors.EventWrappers.USBPlugTypeEventWrapper;
 import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by nexus on 03/09/2015.
@@ -29,13 +30,13 @@ public class USBConnectionType extends BroadcastReceiver implements EventCreator
     }
 
     @Override
-    public boolean register(int delayMillis, Object o) {
+    public boolean register(SensorConfiguration conf) {
         this.mRegistered=true;
         return true;
     }
 
     @Override
-    public boolean unregister(Object o) {
+    public boolean unregister() {
         this.mRegistered=false;
         return false;
     }

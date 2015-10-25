@@ -7,10 +7,10 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 
-
 import com.ibm.sensors.EventWrappers.WiFiAvailableNetworksEvent;
-import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 import java.util.List;
 
@@ -39,13 +39,13 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
         }
     }
 
-    public AvailableWiFINetworks(WifiManager wifiMan,EventHandler handler, Context context){
-        super(handler);
-        this.mWiFi = wifiMan;
+    public AvailableWiFINetworks(final Env env){
+        super(env);
+        this.mWiFi = (WifiManager)env.getContext().getSystemService(Context.WIFI_SERVICE);
         this.shouldStop = true;
         this.mDelay = 0;
         this.mResults =null;
-        this.mContext = context;
+        this.mContext = env.getContext();
         this.thread = new Thread(this);
         this.mIsBuisy= Boolean.valueOf(false);
         this.mBroadcastReciver = new BroadcastReceiver()
@@ -62,7 +62,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
             {
                 mResults = null;
                 mResults = mWiFi.getScanResults();
-                mHandler.handleEvent(new WiFiAvailableNetworksEvent(mResults,sensor));
+                env.getEventHandler().handleEvent(new WiFiAvailableNetworksEvent(mResults,sensor));
                 if (mDelay>0) {
                     mContext.unregisterReceiver(this);
                     try {
@@ -76,28 +76,23 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
             }
         }.init(this);
     }
-    public AvailableWiFINetworks(WifiManager wifiMan,EventHandler handler, Context context, int delay){
-        this(wifiMan,handler,context);
-        this.mDelay = delay;
 
-    }
     @Override
     public int getType() {
         return EventCreatorFactory.Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS;
     }
 
     @Override
-    public boolean register(int delayMillis, Object o) {
+    public boolean register(SensorConfiguration conf) {
         mWiFi.setWifiEnabled(true);
         this.shouldStop = false;
-        this.mDelay = delayMillis;
+        this.mDelay = conf.getInt(EventCreatorFactory.Params.DELAY);
         this.thread.start();
         setIsBusy(false);
         return true;
     }
 
-    @Override
-    public boolean unregister(Object o) {
+    public boolean unregister() {
         mWiFi.setWifiEnabled(false);
         shouldStop = true;
 

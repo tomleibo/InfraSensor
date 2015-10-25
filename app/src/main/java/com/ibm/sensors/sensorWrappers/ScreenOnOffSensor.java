@@ -8,11 +8,13 @@ import android.content.IntentFilter;
 import com.ibm.sensors.EventWrappers.ScreenOnOffEvent;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by nexus on 07/10/2015.
  */
-public class ScreenOnOffSensor extends AbstractSensorWrapper<Boolean>{
+public class ScreenOnOffSensor extends AbstractSensorWrapper{
 
 	public class ScreenBRS extends BroadcastReceiver{
 		private Boolean wasScreenOn;
@@ -40,9 +42,9 @@ public class ScreenOnOffSensor extends AbstractSensorWrapper<Boolean>{
 	}
 	private ScreenBRS mScreenHandler;
 	private IntentFilter mFilter;
-	public ScreenOnOffSensor(EventHandler handler) {
-		super(handler);
-		mScreenHandler = new ScreenBRS(handler,this);
+	public ScreenOnOffSensor(Env env) {
+		super(env);
+		mScreenHandler = new ScreenBRS(env.getEventHandler(),this);
 		mFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
 		mFilter.addAction(Intent.ACTION_SCREEN_OFF);
 	}
@@ -53,16 +55,14 @@ public class ScreenOnOffSensor extends AbstractSensorWrapper<Boolean>{
 	}
 
 	@Override
-	public boolean register(int delayMillis, Boolean aBoolean) {
-		if (mHandler.getEnv()==null)
-			return false;
-		mHandler.getEnv().getContext().registerReceiver(mScreenHandler, mFilter);
+	public boolean register(SensorConfiguration conf) {
+		env.getContext().registerReceiver(mScreenHandler, mFilter);
 		return true;
 	}
 
 	@Override
-	public boolean unregister(Boolean aBoolean) {
-		mHandler.getEnv().getContext().unregisterReceiver(mScreenHandler);
+	public boolean unregister() {
+		env.getContext().unregisterReceiver(mScreenHandler);
 		return true;
 	}
 

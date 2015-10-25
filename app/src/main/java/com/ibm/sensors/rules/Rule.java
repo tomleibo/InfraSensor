@@ -52,7 +52,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     }
 
     @Override
-    public boolean register(int delayMillis, Object o) {
+    public boolean register(SensorConfiguration configuration) {
         boolean ans = true;
         for (Integer type: getSensorTypes()) {
             ans &= env.getEventHandler().subscribe(type, this);
@@ -69,7 +69,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     }
 
     @Override
-    public boolean unregister(Object o) {
+    public boolean unregister() {
         boolean ans = true;
         for (Integer type: getSensorTypes()) {
             ans &= env.getEventHandler().unsubscribe(type, this);

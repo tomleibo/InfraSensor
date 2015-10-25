@@ -7,11 +7,13 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.env.Env;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
  * Created by nexus on 25/10/2015.
  */
-public class PhoneCallSensorWrapper extends AbstractSensorWrapper<Boolean>{
+public class PhoneCallSensorWrapper extends AbstractSensorWrapper{
 	public class PhoneServiceReceiver extends BroadcastReceiver {
 		private EventHandler mEventHandler;
 
@@ -43,8 +45,8 @@ public class PhoneCallSensorWrapper extends AbstractSensorWrapper<Boolean>{
 	}
 	private PhoneServiceReceiver mSensor;
 
-	public PhoneCallSensorWrapper(EventHandler handler) {
-		super(handler);
+	public PhoneCallSensorWrapper(Env env) {
+		super(env);
 	}
 
 
@@ -55,13 +57,13 @@ public class PhoneCallSensorWrapper extends AbstractSensorWrapper<Boolean>{
 	}
 
 	@Override
-	public boolean register(int delayMillis, Boolean aBoolean) {
-		this.mSensor = new PhoneServiceReceiver(this.mHandler);
+	public boolean register(SensorConfiguration conf) {
+		this.mSensor = new PhoneServiceReceiver(env.getEventHandler());
 		return true;
 	}
 
 	@Override
-	public boolean unregister(Boolean aBoolean) {
+	public boolean unregister() {
 		return false;
 	}
 
