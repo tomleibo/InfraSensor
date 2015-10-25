@@ -14,6 +14,7 @@ import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
 import com.ibm.sensors.sensorWrappers.LightSensor;
+import com.ibm.sensors.sensorWrappers.Microphone;
 import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
@@ -53,6 +54,7 @@ public class EventCreatorFactory {
         public static final int TYPE_SENSOR_GPS = 30;
         public static final int TYPE_SENSOR_SCREEN_ON_OFF = 42;
         public static final int TYPE_SENSOR_LIGHT_SENSOR = 41;
+        public static final int TYPE_SENSOR_MICROPHONE = 63;
     }
 
     public class Events{
@@ -67,6 +69,7 @@ public class EventCreatorFactory {
         public static final int TYPE_EVENT_GPS_LOCATION = 31;
         public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
         public static final int AVAILABLE_WIFI_NETWORKS = 50;
+        public static final int AUDION_RECORDING_EVENT = 51;
     }
 
     public class Rules{
@@ -117,6 +120,11 @@ public class EventCreatorFactory {
                 result= new LightSensor(env.getEventHandler());
                 result.register(0,null);
                 break;
+
+          //  case Sensors.TYPE_SENSOR_MICROPHONE:
+              //  result = new Microphone(env.getEventHandler());
+               // result.register(0,null);
+           //     break;
             case Sensors.TYPE_SENSOR_ACCELEROMETER:
             case Sensors.TYPE_SENSOR_GYROSCOPE:
             case Sensors.TYPE_SENSOR_LINEAR_ACCELERATION:
@@ -150,6 +158,7 @@ public class EventCreatorFactory {
                 result = new ScreenOnOffSensor(env.getEventHandler());
                 result.register(0,null);
                 break;
+
 
 
             default:
