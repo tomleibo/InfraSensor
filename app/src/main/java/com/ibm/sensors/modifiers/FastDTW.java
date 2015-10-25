@@ -9,6 +9,7 @@ import com.util.DistanceFunction;
  * Created by nexus on 19/10/2015.
  */
 public class FastDTW extends AbstractSingleValueModifier<TimeSeries,Double>{
+
 	protected TimeSeries mTemplate;
 	protected int mRadius;
 	protected Double mResult;
