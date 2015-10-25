@@ -71,6 +71,9 @@ public class EventCreatorFactory {
         public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
         public static final int AVAILABLE_WIFI_NETWORKS = 50;
         public static final int AUDION_RECORDING_EVENT = 51;
+        public static final int PHONE_CALL_STATE_OFFHOOK = 60;
+        public static final int PHONE_CALL_STATE_RINGING = 61;
+        public static final int PHONE_CALL_STATE_IDLE = 62;
     }
 
     public class Rules{
