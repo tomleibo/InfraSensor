@@ -136,7 +136,11 @@ public class EventCreatorFactory {
     }
 
     private Class<? extends EventCreator> eventTypeNumberToClass(int eventType) {
-        return eventTypeNumberToClass.get(eventType);
+        Class<? extends EventCreator> clz =  eventTypeNumberToClass.get(eventType);
+        if (clz==null) {
+            clz = eventTypeNumberToClass.get(mapping.getCoreType(eventType));
+        }
+        return clz;
     }
 
     private SensorConfiguration sensorClassToDefaultConfiguration(Class<? extends EventCreator> clz) {
