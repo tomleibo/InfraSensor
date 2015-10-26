@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
+import com.ibm.sensors.rules.SensorConfiguration;
 import com.ibm.sensors.utils.MultiGenericObservable;
 
 
@@ -94,11 +95,10 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
         return false;
     }
 
-    @Override
-    public boolean subscribe(Integer eventType, GenericObserver obs) {
+    public boolean subscribe(Integer eventType, GenericObserver obs, SensorConfiguration conf) {
         boolean result = super.subscribe(eventType,obs);
         if (result) {
-            env.getSensorFactory().subscribe(eventType);
+            env.getSensorFactory().subscribe(eventType,conf);
         }
         return result;
     }

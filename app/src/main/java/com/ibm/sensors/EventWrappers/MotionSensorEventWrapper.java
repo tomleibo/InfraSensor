@@ -3,6 +3,7 @@ package com.ibm.sensors.EventWrappers;
 import android.hardware.SensorEvent;
 
 import com.google.gson.Gson;
+import com.ibm.sensors.rules.SensorConfiguration;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 
 import java.util.Arrays;
@@ -29,12 +30,12 @@ public class MotionSensorEventWrapper extends AbstractEventWrapper<Float[]> {
             }
 
             @Override
-            public boolean register(int delayMillis, Object o) {
+            public boolean register(SensorConfiguration s) {
                 return false;
             }
 
             @Override
-            public boolean unregister(Object o) {
+            public boolean unregister() {
                 return false;
             }
 

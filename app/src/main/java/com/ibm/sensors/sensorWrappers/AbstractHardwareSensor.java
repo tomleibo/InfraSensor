@@ -6,6 +6,7 @@ import android.hardware.SensorManager;
 
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.core.EventHandler;
+import com.ibm.sensors.env.Env;
 import com.ibm.sensors.rules.SensorConfiguration;
 
 /**
@@ -18,11 +19,11 @@ public abstract class AbstractHardwareSensor implements EventCreator,SensorEvent
     private final SensorManager sm;
     protected final EventHandler handler;
 
-    public AbstractHardwareSensor(int type,SensorManager sm, EventHandler handler) throws InstantiationException {
+    public AbstractHardwareSensor(int type,Env env) throws InstantiationException {
         this.isRegistered=false;
-        this.sm=sm;
+        this.sm=env.getSensorManager();
         this.sensor = sm.getDefaultSensor(type);
-        this.handler = handler;
+        this.handler = env.getEventHandler();
         if (sensor==null) {
             throw new InstantiationException("hardware sensor is null");
         }
@@ -51,5 +52,4 @@ public abstract class AbstractHardwareSensor implements EventCreator,SensorEvent
     public boolean isRegistered() {
         return isRegistered;
     }
-
 }

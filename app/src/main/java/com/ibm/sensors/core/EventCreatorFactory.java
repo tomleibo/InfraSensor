@@ -1,27 +1,15 @@
 package com.ibm.sensors.core;
 
-import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.net.wifi.WifiManager;
-
-import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.env.Env;
-import com.ibm.sensors.rules.LinearVelocityVirtualSensor;
-import com.ibm.sensors.rules.TransmitLastLocationOnAccuracyChange;
-import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
-import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
+import com.ibm.sensors.exceptions.EventTypeDoesNotExist;
+import com.ibm.sensors.rules.SensorConfiguration;
 import com.ibm.sensors.sensorWrappers.EventCreator;
-import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
-import com.ibm.sensors.sensorWrappers.LightSensor;
-import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.TreeMap;
-
-
-/**TODO: add custom incremental event type id.*/
 
 public class EventCreatorFactory {
     public class Sensors{
@@ -37,6 +25,8 @@ public class EventCreatorFactory {
         public static final int TYPE_SENSOR_PROXIMITY = 8;
         public static final int TYPE_SENSOR_GRAVITY = 9;
         public static final int TYPE_SENSOR_LINEAR_ACCELERATION = 10;
+        public static final int TYPE_SENSOR_ROTATION_VECTOR = 11;
+        public static final int TYPE_SENSOR_RELATIVE_HUMIDITY = 12;
         public static final int TYPE_SENSOR_AMBIENT_TEMPATURE = 13;
         public static final int TYPE_SENSOR_MAGNETIC_FIELD_UNCALIBRATED = 14;
         public static final int TYPE_SENSOR_GAME_ROTATION_VECTOR = 15;
@@ -47,8 +37,7 @@ public class EventCreatorFactory {
         public static final int TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR = 20;
         public static final int TYPE_SENSOR_HEART_RATE = 21;
         public static final int TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS = 23;
-        public static final int TYPE_SENSOR_ROTATION_VECTOR = 11;
-        public static final int TYPE_SENSOR_RELATIVE_HUMIDITY = 12;
+
         // 30-39 GPS
         public static final int TYPE_SENSOR_GPS = 30;
         public static final int TYPE_SENSOR_SCREEN_ON_OFF = 42;
@@ -86,26 +75,106 @@ public class EventCreatorFactory {
         public static final int RuleFastDTW=1005;
     }
 
+    public class Params {
+        public static final String DELAY = "delay";
+        public static final String MIN_DISTANCE = "minDistance";
+    }
 
-    public static final int FIRST_DYNAMIC_ID = 10000;
-    private static final int DELAY = 3;
+    private static final int FIRST_DYNAMIC_ID = 10000;
+    private static final boolean CHANGE_CONFIGURATION_ON_RE_REGISTER = true;
+    private static final int DEFAULT_DELAY = 50;
 
     private final Env env;
-
-
     private final Map<Integer,EventCreator> eventCreatorMap;
     private final DynamicEventCreatorIdMapping mapping;
-
+    private Map<Integer,Class> eventTypeNumberToClass;
 
     public EventCreatorFactory(Env env) {
         this.env = env;
         mapping = new DynamicEventCreatorIdMapping(FIRST_DYNAMIC_ID);
         eventCreatorMap = new TreeMap<>();
+        eventTypeNumberToClass = new TreeMap<>();
+        //TODO put all event types to sensor classes.
     }
 
-    private EventCreator buildAndRegisterEventCreator(int type, Object o) {
-        EventCreator result;
-        switch (type) {
+    private EventCreator buildAndRegisterEventCreator(Class<? extends EventCreator> clz, SensorConfiguration conf) {
+        try {
+            Constructor<? extends EventCreator> ctor = clz.getConstructor(Env.class);
+            EventCreator ec = ctor.newInstance(env);
+            ec.register(conf);
+            return ec;
+        }
+        catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void subscribe(int eventType,SensorConfiguration conf) {
+        Class<? extends EventCreator> clz = eventTypeNumberToClass(eventType);
+        if (clz==null) {
+            throw new EventTypeDoesNotExist();
+        }
+        Integer count = env.getEventHandler().observersCount(eventType);
+
+        // dynamically create event types by class
+        // set initial event types.
+        // map event types to sensors.
+
+        if (conf==null) {
+            conf = sensorClassToDefaultConfiguration(clz);
+        }
+        if (count == 1) {
+            EventCreator ec = buildAndRegisterEventCreator(clz, conf);
+            eventCreatorMap.put(eventType, ec);
+        }
+        else if (CHANGE_CONFIGURATION_ON_RE_REGISTER) {
+            EventCreator ec = eventCreatorMap.get(eventType);
+            ec.unregister();
+            ec.register(conf);
+        }
+    }
+
+    private Class<? extends EventCreator> eventTypeNumberToClass(int eventType) {
+        return eventTypeNumberToClass.get(eventType);
+    }
+
+    private SensorConfiguration sensorClassToDefaultConfiguration(Class<? extends EventCreator> clz) {
+        //TODO add more cases
+        SensorConfiguration conf = new SensorConfiguration();
+        conf.addInteger(Params.DELAY,DEFAULT_DELAY);
+        return conf;
+    }
+
+
+    public void unsubscribe(EventHandler handler,Integer eventType) {
+        if (handler.observersCount(eventType) == 0) {
+            EventCreator ec =eventCreatorMap.get(eventType);
+            if (ec!=null) {
+                ec.unregister();
+            }
+        }
+    }
+
+    public int createNewEventCreatorId(String name,int type) {
+        return mapping.addMapping(name,type);
+    }
+
+    public int getIdForName(String name) {
+        return mapping.getDynamicIpFromName(name);
+    }
+
+    public int getCoreTypeFromDynamicType(int type) {
+        return mapping.getCoreType(type);
+    }
+
+
+
+
+}
+
+
+/*switch (type) {
             case Events.TYPE_EVENT_GPS_ACCURACY_CHANGED:
             case Events.TYPE_EVENT_GPS_LOCATION:
                 result = new GPSSensorWrapper(env.getEventHandler(),env.getLocationManager());
@@ -166,39 +235,4 @@ public class EventCreatorFactory {
             default:
                 int coreType = getCoreTypeFromDynamicType(type);
                 result = buildAndRegisterEventCreator(coreType, o);
-        }
-        eventCreatorMap.put(type, result);
-        return result;
-    }
-
-    public void subscribe(int eventType) {
-        Integer count = env.getEventHandler().observersCount(eventType);
-        if (count == 1) {
-            buildAndRegisterEventCreator(eventType, env.getSensorManager());
-        }
-    }
-
-
-    public void unsubscribe(EventHandler handler,Integer eventType) {
-        if (handler.observersCount(eventType) == 0) {
-            eventCreatorMap.get(eventType).unregister(null);
-        }
-    }
-
-    public int createNewEventCreatorId(String name,int type) {
-        return mapping.addMapping(name,type);
-    }
-
-    public int getIdForName(String name) {
-        return mapping.getDynamicIpFromName(name);
-    }
-
-    public int getCoreTypeFromDynamicType(int type) {
-        return mapping.getCoreType(type);
-    }
-
-    public class Params {
-        public static final String DELAY = "delay";
-        public static final String MIN_DISTANCE = "minDistance";
-    }
-}
+        }*/
