@@ -1,6 +1,8 @@
 <component name="libraryTable">
   <library name="fastdtw-1.1.0">
-    <CLASSES />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/fastdtw-1.1.0.jar!/" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>

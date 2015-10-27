@@ -89,9 +89,11 @@
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
+    <orderEntry type="library" exported="" name="1_gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="realm-android-0.83.1" level="project" />
     <orderEntry type="library" exported="" name="realm-0.83.1" level="project" />
     <orderEntry type="library" exported="" name="fastdtw-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="commons-collections-3.2.1" level="project" />
+    <orderEntry type="library" exported="" name="1_commons-collections-3.2.1" level="project" />
   </component>
 </module>

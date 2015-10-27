@@ -94,7 +94,6 @@ public class EventCreatorFactory {
         mapping = new DynamicEventCreatorIdMapping(FIRST_DYNAMIC_ID);
         eventCreatorMap = new TreeMap<>();
         eventTypeNumberToClass = new TreeMap<>();
-        //TODO put all event types to sensor classes.
     }
 
     private EventCreator buildAndRegisterEventCreator(Class<? extends EventCreator> clz, SensorConfiguration conf) {
@@ -117,7 +116,6 @@ public class EventCreatorFactory {
         }
         Integer count = env.getEventHandler().observersCount(eventType);
 
-        // dynamically create event types by class
         // set initial event types.
         // map event types to sensors.
 
@@ -135,6 +133,16 @@ public class EventCreatorFactory {
         }
     }
 
+    public void unsubscribe(EventHandler handler,Integer eventType) {
+        if (handler.observersCount(eventType) == 0) {
+            EventCreator ec =eventCreatorMap.get(eventType);
+            if (ec!=null) {
+                ec.unregister();
+            }
+            eventCreatorMap.remove(eventType);
+        }
+    }
+
     private Class<? extends EventCreator> eventTypeNumberToClass(int eventType) {
         Class<? extends EventCreator> clz =  eventTypeNumberToClass.get(eventType);
         if (clz==null) {
@@ -143,21 +151,12 @@ public class EventCreatorFactory {
         return clz;
     }
 
+
     private SensorConfiguration sensorClassToDefaultConfiguration(Class<? extends EventCreator> clz) {
         //TODO add more cases
         SensorConfiguration conf = new SensorConfiguration();
         conf.addInteger(Params.DELAY,DEFAULT_DELAY);
         return conf;
-    }
-
-
-    public void unsubscribe(EventHandler handler,Integer eventType) {
-        if (handler.observersCount(eventType) == 0) {
-            EventCreator ec =eventCreatorMap.get(eventType);
-            if (ec!=null) {
-                ec.unregister();
-            }
-        }
     }
 
     public int createNewEventCreatorId(String name,int type) {
@@ -172,71 +171,5 @@ public class EventCreatorFactory {
         return mapping.getCoreType(type);
     }
 
-
-
-
 }
 
-
-/*switch (type) {
-            case Events.TYPE_EVENT_GPS_ACCURACY_CHANGED:
-            case Events.TYPE_EVENT_GPS_LOCATION:
-                result = new GPSSensorWrapper(env.getEventHandler(),env.getLocationManager());
-                result.register(0,10);
-                break;
-            case Events.WIFI_LOCATION_ON_GPS_LOST:
-                result=new TransmitLastLocationOnAccuracyChange(env);
-                result.register(0,null);
-                break;
-            case Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS:
-                result= new AvailableWiFINetworks((WifiManager) env.getContext().getSystemService(Context.WIFI_SERVICE),env.getEventHandler(),env.getContext(),3000);
-                break;
-            case Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE:
-                result=  new LinearVelocityVirtualSensor(env);
-                result.register(0,null);
-                break;
-            case Events.TYPE_EVENT_LIGHT_AMOUNT:
-                result= new LightSensor(env.getEventHandler());
-                result.register(0,null);
-                break;
-
-            case Sensors.TYPE_SENSOR_ACCELEROMETER:
-            case Sensors.TYPE_SENSOR_GYROSCOPE:
-            case Sensors.TYPE_SENSOR_LINEAR_ACCELERATION:
-            case Sensors.TYPE_SENSOR_ROTATION_VECTOR:
-            case Sensors.TYPE_SENSOR_GRAVITY:
-            case Rules.RuleTimeSeriesCreator:
-            case Rules.TYPE_RULE_EXTREME_MOVE:
-            case -1:
-                try {
-                        result =  new AbstractHardwareSensor(type,env.getSensorManager(),env.getEventHandler()) {
-                        @Override
-                        public void onSensorChanged(SensorEvent event) {
-                            MotionSensorEventWrapper wrap = new MotionSensorEventWrapper(event);
-                            handler.handleEvent(wrap);
-                        }
-
-                        @Override
-                        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-                        }
-                    };
-                        result.register(DELAY,null);
-                        break;
-                } catch (InstantiationException e) {
-                        e.printStackTrace();
-                        return null;
-                }
-
-
-            case Events.TYPE_EVENT_SCREEN_ON_OFF:
-                result = new ScreenOnOffSensor(env.getEventHandler());
-                result.register(0,null);
-                break;
-
-
-
-            default:
-                int coreType = getCoreTypeFromDynamicType(type);
-                result = buildAndRegisterEventCreator(coreType, o);
-        }*/

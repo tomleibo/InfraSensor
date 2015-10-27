@@ -7,10 +7,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
-import com.ibm.sensors.MainConfigurations.LinearAccelerometerDTWTest;
 import com.ibm.sensors.MainConfigurations.MainConfInterface;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
+import com.ibm.sensors.mainTests.LocationOnRealm;
 import com.ibm.sensors.utils.MultiGenericObservable;
 
 
@@ -26,12 +26,9 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        conf = new LinearAccelerometerDTWTest();
+        conf = new LocationOnRealm();
         conf.Main(new Env(this.getApplicationContext()));
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -59,6 +56,7 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         conf.update(object,data);
     }
+
     @Override
     protected void onStop()
     {

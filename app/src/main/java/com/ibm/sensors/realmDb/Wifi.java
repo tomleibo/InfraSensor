@@ -11,17 +11,16 @@ public class Wifi extends RealmObject{
     private String ssid;
     private int distance;
     private int level;
-    private long locationId=-1;
+
 
     public Wifi() {
     }
 
-    public Wifi(String ssid, String mac, int distance, int level, long locationId) {
+    public Wifi(String ssid, String mac, int distance, int level) {
         this.ssid = ssid;
         this.mac = mac;
         this.distance = distance;
         this.level = level;
-        this.locationId = locationId;
     }
 
     public String getMac() {
@@ -56,11 +55,4 @@ public class Wifi extends RealmObject{
         this.level = level;
     }
 
-    public long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(long locationId) {
-        this.locationId = locationId;
-    }
 }
