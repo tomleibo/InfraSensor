@@ -3,7 +3,11 @@ package com.ibm.sensors.core;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.exceptions.EventTypeDoesNotExist;
 import com.ibm.sensors.rules.SensorConfiguration;
+import com.ibm.sensors.sensorWrappers.MotionSensors.Accelerometer;
+import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
+import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
+import com.ibm.sensors.sensorWrappers.MotionSensors.LinearAcceleration;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
 import java.lang.NoSuchMethodException;
@@ -95,6 +99,10 @@ public class EventCreatorFactory {
         mapping = new DynamicEventCreatorIdMapping(FIRST_DYNAMIC_ID);
         eventCreatorMap = new TreeMap<>();
         eventTypeNumberToClass = new TreeMap<>();
+        eventTypeNumberToClass.put(EventCreatorFactory.Sensors.TYPE_SENSOR_GPS, GPSSensorWrapper.class);
+        eventTypeNumberToClass.put(EventCreatorFactory.Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS, AvailableWiFINetworks.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ACCELEROMETER, Accelerometer.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, LinearAcceleration.class);
     }
 
     private EventCreator buildAndRegisterEventCreator(Class<? extends EventCreator> clz, SensorConfiguration conf) {

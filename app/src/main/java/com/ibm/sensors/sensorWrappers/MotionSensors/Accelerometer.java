@@ -1,4 +1,4 @@
-package com.ibm.sensors.sensorWrappers;
+package com.ibm.sensors.sensorWrappers.MotionSensors;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import com.ibm.sensors.EventWrappers.MotionSensorEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
+import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 
 
 /**
