@@ -6,6 +6,7 @@ import com.ibm.sensors.rules.SensorConfiguration;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
+import java.lang.NoSuchMethodException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;

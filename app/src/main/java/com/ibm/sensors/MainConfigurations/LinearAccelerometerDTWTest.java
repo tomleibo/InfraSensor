@@ -1,7 +1,6 @@
 package com.ibm.sensors.MainConfigurations;
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;

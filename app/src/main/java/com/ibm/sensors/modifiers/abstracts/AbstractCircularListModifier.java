@@ -15,7 +15,7 @@ import java.util.List;
  * Used to aggregate [size] parametres. Old values are overridden by new ones in a fifo way.
  * Use getValues to get the aggregated collection.
  */
-public abstract class AbstractCircularListModifier<IN,OUT> implements ListModifierInterface<IN,OUT> {
+public abstract class AbstractCircularListModifier<IN,OUT> implements com.ibm.sensors.modifiers.abstracts.ListModifierInterface<IN,OUT> {
     Collection<IN> collection;
     public abstract OUT modifySingleValue(IN in);
     public AbstractCircularListModifier(int size) {

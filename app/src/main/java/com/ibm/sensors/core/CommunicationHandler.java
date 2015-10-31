@@ -1,7 +1,9 @@
 package com.ibm.sensors.core;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.util.Log;
-
 import com.ibm.sensors.EventWrappers.EventWrapper;
 
 import java.io.BufferedReader;
@@ -28,6 +30,7 @@ public class CommunicationHandler implements Runnable{
     private final String url;
 
 
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private CommunicationHandler(String url) {
         this.eventQueue= new LinkedBlockingDeque<>(CAPACITY);
         this.url=url;
@@ -60,11 +63,13 @@ public class CommunicationHandler implements Runnable{
         }
     }
 
+    @SuppressLint("NewApi")
     public void run() {
         while(true) {
             String json = null;
             try {
                 EventWrapper event = eventQueue.take();
+
                 json = EventHandler.get().translateEventToJson(event);
             } catch (InterruptedException e) {
                 json="interrupted exception occured.";
@@ -74,7 +79,7 @@ public class CommunicationHandler implements Runnable{
             }
             Log.d(TAG, "sending json: " + json.substring(0, Math.min(10, json.length())));
             String response = executePost(url,"json="+json);
-            Log.wtf(TAG,"RESPONSE: "+response);
+            Log.wtf(TAG, "RESPONSE: " + response);
         }
     }
 

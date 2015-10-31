@@ -5,6 +5,7 @@ import android.net.wifi.ScanResult;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.db.LocationTable;
 import com.ibm.sensors.db.WifiTable;
 import com.ibm.sensors.env.Env;

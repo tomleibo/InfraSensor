@@ -1,7 +1,5 @@
 package com.ibm.sensors.rules;
 
-import android.util.Log;
-
 import com.ibm.sensors.EventWrappers.BlankEventWrapper;
 import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
@@ -11,7 +9,6 @@ import com.ibm.sensors.modifiers.abstracts.ModifierDecorator;
 import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
 import com.timeseries.TimeSeries;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

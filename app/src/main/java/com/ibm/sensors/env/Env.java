@@ -6,8 +6,8 @@ import android.location.LocationManager;
 import android.os.PowerManager;
 
 import com.ibm.sensors.core.CommunicationHandler;
-import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.core.EventCreatorFactory;
+import com.ibm.sensors.core.EventHandler;
 import com.ibm.sensors.db.DbHandler;
 
 public class Env {

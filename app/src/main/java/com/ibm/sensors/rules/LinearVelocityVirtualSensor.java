@@ -7,12 +7,10 @@ import com.ibm.sensors.modifiers.AddFloatAccumulator;
 import com.ibm.sensors.modifiers.abstracts.Modifier;
 import com.ibm.sensors.rules.ruleStrategies.ImmidiateStrategy;
 import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
-import com.ibm.sensors.utils.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 

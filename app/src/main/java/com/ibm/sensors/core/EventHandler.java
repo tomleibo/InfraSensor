@@ -6,6 +6,7 @@ import android.os.PowerManager;
 
 import com.google.gson.Gson;
 import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.core.CommunicationHandler;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
 import com.ibm.sensors.rules.SensorConfiguration;
