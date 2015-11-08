@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
+import com.ibm.sensors.MainConfigurations.LightSensorMain;
 import com.ibm.sensors.MainConfigurations.MainConfInterface;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.interfaces.GenericObserver;
@@ -21,13 +22,17 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
     //private static final String SERVER_URL = "http://10.0.0.4:8080/SensorDataServer/SensorListener";
 
     private TextView tv=null;
-
+    private LightSensorMain a;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        conf = new LocationOnRealm();
-        conf.Main(new Env(this.getApplicationContext()));
+       // conf = new LocationOnRealm();
+        //conf.Main(new Env(this.getApplicationContext()));
+        TextView tv = (TextView) findViewById(R.id.textView);
+        a = new LightSensorMain();
+        a.ac = this;
+        a.Main(new Env(this.getApplicationContext()));
     }
 
     @Override

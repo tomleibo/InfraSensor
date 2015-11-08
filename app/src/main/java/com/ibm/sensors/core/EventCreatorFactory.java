@@ -2,10 +2,17 @@ package com.ibm.sensors.core;
 
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.exceptions.EventTypeDoesNotExist;
+import com.ibm.sensors.rules.RuleFastDTW;
+import com.ibm.sensors.rules.RuleTimeSeriesCreator;
 import com.ibm.sensors.rules.SensorConfiguration;
+import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
+import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
+import com.ibm.sensors.sensorWrappers.LightSensor;
+import com.ibm.sensors.sensorWrappers.MotionSensors.Accelerometer;
 import com.ibm.sensors.sensorWrappers.MotionSensors.LinearAcceleration;
+import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
 import java.lang.NoSuchMethodException;
@@ -16,13 +23,12 @@ import java.util.TreeMap;
 
 public class EventCreatorFactory {
     public class Sensors{
-        public static final int TYPE_SENSOR_USB_CONNECTION_TYPE = 22;
+
         //correlated with android's Sensor.TYPE_* constants.
         public static final int TYPE_SENSOR_ACCELEROMETER =1;
         public static final int TYPE_SENSOR_MAGNETIC_FIELD = 2;
         public static final int TYPE_SENSOR_ORIENTATION = 3;
         public static final int TYPE_SENSOR_GYROSCOPE = 4;
-        public static final int TYPE_SENSOR_LIGHT =5;
         public static final int TYPE_SENSOR_PRESSURE = 6;
         public static final int TYPE_SENSOR_TEMPRATURE = 7;
         public static final int TYPE_SENSOR_PROXIMITY = 8;
@@ -111,7 +117,8 @@ public class EventCreatorFactory {
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ROTATION_VECTOR, AbstractHardwareSensor.class);
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR, AbstractHardwareSensor.class);
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_MAGNETIC_FIELD_UNCALIBRATED, AbstractHardwareSensor.class);
-
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_SCREEN_ON_OFF, ScreenOnOffSensor.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_LIGHT_AMOUNT, LightSensor.class);
         //GPS
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_LOCATION, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED, GPSSensorWrapper.class);
@@ -130,15 +137,15 @@ public class EventCreatorFactory {
 
         /*
         TODO
-        public static final int TYPE_SENSOR_SCREEN_ON_OFF = 42;
-        public static final int TYPE_SENSOR_LIGHT_SENSOR = 41;
+
+
         public static final int TYPE_SAVE_WIFI_AND_LOCATION = 77;
         public static final int TYPE_COMPARE_WIFI_AND_LOCATION = 78;
 
         public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
         public static final int TYPE_RULE_COMPARE_DTW_SERIES = 1003;
 
-        public static final int TYPE_SENSOR_LIGHT =5;
+
         public static final int TYPE_SENSOR_PRESSURE = 6;
         public static final int TYPE_SENSOR_TEMPRATURE = 7;
         public static final int TYPE_SENSOR_PROXIMITY = 8;
