@@ -3,8 +3,6 @@ package com.ibm.sensors.core;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.exceptions.EventTypeDoesNotExist;
 import com.ibm.sensors.rules.SensorConfiguration;
-import com.ibm.sensors.sensorWrappers.MotionSensors.Accelerometer;
-import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
 import com.ibm.sensors.sensorWrappers.MotionSensors.LinearAcceleration;
@@ -41,6 +39,7 @@ public class EventCreatorFactory {
         public static final int TYPE_SENSOR_STEP_COUNTER = 19;
         public static final int TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR = 20;
         public static final int TYPE_SENSOR_HEART_RATE = 21;
+        public static final int TYPE_SENSOR_USB_CONNECTION_TYPE = 22;
         public static final int TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS = 23;
 
         // 30-39 GPS
@@ -99,6 +98,59 @@ public class EventCreatorFactory {
         mapping = new DynamicEventCreatorIdMapping(FIRST_DYNAMIC_ID);
         eventCreatorMap = new TreeMap<>();
         eventTypeNumberToClass = new TreeMap<>();
+
+        //for all hardware motion sensors event type is as same as the sensor type.
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ACCELEROMETER, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_MAGNETIC_FIELD, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ORIENTATION, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GYROSCOPE, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GYROSCOPE_UNCALIBRATED, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GRAVITY, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GAME_ROTATION_VECTOR, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ROTATION_VECTOR, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR, AbstractHardwareSensor.class);
+        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_MAGNETIC_FIELD_UNCALIBRATED, AbstractHardwareSensor.class);
+
+        //GPS
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_LOCATION, GPSSensorWrapper.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED, GPSSensorWrapper.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_INPUT_PROVIDER_ADD, GPSSensorWrapper.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS, GPSSensorWrapper.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER, GPSSensorWrapper.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE, GPSSensorWrapper.class);
+
+
+        //Rules
+        eventTypeNumberToClass.put(Rules.RuleFastDTW, RuleFastDTW.class);
+        eventTypeNumberToClass.put(Rules.RuleTimeSeriesCreator, RuleTimeSeriesCreator.class);
+
+
+
+
+        /*
+        TODO
+        public static final int TYPE_SENSOR_SCREEN_ON_OFF = 42;
+        public static final int TYPE_SENSOR_LIGHT_SENSOR = 41;
+        public static final int TYPE_SAVE_WIFI_AND_LOCATION = 77;
+        public static final int TYPE_COMPARE_WIFI_AND_LOCATION = 78;
+
+        public static final int TYPE_RULE_LAST_GOOD_GPS_POINT = 1002;
+        public static final int TYPE_RULE_COMPARE_DTW_SERIES = 1003;
+
+        public static final int TYPE_SENSOR_LIGHT =5;
+        public static final int TYPE_SENSOR_PRESSURE = 6;
+        public static final int TYPE_SENSOR_TEMPRATURE = 7;
+        public static final int TYPE_SENSOR_PROXIMITY = 8;
+        public static final int TYPE_SENSOR_RELATIVE_HUMIDITY = 12;
+        public static final int TYPE_SENSOR_AMBIENT_TEMPATURE = 13;
+        public static final int TYPE_SENSOR_SIGNIFICANT_MOTION = 17;
+        public static final int TYPE_SENSOR_STEP_DETECTOR = 18;
+        public static final int TYPE_SENSOR_STEP_COUNTER = 19;
+        public static final int TYPE_SENSOR_HEART_RATE = 21;
+
+         */
+
         eventTypeNumberToClass.put(EventCreatorFactory.Sensors.TYPE_SENSOR_GPS, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(EventCreatorFactory.Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS, AvailableWiFINetworks.class);
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ACCELEROMETER, Accelerometer.class);
