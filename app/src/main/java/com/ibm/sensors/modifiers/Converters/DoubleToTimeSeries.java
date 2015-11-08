@@ -2,8 +2,8 @@ package com.ibm.sensors.modifiers.Converters;
 
 import com.ibm.sensors.modifiers.abstracts.AbstractSingleValueModifier;
 import com.ibm.sensors.utils.TimeSeriesWithJSON;
-import com.timeseries.TimeSeries;
-import com.timeseries.TimeSeriesPoint;
+
+import DTW.timeseries.TimeSeriesPoint;
 
 /**
  * Created by nexus on 19/10/2015.

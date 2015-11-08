@@ -1,9 +1,9 @@
 package com.ibm.sensors.modifiers;
 
-import com.dtw.TimeWarpInfo;
+import DTW.dtw.TimeWarpInfo;
 import com.ibm.sensors.modifiers.abstracts.AbstractSingleValueModifier;
-import com.timeseries.TimeSeries;
-import com.util.DistanceFunction;
+import DTW.timeseries.TimeSeries;
+import DTW.util.DistanceFunction;
 
 /**
  * Created by nexus on 19/10/2015.
@@ -29,7 +29,7 @@ public class FastDTW extends AbstractSingleValueModifier<TimeSeries,Double>{
 
 	@Override
 	public void aggregate(TimeSeries input) {
-		TimeWarpInfo info = com.dtw.FastDTW.getWarpInfoBetween(this.mTemplate, input, this.mRadius, this.mDistFunc);
+		TimeWarpInfo info = DTW.dtw.FastDTW.getWarpInfoBetween(this.mTemplate, input, this.mRadius, this.mDistFunc);
 		this.mResult = new Double(info.getDistance());
 	}
 }

@@ -7,7 +7,7 @@ import com.ibm.sensors.modifiers.Converters.DoubleToTimeSeries;
 import com.ibm.sensors.modifiers.Converters.MotionSensorEventWrapperToDoubleArray;
 import com.ibm.sensors.modifiers.abstracts.ModifierDecorator;
 import com.ibm.sensors.rules.ruleStrategies.EventCountStrategy;
-import com.timeseries.TimeSeries;
+import DTW.timeseries.TimeSeries;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,12 +1,12 @@
 package com.ibm.sensors.modifiers.ThreeDim;
 
 
-import com.dtw.TimeWarpInfo;
+import DTW.dtw.TimeWarpInfo;
 import com.ibm.sensors.modifiers.AbstractModifierOfModifiersArray;
 import com.ibm.sensors.modifiers.FastDTW;
-import com.ibm.sensors.modifiers.abstracts.AbstractSingleValueModifier;
-import com.timeseries.TimeSeries;
-import com.util.DistanceFunction;
+
+import DTW.timeseries.TimeSeries;
+import DTW.util.DistanceFunction;
 
 /**
  * Created by nexus on 18/10/2015.
@@ -34,7 +34,7 @@ public class FastDTW3D extends AbstractModifierOfModifiersArray<TimeSeries,Doubl
 	@Override
 	public void aggregate(TimeSeries[] input) {
 		for (int i=0;i<3;i++){
-			TimeWarpInfo info = com.dtw.FastDTW.getWarpInfoBetween(this.mTemplateSeries[i], input[i], this.mRadiuses[i], this.mDistFunctions[i]);
+			TimeWarpInfo info = DTW.dtw.FastDTW.getWarpInfoBetween(this.mTemplateSeries[i], input[i], this.mRadiuses[i], this.mDistFunctions[i]);
 			this.mResults[i] = new Double(info.getDistance());
 		}
 	}

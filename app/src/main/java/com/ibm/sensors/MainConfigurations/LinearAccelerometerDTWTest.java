@@ -15,7 +15,7 @@ import com.ibm.sensors.rules.ruleStrategies.ImmidiateStrategy;
 import com.ibm.sensors.utils.Converters;
 import com.ibm.sensors.utils.MultiGenericObservable;
 import com.ibm.sensors.utils.TimeSeriesWithJSON;
-import com.util.DistanceFunctionFactory;
+import DTW.util.DistanceFunctionFactory;
 
 import org.json.JSONException;
 

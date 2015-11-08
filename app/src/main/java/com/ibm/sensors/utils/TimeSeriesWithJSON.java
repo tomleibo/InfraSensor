@@ -1,11 +1,10 @@
 package com.ibm.sensors.utils;
 
-import com.timeseries.TimeSeries;
-import com.timeseries.TimeSeriesPoint;
+import DTW.timeseries.TimeSeries;
+import DTW.timeseries.TimeSeriesPoint;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by nexus on 22/10/2015.
@@ -31,10 +30,7 @@ public class TimeSeriesWithJSON extends TimeSeries{
 		super(inputFile, isFirstColTime, delimiter);
 	}
 
-	public TimeSeriesWithJSON(String[] ts, boolean isFirstColTime, boolean isLabeled, char
-			delimiter) {
-		super(ts, isFirstColTime, isLabeled, delimiter);
-	}
+
 
 	public TimeSeriesWithJSON(String inputFile, boolean isFirstColTime, boolean isLabeled, char
 			delimiter) {
@@ -45,10 +41,6 @@ public class TimeSeriesWithJSON extends TimeSeries{
 		super(inputFile, colToInclude, isFirstColTime);
 	}
 
-	public TimeSeriesWithJSON(String[] ts, int[] colToInclude, boolean isFirstColTime, boolean
-			isLabeled, char delimiter) {
-		super(ts, colToInclude, isFirstColTime, isLabeled, delimiter);
-	}
 
 	public TimeSeriesWithJSON(String inputFile, int[] colToInclude, boolean isFirstColTime,
 	                          boolean isLabeled, char delimiter) {
