@@ -1,6 +1,7 @@
 package com.ibm.sensors.MainConfigurations;
 
 import android.app.Activity;
+import android.hardware.SensorManager;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
@@ -11,6 +12,8 @@ import com.ibm.sensors.env.Env;
 import com.ibm.sensors.realmDb.Location;
 import com.ibm.sensors.realmDb.RealmHandler;
 import com.ibm.sensors.realmDb.Wifi;
+import com.ibm.sensors.rules.SensorConfiguration;
+import com.ibm.sensors.sensorWrappers.LightSensor;
 import com.ibm.sensors.utils.MultiGenericObservable;
 
 import io.realm.RealmList;
@@ -25,7 +28,9 @@ public class LightSensorMain implements MainConfInterface {
 	public void Main(Env env) {
 		this.env=env;
 		TextView tv = (TextView) ac.findViewById(R.id.textView);
-		if (!env.getEventHandler().subscribe(EventCreatorFactory.Sensors.TYPE_SENSOR_LIGHT_SENSOR, this)) {
+		LightSensor ls = new LightSensor(env);
+	//	env.getSensorFactory().createNewEventCreatorId(LightSensor.class.toString(),EventCreatorFactory.Sensors.TYPE_SENSOR_LIGHT_SENSOR);
+		if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_LIGHT_AMOUNT, this, new SensorConfiguration().addInteger(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
 			tv.setText("subscription failed");
 		}
 	}
