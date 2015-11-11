@@ -12,7 +12,7 @@ import com.ibm.sensors.utils.MultiGenericObservable;
  */
 public class GPSTest extends AbstractMainActivityConf {
 	@Override
-	public void Main(Env env, Activity ac) {
+	protected void _Main(Env env, Activity ac) {
 
 	}
 

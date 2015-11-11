@@ -7,13 +7,14 @@ import com.ibm.sensors.rules.RuleTimeSeriesCreator;
 import com.ibm.sensors.rules.SensorConfiguration;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
-import com.ibm.sensors.sensorWrappers.BatteryPercent;
+import com.ibm.sensors.sensorWrappers.BatteryPercentSensorWrapper;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
 import com.ibm.sensors.sensorWrappers.LightSensor;
 import com.ibm.sensors.sensorWrappers.MotionSensors.Accelerometer;
 import com.ibm.sensors.sensorWrappers.MotionSensors.LinearAcceleration;
 import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
+import com.ibm.sensors.sensorWrappers.USBConnectionType;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
 import java.lang.NoSuchMethodException;
@@ -78,6 +79,7 @@ public class EventCreatorFactory {
         public static final int PHONE_CALL_STATE_RINGING = 61;
         public static final int PHONE_CALL_STATE_IDLE = 62;
         public static final int TYPE_EVENT_BATTERY_PERCENT=63;
+        public static final int TYPE_SENSOR_USB_CONNECTION_TYPE=65;
     }
 
     public class Rules{
@@ -120,8 +122,9 @@ public class EventCreatorFactory {
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ROTATION_VECTOR, AbstractHardwareSensor.class);
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR, AbstractHardwareSensor.class);
         eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_MAGNETIC_FIELD_UNCALIBRATED, AbstractHardwareSensor.class);
-        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_SCREEN_ON_OFF, ScreenOnOffSensor.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_SCREEN_ON_OFF, ScreenOnOffSensor.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_LIGHT_AMOUNT, LightSensor.class);
+        eventTypeNumberToClass.put(Events.TYPE_SENSOR_USB_CONNECTION_TYPE, USBConnectionType.class);
         //GPS
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_LOCATION, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED, GPSSensorWrapper.class);
@@ -129,7 +132,7 @@ public class EventCreatorFactory {
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE, GPSSensorWrapper.class);
-        eventTypeNumberToClass.put(Events.TYPE_EVENT_BATTERY_PERCENT, BatteryPercent.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_BATTERY_PERCENT, BatteryPercentSensorWrapper.class);
 
         //Rules
         eventTypeNumberToClass.put(Rules.RuleFastDTW, RuleFastDTW.class);

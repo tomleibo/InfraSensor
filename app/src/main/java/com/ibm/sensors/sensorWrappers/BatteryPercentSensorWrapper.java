@@ -14,8 +14,8 @@ import com.ibm.sensors.rules.SensorConfiguration;
 /**
  * Created by nexus on 27/09/2015.
  */
-public class BatteryPercent extends AbstractSensorWrapper{
-    BatteryPercent instance;
+public class BatteryPercentSensorWrapper extends AbstractSensorWrapper{
+    BatteryPercentSensorWrapper instance;
     private int mLevel;
 
     private final BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
@@ -26,7 +26,7 @@ public class BatteryPercent extends AbstractSensorWrapper{
         }
     };
 
-    public BatteryPercent(Env env){
+    public BatteryPercentSensorWrapper(Env env){
         super(env);
         instance = this;
         this.mLevel=-1;

@@ -28,7 +28,7 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 	private Env mEnv;
 
 	@Override
-	public void Main(Env env, Activity ac) {
+	protected void _Main(Env env, Activity ac) {
 		super.Main(env,ac);
 		this.mEnv=env;
 		TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id

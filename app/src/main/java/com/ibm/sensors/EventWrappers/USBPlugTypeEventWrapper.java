@@ -9,18 +9,15 @@ import com.ibm.sensors.sensorWrappers.EventCreator;
  */
 public class USBPlugTypeEventWrapper extends AbstractEventWrapper<Integer> {
     private final int mPlugType;
-    private final EventCreator mSensorWrapper;
-    private final Long mBuildTime;
-    public USBPlugTypeEventWrapper(int plugType, EventCreator sw){
-        super(System.currentTimeMillis(),sw);
-        this.mPlugType = plugType;
-        this.mSensorWrapper=sw;
-        this.mBuildTime = System.currentTimeMillis();
+
+    public USBPlugTypeEventWrapper(long timestamp, EventCreator sensor,Integer type) {
+        super(timestamp, sensor);
+        this.mPlugType=type;
     }
 
     @Override
     public int getEventType() {
-        return EventCreatorFactory.Sensors.TYPE_SENSOR_USB_CONNECTION_TYPE;
+        return EventCreatorFactory.Events.TYPE_SENSOR_USB_CONNECTION_TYPE;
     }
 
     @Override

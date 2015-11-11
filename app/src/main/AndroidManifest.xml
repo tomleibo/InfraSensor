@@ -41,4 +41,12 @@
             <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
         </intent-filter>
     </receiver>
+    <receiver
+        android:name=".USBConnectionType"
+        android:enabled="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+            <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+        </intent-filter>
+    </receiver>
 </manifest>
