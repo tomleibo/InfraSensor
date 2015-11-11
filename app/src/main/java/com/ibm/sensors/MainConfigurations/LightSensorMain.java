@@ -25,11 +25,9 @@ public class LightSensorMain implements MainConfInterface {
 	private Env env;
 	public Activity ac;
 	@Override
-	public void Main(Env env) {
+	public void Main(Env env, Activity ac) {
 		this.env=env;
 		TextView tv = (TextView) ac.findViewById(R.id.textView);
-		LightSensor ls = new LightSensor(env);
-	//	env.getSensorFactory().createNewEventCreatorId(LightSensor.class.toString(),EventCreatorFactory.Sensors.TYPE_SENSOR_LIGHT_SENSOR);
 		if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_LIGHT_AMOUNT, this, new SensorConfiguration().addInteger(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
 			tv.setText("subscription failed");
 		}

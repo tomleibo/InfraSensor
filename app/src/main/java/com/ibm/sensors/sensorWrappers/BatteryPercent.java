@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 
+import com.ibm.sensors.EventWrappers.BatteryPercentEvent;
+import com.ibm.sensors.core.EventCreatorFactory;
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.rules.SensorConfiguration;
 
@@ -13,44 +15,43 @@ import com.ibm.sensors.rules.SensorConfiguration;
  * Created by nexus on 27/09/2015.
  */
 public class BatteryPercent extends AbstractSensorWrapper{
-    private Context mContext;
+    BatteryPercent instance;
     private int mLevel;
-
-    protected void update(){
-
-    }
 
     private final BroadcastReceiver mBatInfoReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context ctxt, Intent intent) {
             mLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
+            env.getEventHandler().handleEvent(new BatteryPercentEvent(System.currentTimeMillis(),instance,mLevel));
         }
     };
+
     public BatteryPercent(Env env){
         super(env);
+        instance = this;
         this.mLevel=-1;
     }
 
     @Override
     public int getType() {
-        return 0;
+        return EventCreatorFactory.Sensors.TYPE_BATTERY_PERCENT;
     }
 
     @Override
     public boolean register(SensorConfiguration conf) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        mContext.registerReceiver(mBatInfoReceiver , ifilter);
+        env.getContext().registerReceiver(mBatInfoReceiver , ifilter);
         return true;
     }
 
     @Override
     public boolean unregister() {
-        mContext.unregisterReceiver(mBatInfoReceiver);
+        env.getContext().unregisterReceiver(mBatInfoReceiver);
         return false;
     }
 
     @Override
     public boolean isRegistered() {
-        return false;
+        return true;
     }
 }

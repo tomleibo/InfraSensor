@@ -7,6 +7,7 @@ import com.ibm.sensors.rules.RuleTimeSeriesCreator;
 import com.ibm.sensors.rules.SensorConfiguration;
 import com.ibm.sensors.sensorWrappers.AbstractHardwareSensor;
 import com.ibm.sensors.sensorWrappers.AvailableWiFINetworks;
+import com.ibm.sensors.sensorWrappers.BatteryPercent;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
 import com.ibm.sensors.sensorWrappers.LightSensor;
@@ -56,6 +57,7 @@ public class EventCreatorFactory {
         public static final int TYPE_COMPARE_WIFI_AND_LOCATION = 78;
 
         public static final int TYPE_SENSOR_MICROPHONE = 63;
+        public static final int TYPE_BATTERY_PERCENT =64;
     }
 
     public class Events{
@@ -75,6 +77,7 @@ public class EventCreatorFactory {
         public static final int PHONE_CALL_STATE_OFFHOOK = 60;
         public static final int PHONE_CALL_STATE_RINGING = 61;
         public static final int PHONE_CALL_STATE_IDLE = 62;
+        public static final int TYPE_EVENT_BATTERY_PERCENT=63;
     }
 
     public class Rules{
@@ -126,7 +129,7 @@ public class EventCreatorFactory {
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_EXTRAS, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED_INPUT_PROVIDER, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_INPUT_PROVIDER_REMOVE, GPSSensorWrapper.class);
-
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_BATTERY_PERCENT, BatteryPercent.class);
 
         //Rules
         eventTypeNumberToClass.put(Rules.RuleFastDTW, RuleFastDTW.class);

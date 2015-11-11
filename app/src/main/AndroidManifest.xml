@@ -34,6 +34,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
     <receiver android:name=".PhoneCallSensorWrapper.AnswerCallBroadcastReceiver">
         <intent-filter>
             <action android:name="android.intent.action.PHONE_STATE" />

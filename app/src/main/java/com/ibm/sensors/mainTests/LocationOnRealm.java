@@ -1,5 +1,7 @@
 package com.ibm.sensors.mainTests;
 
+import android.app.Activity;
+
 import com.ibm.sensors.EventWrappers.EventWrapper;
 import com.ibm.sensors.MainConfigurations.MainConfInterface;
 import com.ibm.sensors.env.Env;
@@ -17,7 +19,7 @@ public class LocationOnRealm implements MainConfInterface {
     Env env;
 
     @Override
-    public void Main(Env env) {
+    public void Main(Env env,Activity ac) {
         RealmHandler realm = new RealmHandler();
         try {
             realm.start(env.getContext());

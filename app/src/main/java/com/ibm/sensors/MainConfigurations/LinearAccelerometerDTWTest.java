@@ -27,11 +27,11 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 
 	private Env mEnv;
 
-
 	@Override
-	public void Main(Env env) {
+	public void Main(Env env, Activity ac) {
+		super.Main(env,ac);
 		this.mEnv=env;
-		TextView tv = (TextView) ((Activity) env.getContext()).getWindow().getDecorView().findViewById(R.id
+		TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id
 				.textView);
 		TimeSeriesWithJSON a = new TimeSeriesWithJSON(3);
 		try {
@@ -62,7 +62,7 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 	@Override
 	public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
 		if (mEnv!=null){
-			TextView tv = (TextView) ((Activity) mEnv.getContext()).getWindow().getDecorView().findViewById(R.id
+			TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id
 				.textView);
 		}
 	}
