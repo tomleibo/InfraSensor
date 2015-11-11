@@ -15,7 +15,7 @@ public class AudioRecordingEvent extends AbstractEventWrapper<short[]>{
 
 	@Override
 	public int getEventType() {
-		return EventCreatorFactory.Events.AUDION_RECORDING_EVENT;
+		return EventCreatorFactory.Events.AUDIO_RECORDING_EVENT;
 	}
 
 	@Override

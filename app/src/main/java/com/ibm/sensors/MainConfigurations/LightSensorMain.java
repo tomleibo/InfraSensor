@@ -21,21 +21,21 @@ import io.realm.RealmList;
 /**
  * Created by nexus on 08/11/2015.
  */
-public class LightSensorMain implements MainConfInterface {
-	private Env env;
-	public Activity ac;
+public class LightSensorMain extends AbstractMainActivityConf {
+
+
 	@Override
-	public void Main(Env env, Activity ac) {
-		this.env=env;
+	protected void _Main(Env env, Activity ac) {
 		TextView tv = (TextView) ac.findViewById(R.id.textView);
 		if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_LIGHT_AMOUNT, this, new SensorConfiguration().addInteger(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
 			tv.setText("subscription failed");
 		}
 	}
 
+
 	@Override
 	public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
-		TextView tv = (TextView) ac.findViewById(R.id.textView);
+		TextView tv = (TextView) mAc.findViewById(R.id.textView);
 		tv.setText(data.getData().toString());
 	}
 }

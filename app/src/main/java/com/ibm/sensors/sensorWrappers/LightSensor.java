@@ -15,9 +15,11 @@ import com.ibm.sensors.rules.SensorConfiguration;
 public class LightSensor extends AbstractSensorWrapper implements SensorEventListener {
 
 	private Sensor mLightSensor;
+	protected Float mLevel;
 	public LightSensor(Env env) {
 		super(env);
 		mLightSensor = env.getSensorManager().getDefaultSensor(Sensor.TYPE_LIGHT);
+		mLevel = new Float(0);
 	}
 
 	@Override
@@ -47,7 +49,8 @@ public class LightSensor extends AbstractSensorWrapper implements SensorEventLis
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		env.getEventHandler().handleEvent(new LightSensorEvent(System.currentTimeMillis(),this,new Float(event.values[0])));
+		this.mLevel=new Float(event.values[0]);
+		env.getEventHandler().handleEvent(new LightSensorEvent(System.currentTimeMillis(),this,mLevel));
 	}
 
 	@Override

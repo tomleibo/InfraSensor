@@ -12,6 +12,7 @@ import com.ibm.sensors.MainConfigurations.BatteryPercent;
 import com.ibm.sensors.MainConfigurations.LightSensorMain;
 import com.ibm.sensors.MainConfigurations.LinearAccelerometerDTWTest;
 import com.ibm.sensors.MainConfigurations.MainConfInterface;
+import com.ibm.sensors.MainConfigurations.Microphone;
 import com.ibm.sensors.MainConfigurations.ScreenOnOff;
 import com.ibm.sensors.MainConfigurations.USBConnectionType;
 import com.ibm.sensors.env.Env;
@@ -33,10 +34,12 @@ public class MainActivity extends Activity implements GenericObserver<EventWrapp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
        // conf = new LocationOnRealm();
-        //conf.Main(new Env(this.getApplicationContext()));
 
-        conf = new USBConnectionType();
-        conf.Main(new Env(this.getApplicationContext()), this);
+        conf = new LinearAccelerometerDTWTest();
+        conf.Main(new Env(this.getApplicationContext()),this);
+
+        //conf = new Microphone();
+        //conf.Main(new Env(this.getApplicationContext()), this);
     }
 
     @Override

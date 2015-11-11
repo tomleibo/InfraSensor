@@ -48,6 +48,7 @@ public class USBConnectionType extends AbstractSensorWrapper {
         ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         env.getContext().registerReceiver(mBatInfoReceiver , ifilter);
         this.mRegistered=true;
+        env.getEventHandler().handleEvent(new USBPlugTypeEventWrapper(System.currentTimeMillis(),instance,mConnectionType));
         return true;
     }
 

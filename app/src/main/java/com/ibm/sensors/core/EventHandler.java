@@ -96,8 +96,10 @@ public class EventHandler extends MultiGenericObservable<EventWrapper> {
         return false;
     }
 
+
+    @Override
     public boolean subscribe(Integer eventType, GenericObserver obs, SensorConfiguration conf) {
-        boolean result = super.subscribe(eventType,obs);
+        boolean result = super.subscribe(eventType,obs,conf);
         if (result) {
             env.getSensorFactory().subscribe(eventType,conf);
         }

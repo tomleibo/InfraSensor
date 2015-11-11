@@ -1,7 +1,10 @@
 package com.ibm.sensors.core;
 
+import android.hardware.Sensor;
+
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.exceptions.EventTypeDoesNotExist;
+import com.ibm.sensors.rules.LinearVelocityVirtualSensor;
 import com.ibm.sensors.rules.RuleFastDTW;
 import com.ibm.sensors.rules.RuleTimeSeriesCreator;
 import com.ibm.sensors.rules.SensorConfiguration;
@@ -11,13 +14,11 @@ import com.ibm.sensors.sensorWrappers.BatteryPercentSensorWrapper;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.sensorWrappers.GPSSensorWrapper;
 import com.ibm.sensors.sensorWrappers.LightSensor;
-import com.ibm.sensors.sensorWrappers.MotionSensors.Accelerometer;
-import com.ibm.sensors.sensorWrappers.MotionSensors.LinearAcceleration;
+import com.ibm.sensors.sensorWrappers.Microphone;
 import com.ibm.sensors.sensorWrappers.ScreenOnOffSensor;
 import com.ibm.sensors.sensorWrappers.USBConnectionType;
 import com.ibm.sensors.utils.DynamicEventCreatorIdMapping;
 
-import java.lang.NoSuchMethodException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -47,6 +48,8 @@ public class EventCreatorFactory {
         public static final int TYPE_SENSOR_STEP_COUNTER = 19;
         public static final int TYPE_SENSOR_GEOMAGNETIC_ROTATION_VECTOR = 20;
         public static final int TYPE_SENSOR_HEART_RATE = 21;
+
+        //not hardware
         public static final int TYPE_SENSOR_USB_CONNECTION_TYPE = 22;
         public static final int TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS = 23;
 
@@ -74,7 +77,7 @@ public class EventCreatorFactory {
         public static final int TYPE_EVENT_GPS_INPUT_PROVIDER_ADD = 32;
         public static final int AVAILABLE_WIFI_NETWORKS = 50;
         public static final int WIFI_DISTANCE = 386;
-        public static final int AUDION_RECORDING_EVENT = 51;
+        public static final int AUDIO_RECORDING_EVENT = 51;
         public static final int PHONE_CALL_STATE_OFFHOOK = 60;
         public static final int PHONE_CALL_STATE_RINGING = 61;
         public static final int PHONE_CALL_STATE_IDLE = 62;
@@ -93,11 +96,12 @@ public class EventCreatorFactory {
     public class Params {
         public static final String DELAY = "delay";
         public static final String MIN_DISTANCE = "minDistance";
+        public static final String SENSOR_TYPE = "type";
     }
 
     private static final int FIRST_DYNAMIC_ID = 10000;
     private static final boolean CHANGE_CONFIGURATION_ON_RE_REGISTER = true;
-    private static final int DEFAULT_DELAY = 50;
+    private static final int DEFAULT_DELAY = 100000;
 
     private final Env env;
     private final Map<Integer,EventCreator> eventCreatorMap;
@@ -125,6 +129,8 @@ public class EventCreatorFactory {
         eventTypeNumberToClass.put(Events.TYPE_EVENT_SCREEN_ON_OFF, ScreenOnOffSensor.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_LIGHT_AMOUNT, LightSensor.class);
         eventTypeNumberToClass.put(Events.TYPE_SENSOR_USB_CONNECTION_TYPE, USBConnectionType.class);
+        eventTypeNumberToClass.put(Events.AUDIO_RECORDING_EVENT, Microphone.class);
+
         //GPS
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_LOCATION, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(Events.TYPE_EVENT_GPS_ACCURACY_CHANGED, GPSSensorWrapper.class);
@@ -137,6 +143,7 @@ public class EventCreatorFactory {
         //Rules
         eventTypeNumberToClass.put(Rules.RuleFastDTW, RuleFastDTW.class);
         eventTypeNumberToClass.put(Rules.RuleTimeSeriesCreator, RuleTimeSeriesCreator.class);
+        eventTypeNumberToClass.put(Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE,LinearVelocityVirtualSensor.class);
 
 
 
@@ -166,8 +173,6 @@ public class EventCreatorFactory {
 
         eventTypeNumberToClass.put(EventCreatorFactory.Sensors.TYPE_SENSOR_GPS, GPSSensorWrapper.class);
         eventTypeNumberToClass.put(EventCreatorFactory.Sensors.TYPE_SENSOR_AVAILABLE_WIFI_NETWORKS, AvailableWiFINetworks.class);
-        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_ACCELEROMETER, Accelerometer.class);
-        eventTypeNumberToClass.put(Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, LinearAcceleration.class);
     }
 
     private EventCreator buildAndRegisterEventCreator(Class<? extends EventCreator> clz, SensorConfiguration conf) {
@@ -178,6 +183,9 @@ public class EventCreatorFactory {
             return ec;
         }
         catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -194,7 +202,7 @@ public class EventCreatorFactory {
         // map event types to sensors.
 
         if (conf==null) {
-            conf = sensorClassToDefaultConfiguration(clz);
+            conf = sensorClassToDefaultConfiguration(eventType);
         }
         if (count == 1) {
             EventCreator ec = buildAndRegisterEventCreator(clz, conf);
@@ -203,7 +211,11 @@ public class EventCreatorFactory {
         else if (CHANGE_CONFIGURATION_ON_RE_REGISTER) {
             EventCreator ec = eventCreatorMap.get(eventType);
             ec.unregister();
-            ec.register(conf);
+            try {
+                ec.register(conf);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -226,11 +238,20 @@ public class EventCreatorFactory {
     }
 
 
-    private SensorConfiguration sensorClassToDefaultConfiguration(Class<? extends EventCreator> clz) {
-        //TODO add more cases
-        SensorConfiguration conf = new SensorConfiguration();
-        conf.addInteger(Params.DELAY,DEFAULT_DELAY);
-        return conf;
+    private SensorConfiguration sensorClassToDefaultConfiguration(int type) {
+        if (type>=1 &&type<=21) {
+            return new SensorConfiguration().addInteger(Params.SENSOR_TYPE,type).addInteger(Params.DELAY,DEFAULT_DELAY);
+        }
+
+        switch(type) {
+
+
+            default:
+                SensorConfiguration conf = new SensorConfiguration();
+                conf.addInteger(Params.DELAY,DEFAULT_DELAY);
+                return conf;
+        }
+
     }
 
     public int createNewEventCreatorId(String name,int type) {

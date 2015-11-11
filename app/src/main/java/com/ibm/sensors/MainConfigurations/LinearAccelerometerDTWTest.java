@@ -29,10 +29,10 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 
 	@Override
 	protected void _Main(Env env, Activity ac) {
-		super.Main(env,ac);
 		this.mEnv=env;
 		TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id
 				.textView);
+		tv.setText("hello");
 		TimeSeriesWithJSON a = new TimeSeriesWithJSON(3);
 		try {
 			a.fromJsonArray(Converters.fileToJSONArray("/TimeSeries", "myData.txt"));
@@ -41,16 +41,16 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 			RuleFastDTW my = new RuleFastDTW(env, new ImmidiateStrategy(),myDTW);
 			DoubleToTimeSeries tmp = new DoubleToTimeSeries(100,false,3);
 
-			RuleTimeSeriesCreator timeSeriesSaver = new RuleTimeSeriesCreator(env, EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION,tmp);
-			if (!env.getEventHandler().subscribe(EventCreatorFactory.Sensors.TYPE_SENSOR_LINEAR_ACCELERATION, timeSeriesSaver)) {
+			//RuleTimeSeriesCreator timeSeriesSaver = new RuleTimeSeriesCreator(env, EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE,tmp);
+			if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE, this,null)) {
 				tv.setText("subscription failed");
 			}
-			if (!env.getEventHandler().subscribe(EventCreatorFactory.Rules.RuleTimeSeriesCreator, my)) {
+		/*	if (!env.getEventHandler().subscribe(EventCreatorFactory.Rules.RuleTimeSeriesCreator, my)) {
 				tv.setText("subscription failed");
 			}
 			if (!env.getEventHandler().subscribe(-2, this)) {
 				tv.setText("subscription failed");
-			}
+			}*/
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -61,9 +61,12 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 
 	@Override
 	public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
-		if (mEnv!=null){
-			TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id
+		TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id
 				.textView);
+		String data1 = new String();
+		for (int i=0;i<3;i++){
+			data1+=","+((Float[])data.getData())[i];
 		}
+		tv.setText(data1);
 	}
 }

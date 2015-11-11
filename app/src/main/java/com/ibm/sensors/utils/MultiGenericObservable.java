@@ -5,6 +5,7 @@ package com.ibm.sensors.utils;
  */
 
 import com.ibm.sensors.interfaces.GenericObserver;
+import com.ibm.sensors.rules.SensorConfiguration;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class MultiGenericObservable<T> {
 
     private final Map<Integer, LinkedList<GenericObserver<T>>> observers = new ConcurrentHashMap<>();
 
-    public boolean subscribe(Integer eventType, GenericObserver<T> obs) {
+    public boolean subscribe(Integer eventType, GenericObserver<T> obs, SensorConfiguration configuration) {
         if (obs == null) {
             throw new IllegalArgumentException("MultiGenericObserver: Tried to add a null observer");
         }

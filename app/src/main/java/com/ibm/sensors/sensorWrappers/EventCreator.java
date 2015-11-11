@@ -7,7 +7,7 @@ import com.ibm.sensors.rules.SensorConfiguration;
  */
 public interface EventCreator{
     int getType();
-    boolean register (SensorConfiguration configuration);
+    boolean register (SensorConfiguration configuration) throws  Exception;
     boolean unregister ();
     boolean isRegistered();
 }

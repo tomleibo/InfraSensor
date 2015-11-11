@@ -8,7 +8,11 @@ import com.ibm.sensors.rules.ruleStrategies.RuleStrategy;
 import com.ibm.sensors.sensorWrappers.EventCreator;
 import com.ibm.sensors.utils.MultiGenericObservable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -45,7 +49,11 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     @Override
     public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
         Integer type = data.getEventType();
-        modifiers.get(type).aggregate(data);
+        List<Float> tmp = new ArrayList<Float>();
+        tmp.add(((Float[]) data.getData())[0]);
+        tmp.add(((Float[]) data.getData())[1]);
+        tmp.add(((Float[]) data.getData())[2]);
+        (modifiers.get(type)).aggregate(tmp);
         if (strategy.shouldDispatchOnEventArrival(type)){
             dispatch();
         }
@@ -55,7 +63,7 @@ public abstract class Rule implements GenericObserver<EventWrapper>,EventCreator
     public boolean register(SensorConfiguration configuration) {
         boolean ans = true;
         for (Integer type: getSensorTypes()) {
-            ans &= env.getEventHandler().subscribe(type, this);
+            ans &= env.getEventHandler().subscribe(type, this,null);
         }
         if (ans) {
             isRegistered=true;

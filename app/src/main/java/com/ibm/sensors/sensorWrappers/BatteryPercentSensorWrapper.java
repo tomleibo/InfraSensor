@@ -41,6 +41,8 @@ public class BatteryPercentSensorWrapper extends AbstractSensorWrapper{
     public boolean register(SensorConfiguration conf) {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         env.getContext().registerReceiver(mBatInfoReceiver , ifilter);
+        env.getEventHandler().handleEvent(new BatteryPercentEvent(System.currentTimeMillis(),
+                instance, mLevel));
         return true;
     }
 
