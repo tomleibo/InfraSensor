@@ -38,14 +38,17 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 			a.fromJsonArray(Converters.fileToJSONArray("/TimeSeries", "myData.txt"));
 			FastDTW myDTW = new FastDTW(a, DistanceFunctionFactory.getDistFnByName("EuclideanDistance"),100);
 
-			RuleFastDTW my = new RuleFastDTW(env, new ImmidiateStrategy(),myDTW);
+			RuleFastDTW my = new RuleFastDTW(env);
 			DoubleToTimeSeries tmp = new DoubleToTimeSeries(100,false,3);
 
 			//RuleTimeSeriesCreator timeSeriesSaver = new RuleTimeSeriesCreator(env, EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE,tmp);
-			if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE, this,null)) {
+			if (!env.getEventHandler().subscribe(EventCreatorFactory.Rules.RuleFastDTW, this,null)) {
 				tv.setText("subscription failed");
 			}
-		/*	if (!env.getEventHandler().subscribe(EventCreatorFactory.Rules.RuleTimeSeriesCreator, my)) {
+			/*if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_LINEAR_VELOCITY_CHANGE, this,null)) {
+				tv.setText("subscription failed");
+			}
+			if (!env.getEventHandler().subscribe(EventCreatorFactory.Rules.RuleTimeSeriesCreator, my)) {
 				tv.setText("subscription failed");
 			}
 			if (!env.getEventHandler().subscribe(-2, this)) {
@@ -61,12 +64,12 @@ public class LinearAccelerometerDTWTest extends AbstractMainActivityConf{
 
 	@Override
 	public void update(MultiGenericObservable<EventWrapper> object, EventWrapper data) {
-		TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id
-				.textView);
-		String data1 = new String();
-		for (int i=0;i<3;i++){
-			data1+=","+((Float[])data.getData())[i];
+		TextView tv = (TextView) this.mAc.getWindow().getDecorView().findViewById(R.id.textView);
+		try{
+			tv.setText(""+(double)(data.getData()));
 		}
-		tv.setText(data1);
+		catch(Exception e){
+			tv.setText(""+(float)(data.getData()));
+		}
 	}
 }

@@ -12,30 +12,15 @@ public class SensorConfiguration {
     public static String DELAY = "DELAY";
     public static String REPEAT = "REPEAT";
     public static String DURATION = "DURATION";
-    Map<String,String> stringMap=null;
-    Map<String,Integer> integerMap=null;
-
+    Map<String,Object> objectMap=null;
     public SensorConfiguration() {
-        stringMap=new HashMap<>();
-        integerMap=new HashMap<>();
+        objectMap=new HashMap<>();
     }
 
-    public SensorConfiguration addString(String key,String value) {
-        stringMap.put(key,value);
+    public SensorConfiguration addObject(String key,Object o) {
+        objectMap.put(key,o);
         return this;
     }
 
-    public SensorConfiguration addInteger(String key,Integer value) {
-        integerMap.put(key,value);
-        return this;
-    }
-
-    public String getString(String key) {
-        return stringMap.get(key);
-    }
-
-    public Integer getInt(String key) {
-        return integerMap.get(key);
-    }
-
+    public Object getObject(String key) { return objectMap.get(key);}
 }

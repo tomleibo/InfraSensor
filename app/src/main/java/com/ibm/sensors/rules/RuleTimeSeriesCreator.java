@@ -25,7 +25,7 @@ public class RuleTimeSeriesCreator extends Rule{
 		}
 	}
 
-	public RuleTimeSeriesCreator(Env env, int sensorID, DoubleToTimeSeries converter) {//TODO: change eventfactoryshit to subgroups and add isingroup
+	public RuleTimeSeriesCreator(Env env, int sensorID, DoubleToTimeSeries converter) {
 		super(env, new EventCountStrategy(
 				sensorID,1));
 		this.modifiers = new HashMap<>();

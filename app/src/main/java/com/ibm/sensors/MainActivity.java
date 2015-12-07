@@ -12,7 +12,6 @@ import com.ibm.sensors.MainConfigurations.BatteryPercent;
 import com.ibm.sensors.MainConfigurations.LightSensorMain;
 import com.ibm.sensors.MainConfigurations.LinearAccelerometerDTWTest;
 import com.ibm.sensors.MainConfigurations.MainConfInterface;
-import com.ibm.sensors.MainConfigurations.Microphone;
 import com.ibm.sensors.MainConfigurations.ScreenOnOff;
 import com.ibm.sensors.MainConfigurations.USBConnectionType;
 import com.ibm.sensors.env.Env;
