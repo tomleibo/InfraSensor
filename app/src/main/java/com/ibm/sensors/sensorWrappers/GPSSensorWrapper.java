@@ -37,8 +37,8 @@ public class GPSSensorWrapper extends AbstractSensorWrapper implements LocationL
 
 	@Override
 	public boolean register(SensorConfiguration conf) {
-		int delayMillis = conf.getInt(EventCreatorFactory.Params.DELAY);
-		int minDistance= conf.getInt(EventCreatorFactory.Params.MIN_DISTANCE);
+		int delayMillis =(Integer)conf.getObject(EventCreatorFactory.Params.DELAY);
+		int minDistance= (Integer)conf.getObject(EventCreatorFactory.Params.MIN_DISTANCE);
 		this.mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, delayMillis, minDistance, this);
 		return false;
 	}

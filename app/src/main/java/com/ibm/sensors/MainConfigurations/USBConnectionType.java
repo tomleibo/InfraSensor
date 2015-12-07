@@ -2,7 +2,6 @@ package com.ibm.sensors.MainConfigurations;
 
 import android.app.Activity;
 import android.hardware.SensorManager;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.ibm.sensors.EventWrappers.EventWrapper;
@@ -24,7 +23,7 @@ public class USBConnectionType extends AbstractMainActivityConf{
 
 	@Override
 	protected void _Main(Env env, Activity ac) {
-		if (!this.mEnv.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_SENSOR_USB_CONNECTION_TYPE, this, new SensorConfiguration().addInteger(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
+		if (!this.mEnv.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_SENSOR_USB_CONNECTION_TYPE, this, new SensorConfiguration().addObject(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
 			//tv.setText("subscription failed");
 		}
 	}

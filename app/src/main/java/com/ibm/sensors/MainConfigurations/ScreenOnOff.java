@@ -21,7 +21,7 @@ public class ScreenOnOff extends AbstractMainActivityConf{
 
 	@Override
 	protected void _Main(Env env, Activity ac) {
-		if (!this.mEnv.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_SCREEN_ON_OFF, this, new SensorConfiguration().addInteger(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
+		if (!this.mEnv.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_SCREEN_ON_OFF, this, new SensorConfiguration().addObject(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
 			//tv.setText("subscription failed");
 		}
 	}

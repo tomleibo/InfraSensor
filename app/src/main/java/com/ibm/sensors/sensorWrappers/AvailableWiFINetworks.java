@@ -86,7 +86,7 @@ public class AvailableWiFINetworks extends AbstractSensorWrapper implements Runn
     public boolean register(SensorConfiguration conf) {
         mWiFi.setWifiEnabled(true);
         this.shouldStop = false;
-        this.mDelay = conf.getInt(EventCreatorFactory.Params.DELAY);
+        this.mDelay = (Integer)conf.getObject(EventCreatorFactory.Params.DELAY);
         this.thread.start();
         setIsBusy(false);
         return true;

@@ -17,7 +17,7 @@ import com.ibm.sensors.utils.MultiGenericObservable;
 public class BatteryPercent extends AbstractMainActivityConf{
 	protected void _Main(Env env, Activity ac){
 		TextView tv = (TextView) ac.findViewById(R.id.textView);
-		if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_BATTERY_PERCENT, this, new SensorConfiguration().addInteger(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
+		if (!env.getEventHandler().subscribe(EventCreatorFactory.Events.TYPE_EVENT_BATTERY_PERCENT, this, new SensorConfiguration().addObject(EventCreatorFactory.Params.DELAY, SensorManager.SENSOR_DELAY_NORMAL))) {
 			tv.setText("subscription failed");
 		}
 	}

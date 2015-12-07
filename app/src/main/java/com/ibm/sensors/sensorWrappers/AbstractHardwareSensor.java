@@ -43,8 +43,8 @@ public class AbstractHardwareSensor implements EventCreator,SensorEventListener 
     @Override
     public synchronized boolean register(SensorConfiguration conf) {
         isRegistered=true;
-        int delayMillis = conf.getInt(EventCreatorFactory.Params.DELAY);
-        int type = conf.getInt(EventCreatorFactory.Params.SENSOR_TYPE);
+        int delayMillis = (Integer)conf.getObject(EventCreatorFactory.Params.DELAY);
+        int type = (Integer)conf.getObject(EventCreatorFactory.Params.SENSOR_TYPE);
         this.sensor = sm.getDefaultSensor(type);
         if (sensor==null) {
             try {

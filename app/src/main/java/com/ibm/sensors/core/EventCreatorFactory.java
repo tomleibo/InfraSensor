@@ -1,7 +1,5 @@
 package com.ibm.sensors.core;
 
-import android.hardware.Sensor;
-
 import com.ibm.sensors.env.Env;
 import com.ibm.sensors.exceptions.EventTypeDoesNotExist;
 import com.ibm.sensors.rules.LinearVelocityVirtualSensor;
@@ -240,7 +238,7 @@ public class EventCreatorFactory {
 
     private SensorConfiguration sensorClassToDefaultConfiguration(int type) {
         if (type>=1 &&type<=21) {
-            return new SensorConfiguration().addInteger(Params.SENSOR_TYPE,type).addInteger(Params.DELAY,DEFAULT_DELAY);
+            return new SensorConfiguration().addObject(Params.SENSOR_TYPE, type).addObject(Params.DELAY, DEFAULT_DELAY);
         }
 
         switch(type) {
@@ -248,7 +246,7 @@ public class EventCreatorFactory {
 
             default:
                 SensorConfiguration conf = new SensorConfiguration();
-                conf.addInteger(Params.DELAY,DEFAULT_DELAY);
+                conf.addObject(Params.DELAY,DEFAULT_DELAY);
                 return conf;
         }
 

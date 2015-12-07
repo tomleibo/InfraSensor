@@ -32,7 +32,7 @@ public class LightSensor extends AbstractSensorWrapper implements SensorEventLis
 		env.getSensorManager().registerListener(
 				this,
 				mLightSensor,
-				conf.getInt(EventCreatorFactory.Params.DELAY));
+				(Integer)conf.getObject(EventCreatorFactory.Params.DELAY));
 		return true;
 	}
 
